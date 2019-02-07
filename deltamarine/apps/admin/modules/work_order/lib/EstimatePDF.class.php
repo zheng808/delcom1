@@ -44,13 +44,13 @@ class EstimatePDF extends sfTCPDF
       $this->SetFont('Arial', 'B', $this->default_fontsize);
       $this->SetAutoPageBreak(false);
       $this->page_width =  216 - (2 * $this->margin_width);
-    }
+    }//__construct()-----------------------------------------------------------
 
 
     function Header()
     {
 
-    }
+    }//Header()----------------------------------------------------------------
 
     function generateLogoHeader($title = null)
     {
@@ -78,7 +78,7 @@ class EstimatePDF extends sfTCPDF
       $this->Cell(0, $this->title_font/2.5, $title, 0, 2, 'R');
 
       $this->SetY(40);
-    }
+    }//generateLogoHeader()----------------------------------------------------
 
     function generateIntro()
     {
@@ -199,7 +199,7 @@ class EstimatePDF extends sfTCPDF
         $this->SetAutoPageBreak(false);
         $this->adding_notes = false;
       }
-    }
+    }//generateIntro()---------------------------------------------------------
 
     function AddPage($orientation = '', $format = '', $keepmargins=false, $tocpage=false)
     {
@@ -217,7 +217,7 @@ class EstimatePDF extends sfTCPDF
       {
         $this->drawSectionHeader(true);
       }
-    }
+    }//AddPage()---------------------------------------------------------------
 
     function Footer()
     {
@@ -228,7 +228,7 @@ class EstimatePDF extends sfTCPDF
         $this->Cell($this->page_width/3, 5, "Generated ".date('Y-M-j g:i a'), 0, 0, 'C');
         $this->AliasNbPages();
         $this->Cell(0, 5, 'Page '.$this->PageNo().' of {nb}', 0, 0, 'C');
-    }
+    }//Footer()----------------------------------------------------------------
 
     function drawTableHeader($cols)
     {
@@ -258,7 +258,7 @@ class EstimatePDF extends sfTCPDF
         }
         $this->ln($line_height + 0.1);
         $this->oddrow = false;
-    }
+    }//drawTableHeader()-------------------------------------------------------
 
     function drawRow($data, $colwidths, $notes = null, $blue = true, $fullnotes = true)
     {
@@ -375,7 +375,7 @@ class EstimatePDF extends sfTCPDF
           $this->setTextColor(0);
           $this->SetCellPaddings($padding['L'],$padding['T'],$padding['R'],$padding['B']);
         }
-    }
+    }//drawRow()---------------------------------------------------------------
 
     function drawTableFooter($colwidths, $subtotal)
     {
@@ -388,7 +388,7 @@ class EstimatePDF extends sfTCPDF
       $this->SetDrawColor(0);
       $this->Cell($labels_width, $this->default_fontsize/1.5, 'Subtotal:', 0, 0, 'R', 1);
       $this->Cell(0, $this->default_fontsize/1.5, number_format($subtotal,2), 1, 1, 'R', 1);
-    }
+    }//drawTableFooter()-------------------------------------------------------
 
 
 
@@ -417,7 +417,7 @@ class EstimatePDF extends sfTCPDF
           $this->drawTableFooter($colwidths, $subtotal);
         }
       }
-    }
+    }//drawItemsTable()--------------------------------------------------------
 
     function drawSectionHeader($continued = false)
     {
@@ -431,11 +431,17 @@ class EstimatePDF extends sfTCPDF
           $this->SetFillColor(255);
           $this->SetFont("Arial", "", $this->default_fontsize);
         }
-    }
+    }//drawSectionHeader()-----------------------------------------------------
 
     //OUTPUTS the various bits for a particular section (workorder item)
     function generateSection($number, $title, $section, $totals, $billable)
     {
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'START EstimatePDF.generateSection()';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
+
         $orig_title = $title;
         $title = $number.': '.$title;
         $this->current_section_title = $title;
@@ -458,6 +464,12 @@ class EstimatePDF extends sfTCPDF
 
         //add parts
         //===================================
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'Add Parts';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
+
         $parts_c = new Criteria();
         $parts_c->add(PartInstancePeer::WORKORDER_ITEM_ID, $section->getId());
         if ($this->settings['parts_detail'] == 'allused')
@@ -551,6 +563,12 @@ class EstimatePDF extends sfTCPDF
 
         //add labour
         //===================================
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'Add Labour';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
+
         $labour_c = new Criteria();
         $labour_c->add(TimelogPeer::WORKORDER_ITEM_ID, $section->getId());
         $labour_c->add(TimelogPeer::BILLABLE_HOURS, 0, Criteria::GREATER_THAN);
@@ -646,6 +664,11 @@ class EstimatePDF extends sfTCPDF
 
         //add expenses
         //===================================
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'Add Expenses';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
 
         $expense_c = new Criteria();
         $expense_c->add(WorkorderExpensePeer::WORKORDER_ITEM_ID, $section->getId());
@@ -713,6 +736,12 @@ class EstimatePDF extends sfTCPDF
 
         //determine if we need a page break
         //=================================
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'Add Pagebreak';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
+
         if ($this->settings['subtasks'] && ($this->settings['show_blank'] || count($section_items) > 0))
         {
           $this->drawn_sections += 1;
@@ -744,11 +773,21 @@ class EstimatePDF extends sfTCPDF
           
           //draw section header
           //====================
+          if (sfConfig::get('sf_logging_enabled'))
+          {
+            $message = 'Draw Section Header';
+            sfContext::getInstance()->getLogger()->info($message);
+          } 
           $this->drawSectionHeader();
 
 
           //draw notes section
           //==================
+          if (sfConfig::get('sf_logging_enabled'))
+          {
+            $message = 'Draw Notes Section';
+            sfContext::getInstance()->getLogger()->info($message);
+          } 
           if (trim($section->getCustomerNotes()))
           {
             $padding = $this->GetCellPaddings();
@@ -769,8 +808,14 @@ class EstimatePDF extends sfTCPDF
         }
         unset($section_items);
 
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'DONE EstimatePDF.generateSection()';
+          sfContext::getInstance()->getLogger()->info($message);
+        } 
+
         return $totals;
-    }
+    }//generateSection()-------------------------------------------------------
 
     private function _recurse_sections($parent, $task_prefix)
     {
@@ -808,7 +853,7 @@ class EstimatePDF extends sfTCPDF
 
       return $sections;
 
-    }
+    }//_recurse_sections()-----------------------------------------------------
 
     //generates an ordered, flat array of sections that need to be displayed, indexed by title
     public function loadSections()
@@ -824,10 +869,16 @@ class EstimatePDF extends sfTCPDF
       $sections = $this->_recurse_sections($parent, $task_prefix);
 
       return $sections;
-    }
+    }//loadSections()----------------------------------------------------------
 
     public function generateSections($sections)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'START EstimatePDF.generateSections()';
+        sfContext::getInstance()->getLogger()->info($message);
+      } 
+
       $totals = array();
 
       foreach ($sections AS $key => $section)
@@ -837,11 +888,23 @@ class EstimatePDF extends sfTCPDF
         $totals = $this->generateSection($numbering[0], trim($numbering[1]), $section, $totals, true);
       }
 
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'DONE EstimatePDF.generateSections()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       return $totals;
-    }
+    }//loadSections()----------------------------------------------------------
 
     public function generateSectionSubtotal($totals, $section_name)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'START EstimatePDF.generateSectionSubtotal()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       if (isset($totals['sections']) && isset($totals['sections'][$section_name]))
       {
         $section = $totals['sections'][$section_name];
@@ -854,11 +917,23 @@ class EstimatePDF extends sfTCPDF
         return $subtotal;
       }
 
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'DONE EstimatePDF.generateSectionSubtotal()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       return 0;
-    }
+    }//generateSectionSubtotal()-----------------------------------------------
 
     public function generateSummary($sections, $totals)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'START EstimatePDF.generateSummary()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       //calculate totals
       $total_parts = 0;
       $total_labour = 0;
@@ -1036,11 +1111,23 @@ class EstimatePDF extends sfTCPDF
         $this->Cell(100, $this->default_fontsize, 'Delivery: '.$this->settings['delivery_time'], 0, 1, 'C');
       }
 
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'DONE EstimatePDF.generateSummary()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       return $total_total;
-    }
+    }//generateSummary()-------------------------------------------------------
 
     public function autoSizeTable($items, $cols)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'START EstimatePDF.autoSizeTable()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       $max_info = array();
 
       //go through and determine the header sizes
@@ -1087,12 +1174,24 @@ class EstimatePDF extends sfTCPDF
         $max_info[$key][1] = '$888,888.88';
       }
 
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'DONE EstimatePDF.autoSizeTable()';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       //perform font scaling
       return $this->calculateFontSizes($max_info);
-    }
+    }//autoSizeTable()---------------------------------------------------------
 
     function calculateFontSizes($columns)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'START EstimatePDF.calculateFontSizes()';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         //FIND APPROPRIATE FONT SIZE
         $longest_width = 0;
         foreach ($columns AS $key => $this_col)
@@ -1177,11 +1276,23 @@ class EstimatePDF extends sfTCPDF
             $final_cols[$key] = array($test_width, $col_fontsize, $columns[$key][2], $columns[$key][3]);
         }
 
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'DONE EstimatePDF.calculateFontSizes()';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         return $final_cols;
-    }
+    }//calculateFontSizes()----------------------------------------------------
 
     public function generateGeneralSection()
     {
+      if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'START EstimatePDF.generateGeneralSection()';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
       if (count($this->uncat_items) > 0)
       {
           //output a header to separate this from other sections if needed
@@ -1200,11 +1311,23 @@ class EstimatePDF extends sfTCPDF
 
           //draw the table
           $this->drawItemsTable($this->uncat_items);
-      }
-    }
+        }
+
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'DONE EstimatePDF.generateGeneralSection()';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+    }//generateGeneralSection()------------------------------------------------
 
     public function generate()
     {
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'START EstimatePDF.generate()';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+      
         set_time_limit(0);
 
         //add the introduction page (only done for customer payers)
@@ -1221,6 +1344,13 @@ class EstimatePDF extends sfTCPDF
 
         //include the summary page
         $final_total = $this->generateSummary($sections, $totals);
-    }
 
-}
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'DONE EstimatePDF.generate()=============';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
+    }//generate()--------------------------------------------------------------
+
+}//EstimatePDF{}===============================================================
