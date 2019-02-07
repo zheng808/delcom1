@@ -1,0 +1,38 @@
+all:
+  wf_crm_plugin:
+    routes_register: true
+    use_bundled_layout: true
+    use_bundled_stylesheet: true
+    
+    subscribe_form:
+      display:          [ first_name, middle_name, last_name, salutation, titles, job_title, alpha_name, email, work_phone, mobile_phone, home_phone, fax, homepage, public_notes, wf_crm_category_ref_list ]
+      fields:
+        first_name:
+          required:     true
+          required_msg: "First Name required."
+        last_name:
+          required:     true
+        email:
+          required:     true
+        wf_crm_category_ref_list:
+          label:        "Categories"
+          required:     true
+
+    contactus_form:
+      email_notification:
+        enable: on
+        subject: mail subject
+        address: mail@local
+      display:          [ first_name, last_name, email, mobile_phone, public_notes ]
+      fields:
+        first_name:
+          required:     true
+          required_msg: "First Name required."
+        last_name:
+          required:     true
+        email:
+          required:     true
+        public_notes:
+          required:     true
+          label:        "Message"
+          required_msg: "Enter message."

@@ -1,0 +1,32 @@
+index:
+  credentials: employee_view
+
+view:
+  credentials: employee_view
+
+edit:
+  credentials: employee_edit
+
+add:
+  credentials: employee_edit
+
+delete:
+  credentials: employee_edit
+
+userEdit:
+  credentials: employee_login
+
+permsLoad:
+  credentials: employee_permissions
+
+permsEdit:
+  credentials: employee_permissions
+
+department:
+  credentials: employee_departments
+
+departmentEdit:
+  credentials: employee_departments
+
+departmentDelete:
+  credentials: employee_departments

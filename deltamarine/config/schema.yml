@@ -1,0 +1,471 @@
+propel:
+
+  ####################
+  # PARTS + VARIANTS #
+  ####################
+
+  part_category:
+    _attributes:            { treeMode: NestedSet }
+    id:                     ~
+    name:                   { type: varchar(255), required: true }
+    lft:                    { type: integer, required: true, nestedSetLeftKey: true,  phpName: Left }
+    rgt:                    { type: integer, required: true, nestedSetRightKey: true, phpName: Right }
+    scope:                  { type: integer, treeScopeKey: true }
+
+  part:
+    id:                     ~
+    part_category_id:       ~
+    name:                   { type: varchar(255), required: true }
+    description:            { type: longvarchar }
+    has_serial_number:      { type: boolean, required: true, default: false }
+    is_multisku:            { type: boolean, required: true, default: false }
+    manufacturer_id:        ~
+    active:                 { type: boolean, required: true, default: true }
+    origin:                 { type: varchar(255), required: false }
+
+  part_option:                  # defined variant (ie, color)
+    id:                     ~
+    part_id:                { type: integer, foreignTable: part, foreignReference: id, required: true }
+    name:                   { type: varchar(255), required: true }
+    is_color:               { type: boolean, required: true, default: false } #if true, colour picker is enabled rather than drop-down list of options.
+
+  part_option_value:        # many to many
+    id:                     ~
+    part_variant_id:        { type: integer, foreignTable: part_variant, foreignReference: id, required: true }
+    part_option_id:         { type: integer, foreignTable: part_option, foreignReference: id, required: true }
+    value:                  { type: varchar(255), required: true }
+
+  # a part variant is a combination of options for a given part
+  # if there are no variant options (non-multisku), then there will still be one 'part_variant', which will have is_default_variant = true
+  part_variant:             
+    id:                     ~
+    part_id:                { type: integer, foreignTable: part, foreignReference: id, required: true }
+    is_default_variant:     { type: boolean, required: true }
+    manufacturer_sku:       { type: varchar(255) }
+    internal_sku:           { type: varchar(255) }
+    use_default_units:      { type: boolean, required: true, default: false }
+    units:                  { type: varchar(6)   } # set to null if sold per item. Otherwise set units for bulk measure (cm, L, kg, etc).
+    use_default_costing:    { type: boolean, required: true, default: false }
+    cost_calculation_method:  { type: varchar(7), required: true, default: 'lifo' } #lifo, fifo, average. used to calculate cost from lots' costs
+    unit_cost:              { type: decimal, size: 8, scale: 2 } # specify a cost manually. If not set, calculated from lot landed costs as above
+    use_default_pricing:    { type: boolean, required: true, default: false }
+    unit_price:             { type: decimal, size: 8, scale: 2 } # specify a full-price (retail) cost manually
+    markup_amount:          { type: decimal, size: 8, scale: 2 } # calculate the retail cost by adding this amount to the current unit cost
+    markup_percent:         { type: integer      }               # calculate the retail cost by adding this percentage on top of the current unit cost
+    taxable_hst:            { type: boolean, required: true, default: true  }
+    taxable_gst:            { type: boolean, required: true, default: true  }
+    taxable_pst:            { type: boolean, required: true, default: true  }
+    enviro_levy:            { type: decimal, size: 8, scale: 2 }
+    battery_levy:           { type: decimal, size: 8, scale: 2 }
+    use_default_dimensions: { type: boolean, required: true, default: false }
+    shipping_weight:        { type: decimal, size: 8, scale: 3 }  #in KG
+    shipping_width:         { type: decimal, size: 8, scale: 3 } # in cm
+    shipping_height:        { type: decimal, size: 8, scale: 3 } # in cm
+    shipping_depth:         { type: decimal, size: 8, scale: 3 } # in cm
+    shipping_volume:        { type: decimal, size: 8, scale: 3 } # in Litres = 1000cc = 1000 cm^3
+    use_default_inventory:  { type: boolean, required: true, default: false }
+    track_inventory:        { type: boolean, required: true, default: true  } # if false, no part lots are used. turns a subpart into a 'bundle'
+    minimum_on_hand:        { type: decimal, size: 8, scale: 3, required: true, default: 0 } # initiates a warning if stock level drops below this point
+    maximum_on_hand:        { type: decimal, size: 8, scale: 3 }  # recommends how many items to order when the minimum has been reached
+    current_on_hand:        { type: decimal, size: 8, scale: 3, required: true, default: 0 } # re-calculated each time a part_instance is created or part_lot is added
+    current_on_hold:        { type: decimal, size: 8, scale: 3, required: true, default: 0 } # re-calculated each time a part_instance is created with a hold on it
+    current_on_order:       { type: decimal, size: 8, scale: 3, required: true, default: 0 } # re-calculated each time a supplier_order is created/deleted/updated
+    location:               { type: varchar(255) }
+    last_inventory_update:  { type: timestamp }
+
+  part_supplier:
+    id:                     ~
+    part_variant_id:        ~
+    supplier_id:            ~
+    supplier_sku:           { type: varchar(255) } #supplier's special part number for this part
+    notes:                  { type: longvarchar  } #text notes on prices, price breaks, etc
+
+  part_photo:  
+    part_id:                ~
+    part_variant_id:        ~
+    photo_id:               ~
+    is_primary:             { type: boolean, required: true, default: true }
+
+  part_file:                # eg, for documentaion
+    part_id:                ~
+    part_variant_id:        ~
+    file_id:                ~
+
+  barcode:
+    id:                     ~
+    value:                  { type: varchar(255), required: true }
+    default_symbology:      { type: varchar(8) }
+    part_variant_id:        ~
+    part_supplier_id:       ~
+
+  #######################
+  # PARTS RELATIONSHIPS #
+  #######################
+
+  subpart:                  # ie, a box of bolts contains 500 bolts. or a computer system contains a monitor and a computer
+    id:                     ~
+    parent_id:              { type: integer, foreignTable: part_variant, foreignReference: id, required: true }
+    child_id:               { type: integer, foreignTable: part_variant, foreignReference: id, required: true }
+    child_quantity:         { type: decimal, size: 8, scale: 3, required: true }
+
+  # TODO way later: related products, accessories, upsells (as needed by future clients)
+
+  ############################
+  # PARTS MANGEMENT / ORDERS #
+  ############################
+
+  supplier:                 #link table to CRM system
+    id:                     ~
+    wf_crm_id:              { type: integer, required: true, foreignTable: wf_crm, foreignReference: id }
+    account_number:         { type: varchar(127) }
+    credit_limit:           { type: decimal, size: 8, scale: 2, required: false }
+    net_days:               { type: integer, required: true, default: 0 } # ie, net 15, net 30, net 0 (on delivery) billing arrangements
+    hidden:                 { type: boolean, required: true, default: false }
+
+  manufacturer:             #link table to CRM system
+    id:                     ~
+    wf_crm_id:              { type: integer, required: true, foreignTable: wf_crm, foreignReference: id }
+    hidden:                 { type: boolean, required: true, default: false }
+
+  # for ordering from a supplier (requisitions)
+  supplier_order:                    
+    id:                     ~
+    supplier_id:            ~
+    purchase_order:         { type: varchar(127) } # supplier purchase order reference
+    notes:                  { type: longvarchar }
+    date_ordered:           { type: timestamp }    # if null, order hasn't been sent out yet
+    date_expected:          { type: timestamp }    # optional
+    date_received:          { type: timestamp }    # if null, order hasn't been received yet
+    finalized:              { type: boolean, required: true, default: false }  # if order is ready to be approved + sent out
+    approved:               { type: boolean, required: true, default: false }  # if order has been approved
+    sent:                   { type: boolean, required: true, default: false }  # if order has been dispatched to the supplier
+    received_some:          { type: boolean, required: true, default: false }  # if one or more items have been receieved
+    received_all:           { type: boolean, required: true, default: false }  # if all items have been received
+    invoice_id:             ~ # accounts payable invoice to the supplier
+
+  # for customer orders (mostly ecommerce related)
+  customer_order:
+    id:                     ~
+    customer_id:            ~
+    finalized:              { type: boolean, required: true, default: false } # if order is ready to be approved + sent out
+    approved:               { type: boolean, required: true, default: false } # if order has been approved
+    sent_some:              { type: boolean, required: true, default: false } # if one or more items have been receieved 
+    sent_all:               { type: boolean, required: true, default: false } # if all items have been received
+    invoice_per_shipment:   { type: boolean, required: true, default: false } # if false, payment will be made for everything at once
+    invoice_id:             ~ # only set if invoice_per_shipment = false, otherwise shipment records contain invoice_ids.
+    date_ordered:           { type: timestamp }
+    hst_exempt:             { type: boolean, required: true, default: false }
+    gst_exempt:             { type: boolean, required: true, default: false }
+    pst_exempt:             { type: boolean, required: true, default: false }
+    for_rigging:            { type: boolean, required: true, default: false }
+    discount_pct:           { type: tinyint, required: true, default: 0 }
+    po_num:		    { type: varchar(127) }
+    boat_name:		    { type: varchar(127) }
+
+  # for customer orders (mostly ecommerce related)
+  customer_return:
+    id:                      ~
+    customer_order_id:       ~
+    invoice_id:              ~  #invoice / receipt for return transaction
+    date_returned:           { type: timestamp }
+
+  # for customer orders (mostly ecommerce related)
+  customer_return_item:
+    id:                      ~
+    customer_return_id:      ~
+    customer_order_item_id:  ~
+    part_instance_id:        ~
+
+  # tracks items on an order from a supplier
+  supplier_order_item:
+    id:                     ~
+    supplier_order_id:      ~
+    part_variant_id:        ~
+    quantity_requested:     { type: decimal, size: 8, scale: 3, required: true, default: 0 } # items on the order
+    quantity_completed:     { type: decimal, size: 8, scale: 3, required: true, default: 0 } # items received by the order so far
+
+  # tracks items on an order from a customer
+  customer_order_item:
+    id:                     ~
+    customer_order_id:      ~
+    part_instance_id:       ~
+    quantity_completed:     { type: decimal, size: 8, scale: 3, required: true, default: 0 } # items sent so far
+
+  # used to help calculate landed cost. a lot represents a shipment received of a part (could be multiple shipments per supplier order)
+  part_lot:
+    id:                     ~
+    part_variant_id:        ~
+    supplier_order_item_id: ~ # refers to a supplier_order. if not set, it is a manual inventory entry
+    quantity_received:      { type: decimal, size: 8, scale: 3, required: true, default: 0 }
+    quantity_remaining:     { type: decimal, size: 8, scale: 3, required: true, default: 0 } # determines stock level
+    received_date:          { type: timestamp, required: true }
+    landed_cost:            { type: decimal, size: 8, scale: 2, required: true } # includes calculated share of taxes, duties, etc
+    # TODO: add location to lots (ie, store vs warehouse)
+
+  # part_instance items track the use of a part_variant for a customer_order_item or workorder_item 
+  part_instance:
+    id:                     ~
+    part_variant_id:        ~
+    custom_name:	        { type: varchar(255) }
+    custom_origin:          { type: varchar(255) }
+    quantity:               { type: decimal, size: 8, scale: 3, required: true  }
+    unit_price:             { type: decimal, size: 8, scale: 2, required: true  } # records the actual final cost attributed to the part
+    unit_cost:              { type: decimal, size: 8, scale: 2, required: false } # calculates the final (average) per unit cost, for profit calculations
+    taxable_hst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_gst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_pst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    enviro_levy:            { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    battery_levy:           { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    supplier_order_item_id: ~     # if this is set, this is associated with a special order.
+    workorder_item_id:      ~     #if set, this is for a workorder
+    workorder_invoice_id:   { type: integer, foreignTable: invoice, foreignReference: id, required: false }
+    added_by:               { type: integer, foreignTable: employee, foreignReference: id, required: false }
+    estimate:               { type: boolean, required: true, default: false }
+    allocated:              { type: boolean, required: true, default: false } # set to false for use in an estimate. true means its on hold.
+    delivered:              { type: boolean, required: true, default: false } # if false, but part is allocated, needs delivery (is on hold)
+    serial_number:          { type: varchar(255) } # optional, only used for parts for "has_serial_number" is true (ie, big-ticket items)
+    date_used:              { type: timestamp }    # the date at which the part gets used (sold or used in a workorder). used for reporting.
+    is_inventory_adjustment: { type: boolean, required: true, default: false   } # if true, inventory was adjusted negatively during re-inventory
+    internal_notes:         { type: longvarchar } # notes viewable by staff only
+
+  # for tracking customer order shipments
+  shipment:
+    id:
+    carrier:                { type: varchar(64)  } # ie, UPS, courier, pickup, etc.
+    tracking_number:        { type: varchar(127) } 
+    date_shipped:           { type: timestamp, required: true }
+    invoice_id:             ~
+
+  shipment_item:
+    shipment_id:            ~
+    customer_order_item_id: ~
+    quantity:               { type: decimal, size: 8, scale: 3 } # items sent/received by the order
+
+  #######################
+  # WORKORDERS          #
+  #######################
+  workorder:
+    id:                     ~
+    customer_id:            ~
+    customer_boat_id:       ~
+    workorder_category_id:  ~
+    status:                 { type: varchar(15), required: true, index: true }  #estimate, in progress, completed, cancelled
+    summary_color:          { type: varchar(6), required: true, default: 'FFFFFF' }  # color hexcode for specifying priority/type
+    summary_notes:          { type: varchar(255) }
+    haulout_date:           { type: timestamp }
+    haulin_date:            { type: timestamp }
+    created_on:             { type: timestamp }
+    started_on:             { type: timestamp }
+    completed_on:           { type: timestamp }
+    hst_exempt:             { type: boolean, required: true, default: false }
+    gst_exempt:             { type: boolean, required: true, default: false }
+    pst_exempt:             { type: boolean, required: true, default: false }
+    customer_notes:         { type: longvarchar } # notes viewable by the customer
+    internal_notes:         { type: longvarchar } # notes viewable by staff only
+    for_rigging:            { type: boolean, required: true, default: false }
+    shop_supplies_surcharge: { type: decimal, size: 5, scale: 2, default: 0 }
+    moorage_surcharge:       { type: decimal, size: 5, scale: 2, default: 0 } # percentage (depricated)
+    moorage_surcharge_amt:   { type: decimal, size: 8, scale: 2, default: 0 }
+
+  workorder_category:
+    id:                     ~
+    name:                   { type: varchar(255) }
+
+  workorder_item:
+    _attributes:            { treeMode: NestedSet }
+    id:                     ~
+    workorder_id:           { type: integer, foreignTable: workorder, foreignReference: id, required: true, treeScopeKey: true, onDelete: cascade }
+    label:                  { type: varchar(255) } # a short description of the item
+    lft:                    { type: integer, required: true, nestedSetLeftKey: true,  phpName: Left }
+    rgt:                    { type: integer, required: true, nestedSetRightKey: true, phpName: Right }
+    #owner_company:          { type: integer, foreignTable: wf_crm, foreignReference: id, required: true } #the owner/controller of the work.
+    owner_company:          { type: integer }
+    labour_estimate:        { type: decimal, size: 8, scale: 2 } # estimate of total labour costs
+    labour_actual:          { type: decimal, size: 8, scale: 2 } # cached total of all timelogs billed to this item
+    other_estimate:         { type: decimal, size: 8, scale: 2 } # estimate of other costs (ie, travel, transportation, etc) in $$
+    other_actual:           { type: decimal, size: 8, scale: 2 } # cached total of all other expenses billed to this item
+    part_estimate:          { type: decimal, size: 8, scale: 2 } # estimate of total part costs. calculated when adding parts as well.
+    part_actual:            { type: decimal, size: 8, scale: 2 } # cached total of all parts
+    amount_paid:            { type: decimal, size: 8, scale: 2 }
+    completed:              { type: boolean, required: true, default: false }
+    completed_by:           { type: integer, foreignTable: employee, foreignReference: id, required: false }
+    completed_date:         { type: timestamp }
+    customer_notes:         { type: longvarchar } # notes viewable by the customer
+    internal_notes:         { type: longvarchar } # notes viewable by staff only
+    color_code:             { type: varchar(6), required: true, default: FFFFFF }
+
+  workorder_item_billable:        #by default all items get billed to workorder customer_id. This table allows overriding this.
+    id:                           ~
+    workorder_item_id:            ~
+    manufacturer_id:              ~ # manufacturer warranty coverage
+    supplier_id:                  ~ # supplier warrantee coverage
+    manufacturer_parts_percent:   { type: tinyint, required: true, default: 0 }
+    manufacturer_labour_percent:  { type: tinyint, required: true, default: 0 }
+    supplier_parts_percent:       { type: tinyint, required: true, default: 0 }
+    supplier_labour_percent:      { type: tinyint, required: true, default: 0 }
+    in_house_parts_percent:       { type: tinyint, required: true, default: 0 }
+    in_house_labour_percent:      { type: tinyint, required: true, default: 0 }
+    customer_parts_percent:       { type: tinyint, required: true, default: 100 }
+    customer_labour_percent:      { type: tinyint, required: true, default: 100 }
+    recurse:                      { type: boolean, required: true, default: true }
+
+  workorder_expense:
+    id:                     ~
+    workorder_item_id:      ~
+    workorder_invoice_id:   { type: integer, foreignTable: invoice, foreignReference: id, required: false }
+    label:                  { type: varchar(255), required: true }
+    customer_notes:         { type: longvarchar } # notes viewable by the customer
+    internal_notes:         { type: longvarchar } # notes viewable by staff only
+    cost:                   { type: decimal, size: 8, scale: 2} #for profit calculations
+    estimate:               { type: boolean, required: true, default: false }
+    price:                  { type: decimal, size: 8, scale: 2} #for profit calculations
+    origin:                 { type: varchar(255), required: false }
+    taxable_hst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_gst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_pst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    created_at:             ~
+
+  workorder_item_photo:
+    id:                     ~
+    workorder_item_id:      ~
+    photo_id:               ~
+    created_at:             { type: timestamp }
+
+  workorder_item_file:
+    id:                     ~
+    workorder_item_id:      ~
+    file_id:                ~
+    created_at:             { type: timestamp }
+
+  workorder_invoice:
+    id:                     ~
+    workorder_id:           ~
+    invoice_id:             ~
+    is_estimate:            { type: boolean, required: true, default: false }
+    created_at:             ~
+
+  workorder_payment:
+    id:                     ~
+    workorder_id:           ~
+    supplier_id:            ~
+    manufacturer_id:        ~
+    amount:                 { type: decimal, size: 8, scale: 2 }
+    created_at:             ~
+
+  ########################
+  # EMPLOYEE MANAGEMENT  #
+  ########################
+
+  employee:
+    id:                     ~
+    wf_crm_id:              { type: integer, foreignTable: wf_crm, foreignReference: id, required: true }
+    guard_user_id:          { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: false, onDelete: cascade }
+    payrate:                { type: decimal, size: 8, scale: 2 }
+    hidden:                 { type: boolean, required: true, default: false }
+
+  ########################
+  # TIME LOGGING/BILLING #
+  ########################
+
+  timelog:
+    id:                     ~
+    employee_id:            ~
+    workorder_item_id:      ~ # must be set if billable is selected
+    workorder_invoice_id:   { type: integer, foreignTable: invoice, foreignReference: id, required: false }
+    labour_type_id:         ~ # only set for billable
+    nonbill_type_id:        ~ # only set for non-billable
+    custom_label:           { type: varchar(128), required: false }
+    rate:                   { type: decimal, size: 5, scale: 2, required: true }
+    start_time:             { type: timestamp }
+    end_time:               { type: timestamp }
+    payroll_hours:          { type: decimal, size: 5, scale: 2, required: true }
+    billable_hours:         { type: decimal, size: 5, scale: 2, required: true }
+    cost:                   { type: decimal, size: 8, scale: 2 } #cached total amount (not editable)
+    taxable_hst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_gst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    taxable_pst:            { type: decimal, size: 8, scale: 2, required: true, default: 0 } # this records the PERCENT tax at the time of use
+    employee_notes:         { type: longvarchar } # notes written by employee about what was performed
+    admin_notes:            { type: longvarchar } # for internal notes/comments 
+    admin_flagged:          { type: boolean, required: true, default: false} # for flagging suspicious or incorrect logs
+    estimate:               { type: boolean, required: true, default: false }
+    approved:               { type: boolean, required: true, default: false} # only approved hours get invoiced or sent to payroll
+    created_at:             { type: timestamp }
+    updated_at:             { type: timestamp }
+
+  labour_type:
+    id:                     ~
+    name:                   { type: varchar(255) }
+    hourly_rate:            { type: decimal, size: 8, scale: 2 }
+    active:                 { type: boolean, required: true, default: true }
+
+  nonbill_type:
+    id:                     ~
+    name:                   { type: varchar(255), required: true }
+
+  ########################
+  # CUSTOMER + EQUIPMENT #
+  ########################
+
+  customer:
+    id:                     ~ 
+    wf_crm_id:              { type: integer, required: true, foreignTable: wf_crm, foreignReference: id }
+    guard_user_id:          { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: false, onDelete: cascade }
+    pst_number:             { type: varchar(255) }
+    hidden:                 { type: boolean, required: true, default: false }
+
+  #logs stuff the customer owns
+  customer_boat:
+    id:                     ~
+    customer_id:            ~
+    serial_number:          { type: varchar(128) }
+    make:                   { type: varchar(255) }
+    model:                  { type: varchar(255) }
+    name:                   { type: varchar(255) }
+    registration:           { type: varchar(255) }
+    notes:                  { type: longvarchar  }
+
+  #######################
+  # ACCOUNTING          #
+  #######################
+  invoice:                  #invoices are generated on-the-fly based on the workorders. cash/pos sales are an order with this invoice_id
+    id:                     ~
+    receivable:             { type: boolean, required: true, default: true } # receivable vs. payable
+    customer_id:            ~  #for customer purchases or refunds
+    supplier_id:            ~  #for supplier purchases or refunds
+    manufacturer_id:        ~  #for manufacturer warrantees
+    subtotal:               { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    shipping:               { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    hst:                    { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    gst:                    { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    pst:                    { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    enviro_levy:            { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    battery_levy:           { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    duties:                 { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    total:                  { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    issued_date:            { type: timestamp }
+    payable_date:           { type: timestamp }
+    archived:               { type: boolean, required: true, default: false } # for keeping around old versions of invoices
+  
+  payment:
+    id:                     ~
+    customer_order_id:      ~
+    workorder_id:           ~
+    amount:                 { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    tendered:               { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    change:                 { type: decimal, size: 8, scale: 2, required: true, default: 0 }
+    payment_method:         { type: varchar(128) }
+    payment_details:        { type: varchar(255) }
+    created_at:             ~ 
+  
+  #######################
+  # MISC                #
+  #######################
+  photo:                    #the photo model will take care of directories, resizing, etc
+    id:                     ~
+    filename:               { type: varchar(255) }
+    caption:                { type: longvarchar  }
+
+  file:                     #this file model will take care of directories, downloading, etc
+    id:                     ~
+    filename:               { type: varchar(255) }
+    description:            { type: longvarchar  }

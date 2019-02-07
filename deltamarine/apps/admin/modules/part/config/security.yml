@@ -1,0 +1,49 @@
+index:
+  credentials: parts_view
+
+view:
+  credentials: parts_view
+
+add:
+  credentials: parts_edit
+
+edit:
+  credentials: parts_edit
+
+inventory:
+  credentials: parts_inventory
+
+bulkInventory:
+  credentials: parts_inventory
+
+bulkInventoryReview:
+  credentials: parts_inventory
+
+bulkInventoryPost:
+  credentials: parts_inventory
+
+inventorySheet:
+  credentials: parts_view
+
+barcodes:
+  credentials: parts_view
+
+delete:
+  credentials: parts_delete
+
+supplierEdit:
+  credentials: parts_edit
+
+supplierRemove:
+  credentials: parts_edit
+
+category:
+  credentials: parts_category_view
+
+categoryEdit:
+  credentials: parts_category_edit
+
+categoryDelete:
+  credentials: parts_category_edit
+
+

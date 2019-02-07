@@ -1,0 +1,14 @@
+index:
+  credentials: parts_supplier_view
+
+view:
+  credentials: parts_supplier_view 
+
+edit:
+  credentials: parts_supplier_edit
+
+add:
+  credentials: parts_supplier_edit
+
+delete:
+  credentials: parts_supplier_edit

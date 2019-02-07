@@ -1,0 +1,7 @@
+all:
+  metas:
+    title:     Delta - Timelogs
+  javascripts: [TreeCombo]
+
+indexSuccess:
+  javascripts: [extTimelog-161010]

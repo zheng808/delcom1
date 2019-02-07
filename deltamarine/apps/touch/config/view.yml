@@ -1,0 +1,11 @@
+default:
+  http_metas:
+    content-type: text/html
+
+  metas:
+    title:        Delta Marine - Touch System
+
+  stylesheets:    [base,main,touch]
+
+  has_layout:     on
+  layout:         layout

@@ -1,0 +1,5 @@
+all:
+  metas:
+    title:     Delta - Employee Management
+
+  javascripts: [extEmployee-161010]

@@ -1,0 +1,127 @@
+html, body { margin: 0; padding: 0; background-color: #fff;}
+body, td, button   { font-family: Geneva, Arial, Helvetica, sans-serif }
+th, td { padding: 0 }
+table { margin-bottom: 0 }
+body.x-border-layout-ct { background-color: #fff; }
+
+
+a { color: #DA6600; }
+p a img { border: none; margin-right: 5px; }
+
+a.button, button, .button { 
+    padding: 8px 10px; 
+    font-size: 14px; 
+    text-align: center; 
+    font-weight: bold; 
+    color: #000; 
+    background-color: #f5f5f5; 
+    border-color: #EEEEEE #DEDEDE #DEDEDE #EEEEEE; 
+    border-width: 2px; 
+    border-style: solid; 
+    color: #565656; 
+    display: block; 
+    float: left; 
+    text-decoration: none;
+    -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; 
+}
+a.disabled { color: #ddd; border-color: #f0f0f0; background-color: #fafafa;}
+a.active, a.button:active { color: #FFF; background-color: #006; border-color: #f0f0fa; border-width: 2px; }
+
+#header     { background: #425E66 url(/images/header_bg.gif) repeat-x; border-bottom:1px solid #5F767F; height: 50px; color: #fff;}
+#header h1  { font-size: 1.2em; margin: 0; padding: 9px 0 0 20px; }
+#header h2  { font-size: 0.8em; margin: 0; padding: 0 0 0 20px; color: #777; }
+#statusarea { color: #FEFFF4; position: absolute; right: 0; top: 5px;}
+#statusarea h3 { margin: 5px 20px 0 0; color: #ccc; font-size: 1.7em; float: left;}
+#logout-button, #startover-button { float: right; margin-left: 15px; width: 100px; padding-top: 3px; padding-right: 10px;}
+#logout-button a, #startover-button a { float: none; } 
+
+.x-btn-xlarge { height: 250px; }
+.x-btn-xlarge .x-btn-text { font-size: 2em; font-weight: bold; text-align: center; }
+.x-btn-large .x-btn-text { font-size: 1.2em; font-weight: bold; text-align: center;}
+.emp-button { margin-bottom: 50px; }
+
+#filter  h2 { margin: 0; padding: 5px 0 5px 20px; border-bottom: 1px solid #5F767F; background-color: #f9f9f9; }
+.filter-area  { padding: 0 0 10px 10px; background-color: #DFE8F6; border-bottom: 1px solid #5F767F; }
+.filter-label { float: left; width: 90px; margin-top: 10px; padding-top: 5px;}
+.filter-options { float: left; margin-top: 10px; }
+.filter-options a.button { margin-left: 8px; padding: 10px;}
+
+.error      { background: #FEE; color: #D12F19; border: 1px solid #FCC; }
+.notice     { background: #FFD; color: #817134; border: 1px solid #FD8; }
+.success    { background: #EFD; color: #529214; border: 1px solid #DEA; }
+
+.bigwarning   { width: 500px; margin: 0 auto; height: 75px; padding: 50px 50px 0 50px; text-align: center;}
+.smallwarning { width: 500px; margin: 0 auto; height: 25px; padding: 10px; text-align: center;}
+
+.empselect         { width: 250px; margin: 10px 20px 25px 25px; }
+.empselect a       { display: block; width: 230px; padding: 15px 0; }
+.empselect-col      { float: left; }
+
+.woselect          { width: 250px; margin: 10px 20px 25px 25px; }
+.woselect a        { display: block; width: 230px;}
+.woselect-col      { float: left; }
+.woselect-number   { color: #222; font-size: 1.2em; margin-bottom: 10px; font-weight: bold; text-align: center; padding: 2px; }
+.woselect-boatname { color: #1122CC; font-style: italic; font-size: 1.5em; margin-bottom: 10px; font-weight: bold; text-align: center; padding: 2px; }
+.woselect-boatinfo { color: #222; font-size: 1em; margin-bottom: 3px; padding-left: 5px;}
+.woselect-date     { color: #888; font-size: 1em; margin-bottom: 3px; padding-left: 5px;}
+
+a.partselect       { display:block; margin-bottom: 8px; width: 450px; text-align: left; padding: 8px 10px; }
+a.partselect span  { font-size: 0.6em; }
+
+a.woiselect         { display: block; margin-bottom: 8px; width: 450px; text-align: left; padding: 15px 10px;}
+.woiselect-path     { margin: 10px 10px 10px 100px; padding: 0 }
+.woiselect-label    { float: left; padding-top: 13px; margin-top: 10px; }
+.woiselect-items    { float: left; margin-top: 10px; }
+a.woiselect-item     { display: block; float: left; margin-left: 10px; padding: 15px 10px;}
+.woiselect-separator{ font-size: 20px; font-weight: bold; color: #aaa; padding-top: 10px; margin-left: 10px; float: left; }
+.woiselect-thistask { padding: 30px; margin: 0 100px 25px 100px; border: 1px solid #5F767F; background-color: #DFF6E8; }
+.woiselect-thistask a { float: none; padding: 20px 15px; }
+.partselect-col, .woiselect-col           { float: left; padding-left: 40px; width: 480px; }
+.partselect-children, .woiselect-children { padding: 30px 0 30px 0; margin: 0 100px 10px 100px; border: 1px solid #5F767F; background-color: #DFE8F6; height: 330px;}
+
+.search-area h2, .time-area h2, .notes-area h2, .labour-area h2, .partadd-area h2{ margin: 0 0 10px 0; background-color: #DFE8F6; color: #000; padding: 5px; text-align: center; }
+
+.labour-area    { border: 1px solid #5F767F; margin: 20px 0 0 20px; width: 345px; padding-bottom: 10px; float: left; }
+.labour-item    { padding: 5px 10px 5px 10px; font-size: 16px; }
+.labour-item a  { float: none; padding: 13px 0;}
+
+.nonbill-item    { padding: 10px 10px 5px 10px; font-size: 16px; }
+.nonbill-item a { float: none; padding: 50px 0; }
+
+.startcol {float: left; margin: 100px 0 0 200px; width: 350px; border: 1px solid #5F767F; padding-bottom: 15px; }
+.startcol h2 { margin: 0 0 10px 0; background-color: #DFE8F6; color: #000; padding: 5px; text-align: center; }
+.startcol a { float: none; padding: 50px 0; margin: 20px;}
+
+.time-area    { border: 1px solid #5F767F; margin: 20px 0 0 20px; padding-bottom: 40px; float: left; width: 850px; }
+.notes-area    { border: 1px solid #5F767F; margin: 20px 0 0 20px; padding-bottom: 10px; float: left; width: 850px; }
+.error-area   {float: left; width: 850px;margin: 20px 0 0 0; }
+.submit-area  { margin: 20px 0 0 20px; float: left; padding-left: 310px;}
+.submit-area button { display: block; width: 200px; height: 50px; }
+
+.time-area p, .notes-area p { margin: 5px 15px; }
+
+.time-label  { float: left; width: 100px; padding: 15px 5px 0 0; text-align: right;}
+#time_hours, #time_mins { margin-top: 5px; }
+#time_hours a, #time_mins a { padding-top: 15px; padding-bottom: 15px; }
+#time_hours a { width: 43px; margin-left: 1px; }
+#time_mins  a { width: 26px; margin-left: 1px; }
+
+.doneitems { width: 500px; margin: 20px auto; padding: 30px; border: 1px solid #5F767F; background-color: #DFE8F6; }
+.doneitems a { display: block; float: none; padding: 15px 0; margin-top:10px; }
+
+.search-area { border: 1px solid #5F767F; margin: 10px 0 10px 125px; padding-bottom: 40px; float: left; width: 450px; }
+.qtylabel { float: left; clear: both; width: 300px; text-align: right; font-size: 15px; margin-top: 10px;}
+.qtyval   { float: left; padding-left: 20px; text-align: left; width: 300px; font-weight: bold; font-size: 16px; margin-top: 10px;}
+.partadd-area { border: 1px solid #5F767F; margin: 10px 0 10px 250px; padding-bottom: 40px; float: left; width: 700px; }
+
+.pager { width: 480px; margin: 0 auto; }
+.pager a.button { margin-left: 20px; background-color: #c5c5c5; border-color: #a5a5a5; color: #333; padding: 12px 15px;}
+
+.x-btn-noicon .x-btn-large .x-btn-text {height: auto;}
+
+.padding20 { padding: 20px 20px 0 20px; }
+.rounded5        { -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+.rounded10        { -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }
+.rounded10-top    { -webkit-border-radius: 10px 10px 0 0; -moz-border-radius: 10px 10px 0 0; border-radius: 10px 10px 0 0; }
+
+

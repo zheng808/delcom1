@@ -1,0 +1,217 @@
+
+    
+wfCRMCategory: 
+  wfCRMCategory_2:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 2
+    private_name: customers
+    public_name: Customers
+    is_subscribable: true
+  wfCRMCategory_3:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 3
+    private_name: employees
+    public_name: Employees
+    is_subscribable: true
+  wfCRMCategory_4:
+    parent_node_id: wfCRMCategory_3
+    private_name: managers
+    public_name: Managers
+    is_subscribable: true
+  wfCRMCategory_5:
+    parent_node_id: wfCRMCategory_3
+    private_name: programmers
+    public_name: Programmers
+    is_subscribable: true
+  wfCRMCategory_6:
+    parent_node_id: wfCRMCategory_3
+    private_name: workers
+    public_name: Workers
+    is_subscribable: false
+  wfCRMCategory_7:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 4
+    private_name: suppliers
+    public_name: Suppliers
+    is_subscribable: true
+    
+
+
+wfCRM:
+  wfCRM_2:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 2
+    department_name: Microsoft
+    work_phone: 123-123-123
+    mobile_phone: 234-234-234
+    home_phone: 345-345-345
+    fax: 456-456-456
+    homepage: 'http://microsoft.com'
+    private_notes: 'Software company'
+    is_company: '1'
+  wfCRM_3:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 3
+    department_name: 'Google inc.'
+    email: support@google.com
+    homepage: 'http://google.com'
+    work_phone: 123-123-123
+    is_company: '1'
+  wfCRM_4:
+    parent_node_id: wfCRM_2
+    first_name: Buill
+    middle_name: ''
+    last_name: Gates
+    salutation: Mr
+    titles: ''
+    job_title: 'Microsoft Chairman '
+    work_phone: 123-123-123
+    mobile_phone: 123-123-123
+    homepage: ''
+    is_company: '0'
+    is_in_addressbook: 0
+  wfCRM_5:
+    parent_node_id: wfCRM_3
+    salutation: Mr
+    first_name: Eric
+    last_name: Schmidt
+    job_title: 'Chairman of the Board and Chief Executive Officer '
+    email: Eric.Schmidt@google.com
+    work_phone: 123-123-123-123
+    mobile_phone: 123-123-123
+    is_company: '0'
+  wfCRM_6:
+    parent_node_id: wfCRM_2
+    department_name: "Microsoft Heartland District: Louisville, KY" 
+    work_phone: 123-123-123
+    fax: 456-456-456
+    homepage: ''
+    private_notes: 'Software company'
+    is_company: '1'
+  wfCRM_7:
+    parent_node_id: wfCRM_2
+    department_name: "Microsoft Heartland District: Grand Rapids, MI" 
+    work_phone: 123-123-123
+    fax: 456-456-456
+    homepage: 'http://microsoft.com'
+    private_notes: 'Software company'
+    is_company: '1'
+  wfCRM_8:
+    parent_node_id: wfCRM_2
+    department_name: "Microsoft Heartland District: Louisville, KY" 
+    work_phone: 123-123-123
+    fax: 456-456-456
+    homepage: 'http://microsoft.com'
+    private_notes: 'Software company'
+    is_company: '1'
+  wfCRM_9:
+    parent_node_id: wfCRM_3
+    department_name: 'Google Ann Arbor'
+    email: support@google.com
+    work_phone: 123-123-123
+    is_company: '1'
+  wfCRM_10:
+    parent_node_id: wfCRM_3
+    department_name: 'Google Atlanta'
+    email: support@google.com
+    work_phone: 123-123-123
+    is_in_addressbook: 0
+    is_company: '1'
+  wfCRM_11:
+    left_value: 1
+    right_value: 2
+    scope_id_value: 11
+    department_name: 'Yahoo! Inc.'
+    email: support@yahoo.com
+    homepage: 'http://www.yahoo.com/'
+    work_phone: 123-123-123
+    is_company: '1'
+  wfCRM_12:
+    parent_node_id: wfCRM_11
+    salutation: Mrs
+    first_name: Carol
+    last_name: Bartz
+    job_title: 'Chief Executive Officer'
+    is_company: '0'
+  wfCRM_13:
+    parent_node_id: wfCRM_11
+    salutation: Mr
+    first_name: Jerry
+    last_name: Yang
+    job_title: 'Co-founder and Chief Yahoo'
+    is_company: '0'
+    
+wfCRMCategoryRef:
+  wfCRMCategoryRef_1:
+    crm_id: wfCRM_4
+    category_id: wfCRMCategory_3
+  wfCRMCategoryRef_2:
+    crm_id: wfCRM_5
+    category_id: wfCRMCategory_3
+  wfCRMCategoryRef_3:
+    crm_id: wfCRM_12
+    category_id: wfCRMCategory_3
+  wfCRMCategoryRef_4:
+    crm_id: wfCRM_13
+    category_id: wfCRMCategory_3
+  wfCRMCategoryRef_5:
+    crm_id: wfCRM_2
+    category_id: wfCRMCategory_4
+  wfCRMCategoryRef_6:
+    crm_id: wfCRM_3
+    category_id: wfCRMCategory_4
+  wfCRMCategoryRef_7:
+    crm_id: wfCRM_4
+    category_id: wfCRMCategory_4
+  wfCRMCategoryRef_8:
+    crm_id: wfCRM_13
+    category_id: wfCRMCategory_4
+    
+wfCRMAddress:
+  wfCRMAddress_1:
+    crm_id: wfCRM_3
+    type: work
+    line1: '1600 Amphitheatre Parkway'
+    city: 'Mountain View'
+    region: CA
+    postal: '94043'
+    country: US
+  wfCRMAddress_2:
+    crm_id: wfCRM_9
+    type: work
+    line1: '201 S. Division St.'
+    line2: 'Suite 500'
+    city: 'Ann Arbor'
+    region: MI
+    postal: '48104'
+    country: US
+  wfCRMAddress_3:
+    crm_id: wfCRM_8
+    type: work
+    line1: '9900 Corporate Campus Dr., Suite 3000'
+    city: Louisville
+    region: KY
+    postal: '40223 '
+    country: US
+  wfCRMAddress_4:
+    crm_id: wfCRM_7
+    type: work
+    line1: '2525 East Paris Ave. SE, Suite 100'
+    city: 'Grand Rapid'
+    region: MI
+    postal: '49546'
+    country: ''
+  wfCRMAddress_5:
+    crm_id: wfCRM_10
+    type: work
+    line1: 'Millennium at Midtown'
+    line2: '10 10th Street NE, Suite 600'
+    city: 'Atlanta'
+    region: GA
+    postal: '30309'
+    country: ''

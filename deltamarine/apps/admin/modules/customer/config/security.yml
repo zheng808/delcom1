@@ -1,0 +1,23 @@
+index:
+  credentials: customer_view
+
+add:
+  credentials: customer_edit
+
+view:
+  credentials: customer_view
+
+edit:
+  credentials: customer_edit
+
+delete:
+  credentials: customer_edit
+
+boatAdd:
+  credentials: customer_edit
+
+boatEdit:
+  credentials: customer_edit
+
+boatDelete:
+  credentials: customer_edit

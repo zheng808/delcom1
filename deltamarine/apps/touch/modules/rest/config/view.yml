@@ -1,0 +1,4 @@
+all:
+  http_metas: 
+    content_type: application/json
+  has_layout: false

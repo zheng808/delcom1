@@ -1,0 +1,42 @@
+index:
+  credentials: sales_view
+
+add:
+  credentials: sales_edit
+
+addItem:
+  credentials: sales_edit
+
+delete:
+  credentials: sales_edit
+
+editItem:
+  credentials: sales_edit
+
+deleteItem:
+  credentials: sales_edit
+
+changestatus:
+  credentials: sales_edit
+
+shipitems:
+  credentials: sales_ship
+
+returnitems:
+  credentials: sales_returns
+
+deletereturn:
+  credentials: sales_returns
+
+addpayment:
+  credentials: sales_payments
+
+deletepayment:
+  credentials: sales_payments
+
+quickcheckout:
+  credentials: [sales_edit,sales_approve,sales_ship,sales_payments]
+
+invoice:
+  credentials: sales_view
+

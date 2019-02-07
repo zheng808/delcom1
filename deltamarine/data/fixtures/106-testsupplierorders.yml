@@ -1,0 +1,20 @@
+SupplierOrder:
+  supp_order1:
+    supplier_id: supp1
+    finalized:   true
+    approved:    true
+    sent:        true
+    date_ordered:  '2009-02-01 12:35:22'
+    date_expected: '2009-03-22 00:00:00'
+    
+SupplierOrderItem:
+  supp_order1_item1:
+    supplier_order_id:   supp_order1
+    part_variant_id:     part1_var2
+    quantity_requested:  25
+    quantity_completed:  0
+  supp_order1_item2:
+    supplier_order_id:   supp_order1
+    part_variant_id:     part1_var3
+    quantity_requested:  82
+    quantity_completed:  5

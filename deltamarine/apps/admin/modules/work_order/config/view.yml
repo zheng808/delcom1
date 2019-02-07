@@ -1,0 +1,7 @@
+all:
+  metas:
+    title:      Delta - Work Orders
+  javascripts: [TreeCombo, extCustomer-161010]
+
+viewSuccess:
+  javascripts: [extWorkorder-161127, extTimelog-161010]

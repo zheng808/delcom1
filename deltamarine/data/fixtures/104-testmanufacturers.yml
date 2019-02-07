@@ -1,0 +1,9 @@
+wfCRM:
+  manu1crm:
+    department_name: Test Manufacturer
+    is_company:      1
+
+Manufacturer:
+  manu1:
+    id: ~
+    wf_crm_id: manu1crm

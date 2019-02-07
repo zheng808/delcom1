@@ -1,0 +1,87 @@
+propel:
+  _attributes:              { package: plugins.wfCRMPlugin.lib.model }
+
+  wf_crm:
+    _attributes:            { phpName: wfCRM , treeMode: NestedSet , idMethod: native }
+    _indexes:               { alpha_name: [alpha_name], nested_set_left: [tree_left],  nested_set_right: [tree_right], nested_set_id: [tree_id],  email: [email] }
+    id:                     ~
+    tree_left:              { type: integer, nestedSetLeftKey: true }  #NestedSet left
+    tree_right:             { type: integer, nestedSetRightKey: true }  #NestedSet right
+    parent_node_id:         { type: integer, foreignTable: wf_crm, foreignReference: id , ondelete: setnull } 
+    tree_id:                { type: integer, treeScopeKey: true }  #NestedSet scope   
+    department_name:        { type: varchar(255) }   # if set, this record represents a department within a company (refered to by organization_crm_id)
+    first_name:             { type: varchar(255) }   # if set, this record reprsesents an individual. This individual can be part of a department
+    middle_name:            { type: varchar(255) }   #    or a company by setting department_crm_id or organization_crm_id respectively
+    last_name:              { type: varchar(255) }
+    salutation:             { type: varchar(64)  }
+    titles:                 { type: varchar(255) }
+    job_title:              { type: varchar(255) }
+    alpha_name:             { type: varchar(255) }   # used for alphabetical sorting (and searching)
+    email:                  { type: varchar(255) }
+    work_phone:             { type: varchar(64)  }
+    mobile_phone:           { type: varchar(64)  }
+    home_phone:             { type: varchar(64)  }
+    fax:                    { type: varchar(64)  }
+    homepage:               { type: varchar(255) }
+    private_notes:          { type: longvarchar  }
+    public_notes:           { type: longvarchar  }
+    is_company:             { type: boolean, required: true, default: false } # if true, this record represents a company
+    is_in_addressbook:      { type: boolean, required: true, default: true } # if true, this record represents a company
+    created_at:             ~
+    updated_at:             ~
+
+  wf_crm_category_ref:
+    _attributes:            { phpName: wfCRMCategoryRef }
+    crm_id:                 { type: integer, foreignTable: wf_crm, foreignReference: id , onDelete: cascade , primaryKey: true }  
+    category_id:            { type: integer, foreignTable: wf_crm_category, foreignReference: id , onDelete: cascade , primaryKey: true }
+
+  wf_crm_category:
+    _attributes:            { phpName: wfCRMCategory , treeMode: NestedSet , idMethod: native }
+    id: ~
+    tree_left:              { type: integer, nestedSetLeftKey: true }  #NestedSet left
+    tree_right:             { type: integer, nestedSetRightKey: true }  #NestedSet right
+    tree_id:                { type: integer, treeScopeKey: true}  #NestedSet scope
+    parent_node_id:         { type: integer, foreignTable: wf_crm_category, foreignReference: id , onDelete: setnull  }  
+    private_name:           { type: varchar(255), required: true }
+    public_name:            { type: varchar(255), required: true }            # the name that shows up for subscribing to
+    is_subscribable:        { type: boolean, required: true, default: false } # people can subscribe themselves to this list
+     
+  wf_crm_address:
+    _attributes:            { phpName: wfCRMAddress }
+    _indexes:               { country: [country], region: [country, region] }
+    id:                     ~
+    crm_id:                 { type: integer, foreignTable: wf_crm, foreignReference: id , ondelete: cascade }  
+    type:                   { type: varchar(255) }
+    line1:                  { type: varchar(255) }
+    line2:                  { type: varchar(255) }
+    city:                   { type: varchar(128)  }
+    region:                 { type: varchar(128)  }
+    postal:                 { type: varchar(16)  }
+    country:                { type: varchar(2), required: true }  #at a bare minimum we need to know a country. Region and City set for varying accuracy.
+
+#  wf_crm_list:
+#    _attributes:            { phpName: wfCRMList }
+#    id:                     ~
+#    private_name:           { type: varchar(255), required: true }            # the name that shows up in admin
+#    public_name:            { type: varchar(255), required: true }            # the name that shows up for subscribing to
+#    is_subscribable:        { type: boolean, required: true, default: false } # people can subscribe themselves to this list
+
+#  wf_crm_subscription:
+#    _attributes:            { phpName: wfCRMSubscription }
+#    id:                     ~
+#    wf_list_id:             { type: integer, foreignTable: wf_crm_list, foreignReference: id, onDelete: cascade }
+#    wf_crm_id:              { type: integer, foreignTable: wf_crm,      foreignReference: id, onDelete: cascade }
+#    subscribe_date:         { type: timestamp, required: true }
+#    unsubscribe_date:       { type: timestamp }
+
+  wf_crm_correspondence:
+    _attributes:            { phpName: wfCRMCorrespondence }
+    _indexes:               { new: [is_new], person: [wf_crm_id] }
+    id:                     ~
+    wf_crm_id:              { type: integer, foreignTable: wf_crm, foreignReference: id, onDelete: cascade }
+    received:               { type: boolean, required: true, default: true }  # is recieved from contact (as opposed to sent TO contact)
+    method:                 { type: varchar(16), required: true            }  # phone, email, contactform, etc
+    subject:                { type: varchar(128)                           }  # only set for received emails/contact forms
+    message:                { type: longvarchar                            }  # also used as phonecall summary. could contain html.
+    whendone:               { type: timestamp, required: true              }  # should default to date of row insertion
+    is_new:                 { type: boolean, required: true, default: true }

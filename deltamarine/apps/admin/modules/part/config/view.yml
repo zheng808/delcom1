@@ -1,0 +1,11 @@
+all:
+  metas:
+    title:      Delta - Parts Management
+
+  javascripts: [TreeCombo]
+
+bulkInventorySuccess:
+  javascripts: [-barcodes_admin, -barcodes_base]
+
+viewSuccess:
+  javascripts: [extCustomer-161010]

@@ -1,0 +1,40 @@
+.clear { clear: both; height: 0; }
+a img { border: none; }
+p { margin-top: 0; }
+.calendar
+{
+        z-Index:999999;
+}
+/*forms*/
+form { display: inline; }
+ul.radio_list { list-style: none; margin: 0; padding: 0}
+ul.radio_list li { list-style: none; }
+ul.radio_list li label { float: none; background-color: transparent; width: auto; display: inline; clear: none;}
+
+fieldset { border: 1px solid #999; margin: 5px 0 0 0; padding: 10px;}
+legend { color: #D60; font-weight: normal; font-size: 1em; margin-left: 10px; padding: 0 10px; }
+button.formsubmit { margin-left: 160px; margin-top: 8px; }
+
+select, textarea, input { background-color: #f4f4d4; border: 1px solid #888; }
+select.disabled, textarea.disabled, input.disabled { background-color: #eee; color: #999;}
+
+/* divforms */
+.formrow { clear: both; margin-top: 3px;}
+.formrow label { display: block; width: 150px; float: left; text-align: right; padding: 4px 8px 0 0; }
+.formrow-fields { margin-left: 160px; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #f4f4f4;}
+.formrow-fields label { display: inline; width: auto; float: none; text-align: left; padding: 0; font-size: 0.9em;}
+ul.formrow-errors { margin: 0; color: #990000; padding: 0;}
+ul.formrow-errors li { list-style: none; margin: 0; padding: 0; font-size: 0.9em; }
+.formrow-fields ul.checkbox_list { list-style: none; margin: 0; padding: 0; }
+.formrow-fields ul.checkbox_list li { list-style: none; margin: 0; padding: 0; }
+div.haserror .formrow-fields{ border: 1px solid #eecccc; background-color: #ffeeee; }
+span.requiredmark { font-weight: bold; color: #990000; font-size: 1.2em; padding-left: 5px; float: right;}
+.formrow-help { float: right; }
+
+/* autocomplete */
+div.auto_complete                     { width: 400px; background: #fff; }
+div.auto_complete ul                  { width: 100%; margin: 0; padding: 0; list-style-type: none; border: 1px solid #bbb; }
+div.auto_complete ul li               { margin: 0;  padding: 3px; border-bottom: 1px solid #eee; list-style-type: none; }
+div.auto_complete ul li.selected      { background-color: #ffb; }
+div.auto_complete ul strong.highlight { margin: 0;  padding: 0; color: #800; }
+

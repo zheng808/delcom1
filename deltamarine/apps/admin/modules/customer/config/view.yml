@@ -1,0 +1,5 @@
+all:
+  metas:
+    title:     Delta - Customer Management
+
+  javascripts: [extCustomer-161010]

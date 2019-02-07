@@ -1,0 +1,62 @@
+index:
+  credentials: workorder_view
+
+add:
+  credentials: workorder_estimates
+
+edit:
+  credentials: [workorder_approve,workorder_edit]
+
+view:
+  credentials: workorder_view
+
+delete:
+  credentials: [workorder_approve,workorder_edit]
+
+itemmove:
+  credentials: workorder_edit
+
+itemload:
+  credentials: workorder_view
+
+itemedit:
+  credentials: workorder_add
+
+itemdelete:
+  credentials: workorder_edit
+
+partadd:
+  credentials: workorder_add
+
+partedit:
+  credentials: workorder_edit
+
+partload:
+  credentials: workorder_view
+
+partdelete:
+  credentials: workorder_edit
+
+partmove:
+  credentials: workorder_add
+
+expenseedit:
+  credentials: workorder_add
+
+expensemove:
+  credentials: workorder_add
+
+expenseload:
+  credentials: workorder_view
+
+expensedelete:
+  credentials: workorder_edit
+
+notesedit:
+  credentials: workorder_edit
+
+notesload:
+  credentials: workorder_view
+
+timelogmove:
+  credentials: workorder_add

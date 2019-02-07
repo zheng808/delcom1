@@ -1,0 +1,6 @@
+# default values
+all:
+
+  hst_rate: 0
+  pst_rate: 7
+  gst_rate: 5

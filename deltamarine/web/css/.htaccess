@@ -1,0 +1,14 @@
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresDefault "access plus 8 hours"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /css
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^([^-]+)-[0-9]{6}.css$  $1.css [L]
+
+</IfModule>

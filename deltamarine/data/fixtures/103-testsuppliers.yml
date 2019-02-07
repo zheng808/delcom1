@@ -1,0 +1,10 @@
+wfCRM:
+ supp1crm:
+   department_name: Test Supplier
+   is_company:      1
+
+Supplier:
+  supp1:
+    id: ~
+    wf_crm_id: supp1crm
+

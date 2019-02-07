@@ -1,0 +1,17 @@
+index:
+  credentials: timelogs_view
+
+changestatus:
+  credentials: timelogs_approve
+
+save:
+  credentials: [[timelogs_view,timelogs_add_other,timelogs_add_self]]
+
+labour:
+  credentials: timelogs_labour
+
+labourEdit:
+  credentials: timelogs_labour
+
+labourDelete:
+  credentials: timelogs_labour

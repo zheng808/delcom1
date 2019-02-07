@@ -1,0 +1,29 @@
+index:
+  credentials: orders_view
+
+add:
+  credentials: orders_edit
+
+addItem:
+  credentials: orders_edit
+
+delete:
+  credentials: orders_edit
+
+editItem:
+  credentials: orders_edit
+
+deleteItem:
+  credentials: orders_edit
+
+changestatus:
+  credentials: orders_edit
+
+receiveitems:
+  credentials: orders_receive
+
+invoice:
+  credentials: orders_view
+
+changeExpectedDate:
+  credentials: orders_edit

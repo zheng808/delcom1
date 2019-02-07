@@ -1,0 +1,9 @@
+.svn
+/web/uploads/*
+/cache/*
+/log/*
+/web/*_dev.php
+/config/ProjectConfiguration.class.php
+/config/databases.yml
+/config/propel.ini
+/web/*Plugin

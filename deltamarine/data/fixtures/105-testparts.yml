@@ -1,0 +1,102 @@
+Part:
+  part1:
+    name:             Brass Wood Screws
+    description:      Here is a short description of the part
+    part_category_id: samplecat1
+    manufacturer_id:  manu1
+    is_multisku:      true
+  part2:
+    name:             Test Widget
+    part_category_id: samplecat2a
+
+PartOption:
+  part1_opt1:
+    part_id:           part1
+    name:              Head Size
+  part1_opt2:
+    part_id:           part1
+    name:              Length
+  part1_opt3:
+    part_id:           part1
+    name:              Puchase Amount
+
+PartVariant:
+  part1_var1:
+    part_id:            part1
+    is_default_variant: true
+    unit_cost:          50.00
+    markup_amount:      5.99
+    current_on_hand:    5
+    manufacturer_sku:   ms1
+    internal_sku:       is1
+  part1_var2:
+    part_id:                 part1
+    is_default_variant:      false
+    use_default_units:       true
+    use_default_pricing:     true
+    use_default_inventory:   true
+    use_default_dimensions:  true
+    manufacturer_sku:        ms11
+    internal_sku:            is11
+  part1_var3:
+    part_id:                 part1
+    is_default_variant:      false
+    use_default_units:       true
+    use_default_pricing:     false
+    unit_cost:               0.50
+    markup_percent:          40
+    use_default_inventory:   true
+    use_default_dimensions:  true
+    manufacturer_sku:        ms12
+    internal_sku:            is12
+  part2_var1:
+    part_id:            part2
+    is_default_variant: true
+    unit_cost:          12
+    markup_percent:     10   # in percent integers
+    manufacturer_sku:   ms2
+    internal_sku:       is2
+
+PartOptionValue:
+  part1_opt1_val1:
+    part_variant_id:    part1_var2
+    part_option_id:     part1_opt1
+    value:              '#8'
+  part1_opt1_val2:
+    part_variant_id:    part1_var3
+    part_option_id:     part1_opt1
+    value:              '#10'
+  part1_opt2_val1:
+    part_variant_id:    part1_var2
+    part_option_id:     part1_opt2
+    value:              '3/4"'
+  part1_opt2_val2:
+    part_variant_id:    part1_var3
+    part_option_id:     part1_opt2
+    value:              '1"'
+  part1_opt3_val1:
+    part_variant_id:    part1_var2
+    part_option_id:     part1_opt3
+    value:              Box
+  part1_opt3_val2:
+    part_variant_id:    part1_var3
+    part_option_id:     part1_opt3
+    value:              Individual Screw
+
+Subpart:
+  subpart1:
+    parent_id:              part1_var2
+    child_id:               part1_var3
+    child_quantity:         200
+  subpart2:
+    parent_id:              part1_var2
+    child_id:               part1_var3
+    child_quantity:         100
+
+PartSupplier:
+  part1_var1_sup:
+    part_variant_id: part1_var1
+    supplier_id:     supp1
+  part2_var1_sup:
+    part_variant_id: part2_var1
+    supplier_id:     supp1 

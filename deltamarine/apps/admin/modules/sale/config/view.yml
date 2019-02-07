@@ -1,0 +1,8 @@
+all:
+  metas:
+    title:     Delta - Sales
+
+  javascripts: [TreeCombo]
+
+indexSuccess:
+  javascripts: [extCustomer-161010]

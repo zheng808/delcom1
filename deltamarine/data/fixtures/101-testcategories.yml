@@ -1,0 +1,26 @@
+PartCategory:
+  samplecat1:
+    name:       Hardware
+    lft:        2
+    rgt:        9
+  samplecat2:
+    name:       Bolts
+    lft:        3
+    rgt:        6
+  samplecat2a:
+    name:       Hex Head
+    lft:        4
+    rgt:        5
+  samplecat3:
+    name:       Nails
+    lft:        7
+    rgt:        8
+  samplecat4:
+    name:       Plumbing & Electrical
+    lft:        10
+    rgt:        11
+  samplecat5:
+    name:       Appliances
+    lft:        12
+    rgt:        13
+

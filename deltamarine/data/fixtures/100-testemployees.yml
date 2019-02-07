@@ -1,0 +1,16 @@
+SfGuardUser:
+  daveemp:
+    username: daveemp
+    password: daveemp
+    salt: daveemp
+
+wfCRM:
+  davecrm:
+    first_name: Dave
+    last_name:  Achtemichuk
+
+Employee:
+  daveemp:  
+    guard_user_id: daveemp
+    wf_crm_id: davecrm
+

@@ -1,0 +1,18 @@
+# default values
+all:
+  sf_guard_plugin:
+    remember_key_expiration_age: 2592000
+    remember_cookie_name:        delta_rk
+    signin_form:                 sfGuardFormSigninCustom
+
+  hst_rate: 12
+  pst_rate: 7
+  gst_rate: 5
+
+  workorder:
+    default_tasks:  
+      - Admin & Project Mgmt
+      - Product Sourcing & Ordering
+      - Install Protective Coverings
+      - Clean Up/Final Clean Up
+      - Freight & Customs

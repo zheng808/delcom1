@@ -1,0 +1,63 @@
+SfGuardUser:
+  cust1guard:
+    username: cust1
+    password: cust1
+    salt: cust1
+  cust2guard:
+    username: cust2
+    password: cust2
+    salt: cust2
+
+wfCRM:
+  cust1crm:
+    first_name:    Customer
+    last_name:     One
+
+Customer:
+  cust1:
+    guard_user_id: cust1guard
+    wf_crm_id:     cust1crm
+
+Invoice:
+  invoice1:
+    customer_id:   cust1
+    receivable:    0
+    subtotal:      24
+    total:         24
+
+CustomerOrder:
+  custorder1:
+    customer_id: cust1
+    finalized:   true
+    approved:    true
+    sent_some:   false
+    sent_all:    false
+    invoice_id:  invoice1
+    date_ordered:  '2009-02-01 12:35:22'
+
+PartInstance:
+  custorder1_item1_instance:
+    part_variant_id:    part1_var2
+    quantity:           7
+    unit_price:         20
+    unit_cost:          12
+    allocated:          true
+    delivered:          false
+    date_used:          '2009-02-01 12:35:21'
+  custorder1_item2_instance:
+    part_variant_id:    part1_var3
+    quantity:           2
+    unit_price:         20
+    unit_cost:          12
+    allocated:          true
+    delivered:          false
+    date_used:          '2009-02-01 12:35:21'
+
+CustomerOrderItem:
+  custorder1item1:
+    customer_order_id:  custorder1
+    part_instance_id:   custorder1_item1_instance
+    quantity_completed: 0
+  customerorderitem2:
+    customer_order_id:  custorder1
+    part_instance_id:   custorder1_item2_instance

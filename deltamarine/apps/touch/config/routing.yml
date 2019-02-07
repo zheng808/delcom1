@@ -1,0 +1,21 @@
+# default rules
+
+homepage:
+  url:   /
+  param: { module: general, action: index }
+
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default_rest:
+  url:   /rest/:action
+  param: { module: rest }
+
+default_rest_id:
+  url:   /rest/:action/:id
+  param: { module: rest }
+  requirements: {id: \d+ }
+
+default:
+  url:   /:module/:action/*

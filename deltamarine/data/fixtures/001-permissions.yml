@@ -1,0 +1,41 @@
+sfGuardPermission:
+
+#Work Order & Estimates permissions
+  wo_create:
+    name:           wo_create
+    description:    Create a new Work Order (as status = estimate)
+  wo_activate:
+    name:           wo_activate
+    description:    Activate Work Order (set status => active)
+  wo_close:
+    name:           wo_close
+    description:    Close Work Order (set status => complete)
+  wo_edit:
+    name:           wo_edit
+    description:    Edit Work Order (when status = estimate or active) - includes adding/editing/deleting all items
+  wo_edit_completed:
+    name:           wo_edit_completed
+    description:    Edit Old Work Order (when status = complete)
+  wo_view:
+    name:           wo_view
+    description:    View Work Order (read-only access)
+  wo_view_internal_notes:
+    name:           wo_view_internal_notes
+    description:    View Internal Notes (enables viewing of the internal notes for the different work order items)
+  wo_generate_invoice:
+    name:           wo_generate_invoice
+    description:    Generate a Invoice (add work order items (usually all of them) to a new invoice)
+
+#TimeLog permissions
+  tl_submit:
+    name:           tl_submit
+    description:    Submit Time Logs
+  tl_view:
+    name:           tl_view
+    description:    View Time Logs (of any employee) - includes viewing reports + details of employee work logs
+  tl_approve:
+    name:           tl_approve
+    description:    Approve Time Logs (of any employee)
+  tl_edit:
+    name:           tl_edit
+    description:    Edit/Delete Time Log (of any employee)
