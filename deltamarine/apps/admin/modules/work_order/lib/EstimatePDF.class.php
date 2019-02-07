@@ -833,7 +833,8 @@ class EstimatePDF extends sfTCPDF
       foreach ($sections AS $key => $section)
       {
         $numbering = explode(':', $key);
-        $totals = $this->generateSection($numbering[0], trim($numbering[1]), $section, $totals);
+        //$totals = $this->generateSection($numbering[0], trim($numbering[1]), $section, $totals);
+        $totals = $this->generateSection($numbering[0], trim($numbering[1]), $section, $totals, true);
       }
 
       return $totals;

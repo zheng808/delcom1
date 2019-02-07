@@ -161,7 +161,7 @@ class detailstreeAction extends sfAction
         {
           $label = ($log->getLabourTypeId() ? $log->getLabourType()->getName() : $log->getCustomLabel());
           $labour_out['children'][] = array('id' => 'labour-'.$node->getId().'-estimate-'.$log->getId(),
-                                            'text' => $label.' ('.$log->getHoursAndMinutes().' @ '.$log->getRate().'/hr)',
+                                            'text' => $label.' ('.$log->getHoursAndMinutes(false).' @ '.$log->getRate().'/hr)',
                                             'iconCls' => 'labour',
                                             'estimate' => $log->getCost(),
                                             'actual' => null,
@@ -217,7 +217,7 @@ class detailstreeAction extends sfAction
             $status .= '<img src="/images/silkicon/error.png" title="Unapproved" width="14" height="14" style="float: left; margin-right: 3px;" /> Unapproved';
           }
           $labour_out['children'][] = array('id' => 'labour-'.$node->getId().'-'.$this_labourtype_id.'-'.$log->getId(),
-                                            'text' => $log->getEmployee()->generateName().': '.$log->getEndTime('M j, Y').' ('.$log->getHoursAndMinutes().' @ '.$log->getRate().'/hr)',
+                                            'text' => $log->getEmployee()->generateName().': '.$log->getEndTime('M j, Y').' ('.$log->getHoursAndMinutes(false).' @ '.$log->getRate().'/hr)',
                                             'iconCls' => 'labour',
                                             'estimate' => null,
                                             'actual' => $log->getCost(),
