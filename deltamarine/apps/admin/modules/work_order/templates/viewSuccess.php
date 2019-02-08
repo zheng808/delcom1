@@ -131,6 +131,37 @@ function reload_tree(){
   foldersStore.setRootNode(tree_root_node);
 }
 
+var workordersStore = new Ext.data.JsonStore({
+  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt','text'],
+  //sorters: [{ property: 'id', direction: 'DESC' }],
+  remoteSort: true,
+  pageSize: 1000,
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('work_order/datagrid'); ?>',
+    extraParams: { status: 'In Progress', sort: 'id', dir: 'DESC' },
+    //simpleSortMode: true,
+    reader: { 
+      root: 'workorders',
+      totalProperty: 'totalCount',
+      idProperty: 'id'
+    }
+  }
+});
+
+
+var workorderItemsStore = new Ext.data.JsonStore({
+  fields: ['id','workorder_id','label','text'],
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('/work_order/workorderItems'); ?>',
+    reader: {
+      root: 'items',
+      idProperty: 'id'
+    }
+  }
+});
+
 var itemsStore = new Ext.data.TreeStore({
   fields: ['id', 'text','estimate','actual','info','custom'],
   proxy: {
@@ -279,6 +310,23 @@ function showPartAddWin(){
   Ext.getCmp('partadd_namesearch').focus(true, 200);
 }
 
+function showPartMoveWin(partInstanceId){
+
+  var config = {
+    workorder_id: <?php echo $workorder->getId(); ?>,
+    workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
+    pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
+    gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
+    pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
+    gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>,
+  };
+
+  partInst = partInstanceId;
+  workordersStore.load();
+  PartMoveWin.show();
+}//showPartMoveWin()-----------------------------------------------------------
+
+
 function filterPartGrid(field){
   grid = Ext.getCmp('parts_grid');
     if (grid.store.proxy.extraParams[field.paramField]){
@@ -318,6 +366,12 @@ var showPartCustomEditWin = function(inst_id){
 };
 
 var showPartEditWin = function(inst_id, data){
+  var workorder_id = <?php echo $workorder->getId(); ?>;
+
+  showPartEditWindow(inst_id, workorder_id, data);
+};//showPartEditWin()----------------------------------------------------------
+
+function showPartEditWindow(inst_id, wo, data){
   var config = {
     workorder_id: <?php echo $workorder->getId(); ?>,
     workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
@@ -336,7 +390,153 @@ var showPartEditWin = function(inst_id, data){
   }
   
   new Ext.ux.PartEditWin(config);
-};
+};//showPartEditWindow()-------------------------------------------------------
+
+var PartMoveWin = new Ext.Window({
+  width: 550,
+  height: 200,
+  border: false,
+  resizable: false,
+  modal: true,
+  id: 'partmovewo',
+  closeAction: 'hide',
+  title: 'Move Part to Other Work Order',
+  layout: 'fit',
+  items: new Ext.FormPanel({
+    autoWidth: true,
+    id: 'partmoveform',
+    url: '<?php echo url_for('work_order/partmovewo'); ?>',
+    bodyStyle: 'padding: 15px 10px 0 10px',
+    fieldDefaults: { labelAlign: 'left' },
+    items: [{
+      xtype: 'textfield',
+      width: 350,
+      fieldLabel: 'Move from Work Order',
+      name: 'workorderNumber',
+      value: this_workorder_id,
+      disabled: true,    
+    },{
+          xtype: 'combo',
+          width: 350,
+          itemId: 'workorderField',
+          id: 'workorderField',
+          fieldLabel: 'Move to Workorder',
+          name: 'workorder_id',
+          forceSelection: true,
+          allowBlank: false,
+          valueField: 'id',
+          displayField: 'text',
+          emptyText: 'Select New Workorder...',
+          minChars: 2,
+          anyMatch: true,
+          store: workordersStore,
+          listConfig: { minWidth: 350 },
+          queryMode: 'local',
+          listeners: {
+            'select': function(field,r){
+              var itemField = field.up('form').down('#itemField');
+              itemField.clearValue();
+              itemField.setDisabled(false);
+              itemField.getStore().proxy.setExtraParam('workorder_id', field.getValue());
+              itemField.getStore().load({
+                callback: function(){
+                  var itemField = field.up('form').down('#itemField');
+                  if (itemField.getStore().getCount() === 0){
+                    Ext.Msg.alert(
+                      'No Tasks Available', 
+                      'This workorder ('+field.getValue()+') does not have any tasks');
+                  }
+                  else if (itemField.getStore().getCount() == 1){
+                    itemField.setValue( itemField.getStore().getAt(0).data.id);
+                  } else {
+                    itemField.onTriggerClick();
+                  }
+                }
+              });
+              //r = field.findRecordByValue(field.getValue());
+            },
+            'blur': function(field){
+              if (field.getValue() == '')
+              {
+                var itemField = field.up('form').down('#itemField');
+                itemField.clearValue();
+                itemField.setDisabled(true);
+                itemField.getStore().proxy.setExtraParam('workorder_id', null);
+                field.up('form').down('#itemField').setDisabled(true);
+              }
+            }
+          }
+        },{
+          xtype: 'combo',
+          width: 350,
+          itemId: 'itemField',
+          id: 'itemField',
+          fieldLabel: 'Move to Task',
+          name: 'wo_item_id',
+          forceSelection: true,
+          editable: false,
+          allowBlank: false,
+          valueField: 'id',
+          displayField: 'text',
+          disabled: true,
+          triggerAction: 'all',
+          emptyText: 'Select New Task...',
+          minChars: 1,
+          store: workorderItemsStore,
+          listConfig: { minWidth: 350 },
+          queryMode: 'local'
+        }
+  ],
+
+    buttons: [{
+      text: 'OK',
+      formBind: true,
+      handler: function(btn){
+        var newWorkorderItem = Ext.getCmp('itemField').getValue();
+        var newWorkorder = Ext.getCmp('workorderField').getValue();
+                
+        Ext.Msg.alert('Moving Part', 'Moving Part to Workorder: ' + newWorkorder);
+        PartMoveWin.hide();
+
+       Ext.Ajax.request({
+            url: '<?php echo url_for('work_order/partmove'); ?>',
+            method: 'POST',
+            params: { 
+              id: partInst, 
+              target: newWorkorderItem
+            },
+            success: function(){
+              Ext.Msg.hide();
+              reload_tree();
+              partslistStore.load();
+            },
+            failure: function(){
+              Ext.Msg.hide();
+              Ext.Msg.show({
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.MessageBox.OK,
+                msg: 'Could not move part! Reload page and try again.',
+                modal: true,
+                title: 'Error'
+              });
+              reload_tree();
+            }
+          });
+
+          Ext.getCmp('parts_grid').getSelectionModel().deselectAll();
+          Ext.getCmp('workorder_tree').getSelectionModel().deselectAll();
+      }
+    },{
+      text: 'Cancel',
+      handler:function(){
+        PartMoveWin.hide();
+        Ext.getCmp('parts_grid').getSelectionModel().deselectAll();
+      }
+    }
+  ]
+
+  })
+});//PartMoveWin()-------------------------------------------------------------
 
 var PartAddWin = new Ext.Window({
   width: 550,
@@ -489,7 +689,7 @@ var PartAddWin = new Ext.Window({
       Ext.getCmp('parts_grid').getSelectionModel().deselectAll();
     }
   }]
-});
+});//PartAddWin()--------------------------------------------------------------
 
 var parts_list = new Ext.grid.GridPanel({
   title: 'Parts List',
@@ -567,6 +767,22 @@ var parts_list = new Ext.grid.GridPanel({
           Ext.Msg.alert('Permission Denied','You do not have permission to edit workorders');
         <?php endif; ?>
       }
+    },'-',
+    {
+      text: 'Move Selected Part',
+      id: 'parts_list_movebutton',
+      iconCls: 'partmove',
+      disabled: true,
+      handler: function(){
+        <?php if ($sf_user->hasCredential('workorder_edit')): ?>
+          var record = parts_list.getSelectionModel().getSelection()[0].data;
+          partInst = record.id
+
+          showPartMoveWin(record.id);
+        <?php else: ?>
+          Ext.Msg.alert('Permission Denied','You do not have permission to edit workorders');
+        <?php endif; ?>
+      }
     },'->',{
       text: 'Print List',
       iconCls: 'print',
@@ -606,10 +822,11 @@ var parts_list = new Ext.grid.GridPanel({
     listeners: {
       selectionchange: function(sm){
         Ext.getCmp('parts_list_editbutton').setDisabled(!sm.hasSelection());
+        Ext.getCmp('parts_list_movebutton').setDisabled(!sm.hasSelection());
       }
     }
   }) 
-});
+});//parts_list()--------------------------------------------------------------
 
 /*********************************************/
 /*      LABOUR STUFF                         */
@@ -1132,7 +1349,10 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       value: '<?php echo $workorder->getSummaryColor(); ?>',
       width: 350,
       items: color_code_array
-    },{
+    },
+    /*
+    Removed for_rigging option
+    {
       xtype: 'acbuttongroup',
       fieldLabel: 'Company',
       width: 350,
@@ -1142,7 +1362,9 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         { value: '0', text: 'Delta Services' },
         { value: '1', text: 'Delta Rigging' }
       ]
-    },{
+    },
+    */
+    {
       xtype: 'combo',
       fieldLabel: 'Category',
       name: 'workorder_category_id',

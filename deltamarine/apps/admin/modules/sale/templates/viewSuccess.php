@@ -381,7 +381,10 @@ var SaleEditWin = new Ext.Window({
       anchor: '-25',
       name: 'boat_name',
       value: '<?php echo $sale->getBoatName(); ?>',
-    },{
+    },
+    /*
+    Removed for_rigging option
+    {
       xtype: 'fieldcontainer',
       fieldLabel: 'Company',
       layout: 'hbox',
@@ -423,7 +426,9 @@ var SaleEditWin = new Ext.Window({
           if (pressed) btn.prev('hidden').setValue(btn.valueField);
         }}
       }]
-    },{
+    },
+    */
+    {
       xtype: 'fieldcontainer',
       fieldLabel: 'PST',
       layout: 'hbox',

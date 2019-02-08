@@ -57,7 +57,7 @@ var boatTpl = new Ext.XTemplate(
 );
 
 var workordersStore = new Ext.data.JsonStore({
-  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress'],
+  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt'],
   sorters: [{ property: 'id', direction: 'DESC' }],
   remoteSort: true,
   pageSize: 25,
@@ -299,7 +299,10 @@ var WorkOrderAddWin = new Ext.Window({
       store: catsStore,
       value: 0,
       listConfig: { minWidth: 200 }
-    },{
+    },
+    /*
+    Removed for_rigging field
+    {
       xtype: 'fieldcontainer',
       fieldLabel: 'Company',
       layout: 'hbox',
@@ -336,7 +339,9 @@ var WorkOrderAddWin = new Ext.Window({
           if (pressed) btn.prev('hidden').setValue(btn.valueField);
         }}
       }]      
-    },{
+    },
+    */
+    {
       xtype: 'fieldcontainer',
       fieldLabel: 'Initial Status',
       layout: 'hbox',
@@ -601,6 +606,33 @@ var grid = new Ext.grid.GridPanel({
     dataIndex: 'category_name',
     sortable: true,
     width: 90
+  },
+  /* Individual GST and PST columns */
+  //{
+  //  header: "GST",
+  //  dataIndex: 'gst_exempt',
+  //  sortable: true,
+  //  width: 40
+  //},{
+  //  header: "PST",
+  //  dataIndex: 'pst_exempt',
+  //  sortable: true,
+  //  width: 45
+  //},
+  {
+    header: "Tax Exempt",
+    dataIndex: 'tax_exempt',
+    sortable: true,
+    renderer: function(value,metaData,record){
+      output = ' '
+      if (value == 'Y'){
+        img = 'flag_red';
+        output = '<img src="/images/silkicon/tick.png" title="Tax Exempt" alt="'+value+'" />';
+      }
+      return output;
+    },
+    align: 'center',
+    width: 70
   },{
     header: "Status",
     dataIndex: 'status',
@@ -869,7 +901,10 @@ var filter = new Ext.Panel({
         }
       <?php endforeach; ?>
       ]
-    },{
+    },
+    /*
+    Removed Rigging Filter
+    {
       id: 'filter_rigging',
       xtype: 'container',
       padding: '5 5 15 5',
@@ -907,7 +942,9 @@ var filter = new Ext.Panel({
         valueField: '1',
         flex: 3
       }]
-    },{
+    },
+    */
+    {
       id: 'filter_category',
       xtype: 'combo',
       fieldLabel: 'Category',
@@ -1004,7 +1041,7 @@ var filter = new Ext.Panel({
       iconCls: 'undo',
       handler: function(){
         Ext.getCmp('filter_status').down('button[isDefault]').toggle(true);
-        Ext.getCmp('filter_rigging').down('button[isDefault]').toggle(true);
+        //Ext.getCmp('filter_rigging').down('button[isDefault]').toggle(true);
         Ext.getCmp('filter_color').down('button[isDefault]').toggle(true);
 
         Ext.getCmp('filter_category').reset();

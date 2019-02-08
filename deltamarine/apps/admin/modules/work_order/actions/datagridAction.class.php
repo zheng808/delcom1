@@ -201,7 +201,11 @@ class datagridAction extends sfAction
         'color'    => $workorder->getSummaryColor(),
         'for_rigging' => $workorder->getForRigging(),
         'category_name' => $workorder->getWorkorderCategory() ? $workorder->getWorkorderCategory()->getName() : '',
-        'progress' => isset($completion[$workorder->getId()]) ? implode('/',$completion[$workorder->getId()]) : ''
+        'progress' => isset($completion[$workorder->getId()]) ? implode('/',$completion[$workorder->getId()]) : '',
+        'pst_exempt' => ($workorder->getPstExempt() ? 'Y' : 'N'), 
+        'gst_exempt' => ($workorder->getGstExempt() ? 'Y' : 'N'),
+        'tax_exempt' => ($workorder->getGstExempt() || $workorder->getPstExempt() ? 'Y' : 'N'),
+        'text'  => '['.$workorder->getId().'] '.$workorder->getCustomer()->getName(false, false, false)
        );
     }
     $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);

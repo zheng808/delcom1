@@ -31,6 +31,9 @@ partadd:
 partedit:
   credentials: workorder_edit
 
+partmove:
+  credentials: workorder_edit
+
 partload:
   credentials: workorder_view
 

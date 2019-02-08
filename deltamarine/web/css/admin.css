@@ -277,6 +277,7 @@ table.x-btn { margin: 3px }
 .x-btn-button .timeadd,      .x-btn-button .timeadd:hover      { background-image: url(/images/silkicon/time_add.png); }
 .x-btn-button .timeedit,     .x-btn-button .timeedit:hover     { background-image: url(/images/silkicon/clock_edit.png); }
 .x-btn-button .partadd,      .x-btn-button .partadd:hover      { background-image: url(/images/silkicon/cog_add.png); }
+.x-btn-button .partmove,     .x-btn-button .partmove:hover     { background-image: url(/images/silkicon/cog_go.png); }
 .x-btn-button .partedit,     .x-btn-button .partedit:hover     { background-image: url(/images/silkicon/cog_edit.png); }
 .x-btn-button .inventory,    .x-btn-button .inventory:hover    { background-image: url(/images/silkicon/calculator.png); }
 .x-btn-button .barcode,      .x-btn-button .barcode:hover      { background-image: url(/images/silkicon/printer.png); }
@@ -293,6 +294,7 @@ table.x-btn { margin: 3px }
 .x-btn-button .pdf,          .x-btn-button .pdf:hover          { background-image: url(/images/silkicon/page_white_acrobat.png); }
 .x-btn-button .xls,          .x-btn-button .xls:hover          { background-image: url(/images/silkicon/page_white_excel.png); }
 .x-btn-button .folderadd,    .x-btn-button .folderadd:hover    { background-image: url(/images/silkicon/folder_add.png); }
+.x-btn-button .foldergo,     .x-btn-button .foldergo:hover    { background-image: url(/images/silkicon/folder_go.png); }
  
 .x-tree-icon.department{ background-image: url(/images/silkicon/chart_organisation.png); }
 .x-tree-icon.person{ background-image: url(/images/silkicon/user_gray.png); }

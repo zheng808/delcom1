@@ -1445,6 +1445,15 @@ class work_orderActions extends sfActions
       $expense->setTaxablePst($request->getParameter('taxable_pst') ? ($expense->getTaxablePst() != 0 ? $expense->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
       $expense->setTaxableGst($request->getParameter('taxable_gst') ? ($expense->getTaxableGst() != 0 ? $expense->getTaxableGst() : sfConfig::get('app_gst_rate')) : 0);
 
+
+      /**
+       * TODO :  Validate the default cost value
+       * */
+      //if (!$request->getParameter('cost'))
+      //{
+      //  $expense->setCost(0.00);
+      //}
+
       //save and update labour cost of old parent if needed
       $expense->save();
       if ($old_parent && $old_parent->getId() != $expense->getWorkorderItemId())

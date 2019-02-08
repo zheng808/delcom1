@@ -206,7 +206,9 @@ Ext.define('Ext.ux.SaleAddWin', {
       maxLength: 126,
       anchor: '-100',
       name: 'po_num'
-    },{
+    },
+    /*
+    {
       xtype: 'acbuttongroup',
       fieldLabel: 'Company',
       anchor: '-100',
@@ -216,7 +218,9 @@ Ext.define('Ext.ux.SaleAddWin', {
         { value: '0', text: 'Delta Services' },
         { value: '1', text: 'Delta Rigging' }
       ]
-    },{
+    },
+    */
+    {
       itemId: 'exempt_pst',
       xtype: 'acbuttongroup',
       fieldLabel: 'PST',
@@ -394,7 +398,9 @@ var filter = new Ext.Panel({
       enableKeyEvents: true,
       listConfig: { minWidth: 300 },
       listeners: { 'keyup': updateFilterVal, 'blur': updateFilterVal }
-    },{
+    }
+    /*
+    ,{
       id: 'filter_rigging',
       xtype: 'container',
       padding: '15 5 5 5',
@@ -432,7 +438,9 @@ var filter = new Ext.Panel({
         valueField: '1',
         flex: 2
       }]
-    }]
+    }
+  */
+  ]
   }],
 
   bbar: new Ext.Toolbar({
@@ -445,7 +453,7 @@ var filter = new Ext.Panel({
         Ext.getCmp('filter_id').reset();
         grid.store.proxy.setExtraParam('query', null);
         grid.store.proxy.setExtraParam('id', null);
-        Ext.getCmp('filter_rigging').down('button[isDefault]').toggle(true);
+        //Ext.getCmp('filter_rigging').down('button[isDefault]').toggle(true);
         is_resetting = false;
 
         Ext.getCmp('index_pager').moveFirst();
