@@ -1849,8 +1849,9 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 37; // 37 = PartVariantPeer::NUM_COLUMNS - PartVariantPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + PartVariantPeer::NUM_COLUMNS;
+			//PartVariantPeer::NUM_COLUMNS = 39
+			//return $startcol + 37; // 37 = PartVariantPeer::NUM_COLUMNS - PartVariantPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating PartVariant object", $e);

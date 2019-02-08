@@ -91,6 +91,7 @@
 
 var this_workorder_id = <?php echo $workorder->getId(); ?>;
 var this_workorder_root = <?php echo $workorder->getRootItem()->getId(); ?>;
+var partInst = 0;
 
 var color_code_array = [
       <?php $colors = WorkorderPeer::getColorCodesArray(); ?>
@@ -776,7 +777,7 @@ var parts_list = new Ext.grid.GridPanel({
       handler: function(){
         <?php if ($sf_user->hasCredential('workorder_edit')): ?>
           var record = parts_list.getSelectionModel().getSelection()[0].data;
-          partInst = record.id
+          partInst = record.id;
 
           showPartMoveWin(record.id);
         <?php else: ?>
@@ -1894,7 +1895,25 @@ var workorder_tbar = new Ext.Toolbar({
       <?php endif; ?>
     }
 <?php endif; ?>
-  },'->',{
+  },'-',{
+      text: 'Move Selected Part',
+      id: 'wo_tasks_movebutton',
+      iconCls: 'partmove',
+      disabled: true,
+      handler: function(){
+        <?php if ($sf_user->hasCredential('workorder_edit')): ?>
+          var record = workorder_tree.getSelectionModel().getSelection()[0].data;
+          partInst = record.id.substring(record.id.lastIndexOf("-")+1);
+
+          Ext.getCmp('wo_tasks_movebutton').setDisabled(true);
+
+          showPartMoveWin(partInst);
+
+        <?php else: ?>
+          Ext.Msg.alert('Permission Denied','You do not have permission to edit workorders');
+        <?php endif; ?>
+      }
+    },'->',{
     text: 'Print Estimate',
     iconCls: 'print',
     handler: function(){
@@ -2225,6 +2244,8 @@ var workorder_tree = new Ext.tree.TreePanel({
       selectionchange: function(sm,node){
         node = sm.getSelection()[0];
         if (node){
+          Ext.getCmp('wo_tasks_movebutton').setDisabled(true);
+
           if (/^[0-9]+$/.test(node.data.id)){
             Ext.getCmp('woi_copybutton').setDisabled(false);
             <?php if ($workorder->isInProgress() || $workorder->isEstimate()): ?>
@@ -2240,6 +2261,7 @@ var workorder_tree = new Ext.tree.TreePanel({
             <?php if ($workorder->isInProgress() || $workorder->isEstimate()): ?>
               Ext.getCmp('woi_editbutton').setDisabled(false);
               Ext.getCmp('woi_deletebutton').setDisabled(false);
+              Ext.getCmp('wo_tasks_movebutton').setDisabled(false);
             <?php endif; ?>
           } else if (/^expense-[0-9]+-[0-9]+$/.test(node.data.id)) {
             <?php if ($workorder->isInProgress() || $workorder->isEstimate()): ?>

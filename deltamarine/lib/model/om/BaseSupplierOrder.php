@@ -213,6 +213,12 @@ abstract class BaseSupplierOrder extends BaseObject  implements Persistent {
 	 */
 	public function getDateOrdered($format = 'Y-m-d H:i:s')
 	{
+		if (sfConfig::get('sf_logging_enabled'))
+    {
+			$message = 'START BaseSupplierOrder.getDateOrdered';
+      sfContext::getInstance()->getLogger()->info($message);
+		}
+						
 		if ($this->date_ordered === null) {
 			return null;
 		}
@@ -238,6 +244,13 @@ abstract class BaseSupplierOrder extends BaseObject  implements Persistent {
 		} else {
 			return $dt->format($format);
 		}
+
+		if (sfConfig::get('sf_logging_enabled'))
+    {
+			$message = 'DONE BaseSupplierOrder.getDateOrdered';
+      sfContext::getInstance()->getLogger()->info($message);
+		}
+
 	}
 
 	/**
