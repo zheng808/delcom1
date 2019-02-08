@@ -47,7 +47,7 @@ propel:
     units:                  { type: varchar(6)   } # set to null if sold per item. Otherwise set units for bulk measure (cm, L, kg, etc).
     use_default_costing:    { type: boolean, required: true, default: false }
     cost_calculation_method:  { type: varchar(7), required: true, default: 'lifo' } #lifo, fifo, average. used to calculate cost from lots' costs
-    unit_cost:              { type: decimal, size: 8, scale: 2 } # specify a cost manually. If not set, calculated from lot landed costs as above
+    unit_cost:              { type: decimal, size: 8, scale: 2, required: false } # specify a cost manually. If not set, calculated from lot landed costs as above
     use_default_pricing:    { type: boolean, required: true, default: false }
     unit_price:             { type: decimal, size: 8, scale: 2 } # specify a full-price (retail) cost manually
     markup_amount:          { type: decimal, size: 8, scale: 2 } # calculate the retail cost by adding this amount to the current unit cost

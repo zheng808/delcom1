@@ -1445,6 +1445,22 @@ Ext.define('Ext.ux.PartQuickaddWin', {
         minValue: 0
       },{
         xtype: 'numberfield',
+        name: 'broker_fees',
+        fieldLabel: 'Broker Fees',
+        minValue: 0,
+        //allowBlank: false,
+        anchor: '-100',
+        forcePrecision: true
+      },{
+        xtype: 'numberfield',
+        name: 'shipping_fees',
+        fieldLabel: 'Shipping Fees',
+        minValue: 0,
+        //allowBlank: false,
+        anchor: '-100',
+        forcePrecision: true
+      },{
+        xtype: 'numberfield',
         name: 'unit_price',
         fieldLabel: 'Price',
         forcePrecision: true,

@@ -19,7 +19,7 @@ class Timelog extends BaseTimelog
     {
       return 'Unapproved';
     }
-  }
+  }//getStatus()---------------------------------------------------------------
 
 
   /*
@@ -28,8 +28,15 @@ class Timelog extends BaseTimelog
    */
   public function getBillableHoursAndMinutes() { return $this->getHoursAndMinutes(false); }
   public function getPayrollHoursAndMinutes()  { return $this->getHoursAndMinutes(true);  }
+  
   public function getHoursAndMinutes($payroll)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START Timelog.getHoursAndMinutes';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $amt = ($payroll ? $this->getPayrollHours() : $this->getBillableHours());
     $output = '';
     if ($amt > 0)
@@ -51,8 +58,14 @@ class Timelog extends BaseTimelog
       $output = '0h';
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE Timelog.getHoursAndMinutes';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return $output;
-  }
+  }//getHoursAndMinutes()------------------------------------------------------
 
   /*
    * displays work order boat name
@@ -72,7 +85,7 @@ class Timelog extends BaseTimelog
     }
 
     return '';
-  }
+  }//getWorkorderBoat()--------------------------------------------------------
 
   public function getWorkorderCustomerName()
   {
@@ -88,7 +101,7 @@ class Timelog extends BaseTimelog
     }
 
     return '';
-  }
+  }//getWorkorderCustomerName()------------------------------------------------
 
   /*
    * returns workorder id if present
@@ -101,7 +114,7 @@ class Timelog extends BaseTimelog
     }
 
     return '';
-  }
+  }//getWorkorderId()----------------------------------------------------------
 
   public function getWorkorderSummary()
   {
@@ -111,7 +124,7 @@ class Timelog extends BaseTimelog
     }
 
     return '';
-  }
+  }//getWorkorderSummary()-----------------------------------------------------
 
   /*
    * returns workorder item description if present
@@ -123,7 +136,7 @@ class Timelog extends BaseTimelog
       return ($woi->getLabel() ? $woi->getLabel() : 'Unnamed Task');
     }
     return '';
-  }
+  }//getWorkorderItemName()----------------------------------------------------
 
   /*
    * calculates the hours field based on start and end date
@@ -134,7 +147,7 @@ class Timelog extends BaseTimelog
     {
       $this->setHours(round(($this->getEndTime('U') - $this->getStartTime('U')) / 3600, 2));
     }
-  }
+  }//calculateHours()----------------------------------------------------------
 
   /*
    * calculates the overall cost for billable items - note: this is labour cost, not employee cost
@@ -150,13 +163,13 @@ class Timelog extends BaseTimelog
     {
       $this->setCost($this->getRate() * $this->getBillableHours());
     }
-  }
+  }//calculateCost()-----------------------------------------------------------
 
   //calculates subtotal (before taxes and fees)
   public function getSubtotal()
   {
     return $this->getCost();
-  }
+  }//getSubtotal()-------------------------------------------------------------
 
   public function getHstTotal($round = false)
   {
@@ -168,7 +181,7 @@ class Timelog extends BaseTimelog
       return ($round ? round($amt,2) : $amt);
     }
     else return 0;
-  }
+  }//getTaxableHst()-----------------------------------------------------------
 
   public function getPstTotal($round = false)
   {
@@ -178,7 +191,7 @@ class Timelog extends BaseTimelog
       return ($round ? round($amt,2) : $amt);
     }
     else return 0;
-  }
+  }//getPstTotal()-------------------------------------------------------------
 
   public function getGstTotal($round = false)
   {
@@ -188,13 +201,13 @@ class Timelog extends BaseTimelog
       return ($round ? round($amt,2) : $amt);
     }
     else return 0;
-  }
+  }//getGstTotal()-------------------------------------------------------------
 
   //including all fees and taxes
   public function getTotal()
   {
     return ($this->getSubtotal() + $this->getHstTotal() + $this->getPstTotal() + $this->getGstTotal());
-  }
+  }//getTotal()----------------------------------------------------------------
 
   public function save (PropelPDO $con = null)
   {
@@ -206,7 +219,7 @@ class Timelog extends BaseTimelog
     {
       $item->calculateActualLabour();
     }
-  }
+  }//save()--------------------------------------------------------------------
 
   public function delete (PropelPDO $con = null)
   {
@@ -219,6 +232,6 @@ class Timelog extends BaseTimelog
       $item->calculateActualLabour();
     }
 
-  }
+  }//delete()------------------------------------------------------------------
 
-}
+}//Timelog{}===================================================================

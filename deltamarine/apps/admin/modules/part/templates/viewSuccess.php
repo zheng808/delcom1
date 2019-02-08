@@ -91,8 +91,8 @@
           </td>
         </tr>
         <tr>
-          <td class="label">Location:</td>
-          <td><?php echo $part->getDefaultVariant()->getLocation();?></td>          
+        <td class="label"></td>
+          <td class="label"></td>
           <td class="label">Date Added:</td>
           <td><?php echo $part->getDefaultVariant()->getCreatedAt('M j, Y'); ?></td>
         </tr>                      
@@ -219,6 +219,397 @@ var supplierStore = new Ext.data.JsonStore({
     }
   }
 });
+
+
+/*
+ * 
+ * Add Part directly to Task
+ * 
+ * 
+ */
+var partVarianceId = <?php echo $part->getDefaultVariant()->getId(); ?>;
+var partAvailable = '<?php echo $part->getDefaultVariant()->getCurrentAvailable(); ?>';
+var includeEstimate = 0;
+
+var partStatus = 'estimate';
+if (partAvailable > 0){
+  partStatus = 'delivered';
+}
+
+var partLocation = '';
+<?php if ($part->getDefaultVariant()->getLocation()): ?>
+  partLocation = '<?php echo $part->getDefaultVariant()->getLocation(); ?>';
+<?php endif; ?>
+
+var partName = '<?php echo $part->getName(); ?>';
+
+var unitPrice = null;
+<?php if ($part->getDefaultVariant()->calculateUnitPrice()): ?>
+  unitPrice = <?php echo $part->getDefaultVariant()->calculateUnitPrice(); ?>;
+<?php endif; ?>
+
+var displayUnitPrice = '<?php echo $part->getDefaultVariant()->outputUnitPrice(); ?>';
+
+
+var partSku = '';
+<?php if ($part->getDefaultVariant()->getInternalSku()): ?>
+  partSku = '<?php echo $part->getDefaultVariant()->getInternalSku(); ?>';
+<?php endif; ?>
+
+var partBatteryLevy = 0;
+<?php if ($part->getDefaultVariant()->getBatteryLevy()): ?>
+  partBatteryLevy = '<?php echo $part->getDefaultVariant()->getBatteryLevy(); ?>';
+<?php endif; ?>
+
+var partEnviroLevy = 0;
+<?php if ($part->getDefaultVariant()->getEnviroLevy()): ?>
+  partEnviroLevy = '<?php echo $part->getDefaultVariant()->getEnviroLevy(); ?>';
+<?php endif; ?>
+
+
+var workordersStore = new Ext.data.JsonStore({
+  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt','text'],
+  remoteSort: true,
+  pageSize: 1000,
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('work_order/datagrid'); ?>',
+    extraParams: { status: 'In Progress', sort: 'id', dir: 'DESC' },
+    //simpleSortMode: true,
+    reader: { 
+      root: 'workorders',
+      totalProperty: 'totalCount',
+      idProperty: 'id'
+    }
+  }
+});//workordersStore()---------------------------------------------------------
+
+var workorderItemsStore = new Ext.data.JsonStore({
+  fields: ['id','workorder_id','label','text'],
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('/work_order/workorderItems'); ?>',
+    reader: {
+      root: 'items',
+      idProperty: 'id'
+    }
+  }
+});//workorderItemsStore()-----------------------------------------------------
+
+
+var PartAddWin = new Ext.Window({
+  width: 500,
+  height: 550,
+  border: false,
+  resizable: false,
+  modal: true,
+  id: 'addPart',
+  closeAction: 'hide',
+  title: 'Add Part to Work Order',
+  layout: 'fit',
+  items: new Ext.FormPanel({
+    autoWidth: true,
+    id: 'partmoveform',
+    url: '<?php echo url_for('work_order/partmovewo'); ?>',
+    bodyStyle: 'padding: 15px 10px 0 10px',
+    fieldDefaults: { labelAlign: 'left' },
+    items: [
+      {
+        border: false,
+        name: 'Settings',
+        columnWidth: 1,
+        layout: 'anchor',
+        bodyStyle: 'padding: 5px 5px 5px 5px',
+        items: [
+      {
+            xtype: 'textfield',
+            fieldLabel: 'Part Name',
+            name: 'name',
+            value: partName,
+            anchor: '-100',
+            disabled: true
+          },{
+            xtype: 'textfield',
+            fieldLabel: 'Part SKU',
+            name: 'part_sku',
+            value: partSku,
+            anchor: '-100',
+            disabled: true
+          },{
+            xtype: 'textfield',
+            fieldLabel: 'Location',
+            name: 'location',
+            value: partLocation,
+            anchor: '-100',
+            disabled: true
+          }]},{
+        border: false,
+        name: 'Settings',
+        columnWidth: 1,
+        layout: 'anchor',
+        bodyStyle: 'padding: 5px 5px 5px 5px',
+        items: [{
+          xtype: 'combo',
+          width: 360,
+          itemId: 'workorderField',
+          id: 'workorderField',
+          fieldLabel: 'Workorder',
+          name: 'workorder_id',
+          forceSelection: true,
+          allowBlank: false,
+          valueField: 'id',
+          displayField: 'text',
+          emptyText: 'Select Workorder...',
+          minChars: 2,
+          store: workordersStore,
+          listConfig: { minWidth: 350 },
+          queryMode: 'local',
+          anyMatch: true,
+          listeners: {
+            'select': function(field,r){
+              var itemField = field.up('form').down('#itemField');
+              itemField.clearValue();
+              itemField.setDisabled(false);
+              itemField.getStore().proxy.setExtraParam('workorder_id', field.getValue());
+              itemField.getStore().load({
+                callback: function(){
+                  var itemField = field.up('form').down('#itemField');
+                  if (itemField.getStore().getCount() === 0){
+                    Ext.Msg.alert(
+                      'No Tasks Available', 
+                      'This workorder ('+field.getValue()+') does not have any tasks');
+                  }
+                  else if (itemField.getStore().getCount() == 1){
+                    itemField.setValue( itemField.getStore().getAt(0).data.id);
+                  } else {
+                    itemField.onTriggerClick();
+                  }
+                }
+              });
+
+              var pstField = field.up('form').down('#pstField');
+              r = field.findRecordByValue(field.getValue());
+              pstField.setValue((r && r.data.pst_exempt == 'Y' ? 1 : 0));
+
+              var gstField = field.up('form').down('#gstField');
+              gstField.setValue((r && r.data.gst_exempt == 'Y' ? 1 : 0));
+
+            },
+            'blur': function(field){
+              if (field.getValue() == '')
+              {
+                var itemField = field.up('form').down('#itemField');
+                itemField.clearValue();
+                itemField.setDisabled(true);
+                itemField.getStore().proxy.setExtraParam('workorder_id', null);
+                field.up('form').down('#itemField').setDisabled(true);
+              }
+            }
+          }
+        },{
+          xtype: 'combo',
+          width: 360,
+          itemId: 'itemField',
+          id: 'itemField',
+          fieldLabel: 'Parent Task',
+          name: 'wo_item_id',
+          forceSelection: true,
+          editable: false,
+          allowBlank: false,
+          valueField: 'id',
+          displayField: 'text',
+          disabled: true,
+          triggerAction: 'all',
+          emptyText: 'Select New Task...',
+          minChars: 1,
+          store: workorderItemsStore,
+          listConfig: { minWidth: 350 },
+          queryMode: 'local'
+        },{
+          xtype: 'numberfield',
+          name: 'quantity',
+          id: 'quantity',
+          minValue: 0,
+          maxValue: 99999,
+          fieldLabel: 'Quantity',
+          value: 1,
+          anchor: '-250',
+          allowBlank: false
+        },{
+          itemId: 'estimate',
+          xtype: 'acbuttongroup',
+          fieldLabel: 'Include in Estimate',
+          anchor: '-100',
+          name: 'estimate',
+          value: '0',
+          items: [
+            { value: '1', flex: 3, text: 'Yes' },
+            { value: '0', flex: 3, text: 'No' }
+          ],
+          listeners: { 
+            change: function(field){
+              var value = field.getValue();
+              includeEstimate = value;
+            }
+          }
+        },{
+          itemId: 'part_status',
+          xtype: 'acbuttongroup',
+          fieldLabel: 'Part Status',
+          anchor: '-100',
+          name: 'part_status',
+          value: '2',
+          items: [
+            { value: '0', flex: 2, text: 'Estinamte Only' },
+            { value: '1', flex: 2, text: 'On Hold' },
+            { value: '2', flex: 2, text: 'Utilized' }
+          ],
+          listeners: { 
+            change: function(field){
+              var value = field.getValue();
+              
+              if (value == '0') {partStatus = 'estimate';}
+              else if (value == '1') {partStatus = 'hold';}
+              else {partStatus = 'delivered';}
+            }
+          }
+        }
+        ]},
+        {
+        border: false,
+        name: 'Settings',
+        columnWidth: 0.7,
+        layout: 'anchor',
+        bodyStyle: 'padding: 5px 5px 5px 5px',
+        items: [
+
+        {
+            xtype: 'textfield',
+            fieldLabel: 'Unit Price',
+            name: 'unit_price',
+            value: displayUnitPrice,
+            anchor: '-250',
+            disabled: true
+          },{
+          xtype: 'numberfield',
+          name: 'enviro_levy',
+          id: 'enviro_levy',
+          minValue: 0,
+          maxValue: 99999,
+          fieldLabel: 'Environment Levy',
+          value: partEnviroLevy,
+          anchor: '-250',
+          forcePrecision: true,
+          allowBlank: false
+        },{
+          xtype: 'numberfield',
+          name: 'battery_levy',
+          id: 'battery_levy',
+          minValue: 0,
+          maxValue: 99999,
+          fieldLabel: 'Battery Levy',
+          value: 0,
+          anchor: '-250',
+          forcePrecision: true,
+          allowBlank: false
+        },{
+          itemId: 'pstField',
+          xtype: 'acbuttongroup',
+          name: 'pstField',
+          value: 0,
+          anchor: '-100',
+          fieldLabel: 'PST Exempt',
+          items: [
+                { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST' },
+                { value: '0', flex: 3, text: 'PST Exempt' }],
+          listeners: { 
+            change: function(field){
+              var value = field.getValue();
+              partPstExempt = value;
+            }
+          }
+        },{
+          itemId: 'gstField',
+          xtype: 'acbuttongroup',
+          name: 'gstField',
+          value: 0,
+          anchor: '-100',
+          fieldLabel: 'GST Exempt',
+          items: [
+                { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST' },
+                { value: '0', flex: 3, text: 'GST Exempt' }],
+          listeners: { 
+            change: function(field){
+              var value = field.getValue();
+              partGstExempt = value;
+            }
+          }
+        }]}
+  ],
+
+    buttons: [{
+      text: 'OK',
+      formBind: true,
+      handler: function(btn){
+        var workorderId = Ext.getCmp('workorderField').getValue();
+        var workorderItemId = Ext.getCmp('itemField').getValue();
+        var woQuantity = Ext.getCmp('quantity').getValue();
+        var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
+        var woBatteryLevy = Ext.getCmp('battery_levy').getValue();
+
+//        if (partAvailable >= woQuantity){
+//         partStatus = 'delivered';
+//        }
+
+       Ext.Ajax.request({
+            url: '<?php echo url_for('work_order/partedit'); ?>',
+            method: 'POST',
+            params: { 
+              id: workorderId, 
+              workorder_id: workorderId, 
+              instance_id: 'new',
+              quantity: woQuantity,
+              unit_price: unitPrice,
+              parent_id: workorderItemId,
+              part_variant_id: partVarianceId,
+              enviro_levy: woEnviroLevy,
+              battery_levy: woBatteryLevy,
+              estimate: includeEstimate,
+              taxable_pst: partPstExempt,
+              taxable_gst: partGstExempt,
+              statusaction: partStatus,
+            },
+            success: function(){
+              PartAddWin.hide();
+              Ext.Msg.hide();
+              reload_tree();
+              partslistStore.load();
+            },
+            failure: function(){
+              PartAddWin.hide();
+              Ext.Msg.hide();
+              Ext.Msg.show({
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.MessageBox.OK,
+                msg: 'Could not move part! Reload page and try again.',
+                modal: true,
+                title: 'Error'
+              });
+              reload_tree();
+            }
+          });
+      }
+    },{
+      text: 'Cancel',
+      handler:function(){
+        PartAddWin.hide();
+      }
+    }
+  ]
+
+  })
+});//PartAddWin()--------------------------------------------------------------
+
 
 
 var PartBarcodeWin = new Ext.Window({
@@ -1267,7 +1658,9 @@ Ext.define('Ext.ux.SaleAddWin', {
       maxLength: 126,
       anchor: '-100',
       name: 'po_num'
-    },{
+    },
+    /*
+    ,{
       xtype: 'acbuttongroup',
       fieldLabel: 'Company',
       anchor: '-100',
@@ -1277,7 +1670,9 @@ Ext.define('Ext.ux.SaleAddWin', {
         { value: '0', text: 'Delta Services' },
         { value: '1', text: 'Delta Rigging' }
       ]
-    },{
+    },
+    */
+    {
       itemId: 'exempt_pst',
       xtype: 'acbuttongroup',
       fieldLabel: 'PST',
@@ -1463,7 +1858,7 @@ var OrderAddWin = new Ext.Window({
         fieldLabel: 'Maximum Inventory',
         items: [{
           border: false,
-          html: '<strong><?php echo ($part->getDefaultVariant()->getQuantity('maximum', false) ? $part->getDefaultVariant()->getQuantity('maximum') : 'Not Set'); ?></strong>'
+          html: '<strong><?php echo ($part->getDefaultVariant()->getQuantity('maximum', false) ? $part->getDefaultVariant()->getQuantity('maximum', false) : 'Not Set'); ?></strong>'
         }]
   <?php $default = 1; ?>
   <?php if ($part->getDefaultVariant()->getQuantity('maximum', false)): ?>
@@ -1795,6 +2190,18 @@ var tb = new Ext.Toolbar({
       <?php endif; ?>
     }
   },'-',{
+    text: 'Add Part to Workorder',
+    iconCls: 'foldergo',
+    handler: function(){
+        <?php if ($sf_user->hasCredential('workorder_add')): ?>
+          
+          workordersStore.load();
+          PartAddWin.show();
+        <?php else: ?>    
+          Ext.Msg.alert('Permission Denied','You do not have permission to edit worklogs');
+        <?php endif; ?>
+      }
+    },'-',{
     text: 'Print Barcodes',
     iconCls: 'barcode',
     handler: function(){

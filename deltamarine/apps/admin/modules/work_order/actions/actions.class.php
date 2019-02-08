@@ -910,6 +910,12 @@ class work_orderActions extends sfActions
 
   public function executePartdelete(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartdelete======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $workorder = $this->loadWorkorder($request);
@@ -925,11 +931,23 @@ class work_orderActions extends sfActions
 
     $this->renderText('{success:true}');
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartdelete======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executePartdelete()-------------------------------------------------------
 
   public function executePartedit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartedit======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $is_new = false;
@@ -1008,6 +1026,12 @@ class work_orderActions extends sfActions
     //check stock levels
     if ($valid)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '++ Checkpoint 1 ++ VALID';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       $new_status = $request->getParameter('statusaction');
       $difference = ($new_quantity - $old_quantity);
       $left_in_stock = $instance->getPartVariant()->getQuantity('available', false);
@@ -1071,11 +1095,23 @@ class work_orderActions extends sfActions
                             ' special order (supplier order)';
         $errors['maximum'] = $left_in_stock;
       }
+    } else {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '-- Checkpoint 1 -- NOT VALID';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
     }
 
     //save
     if ($valid)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '++ Checkpoint 2 ++ VALID';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       //its possible that the part instance was previously set as delivered. because of this,
       // we need to set it as undelivered so that when it is delivered in the future the proper
       // amount is taken out of the part lots. This also takes into account returned items,
@@ -1094,7 +1130,9 @@ class work_orderActions extends sfActions
       $instance->setSerialNumber($request->getParameter('serial') ? $request->getParameter('serial') : null);
       $instance->setWorkorderItemId($parent_item->getId());
       $instance->setEstimate($request->getParameter('estimate'));
-
+      $instance->setBrokerFees($request->getParameter('broker_fees'));
+      $instance->setShippingFees($request->getParameter('shipping_fees'));
+      
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
       $instance->setTaxablePst($request->getParameter('taxable_pst') ? ($instance->getTaxablePst() != 0 ? $instance->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
@@ -1179,6 +1217,12 @@ class work_orderActions extends sfActions
     }
     else
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '-- Checkpoint 2 -- NOT VALID';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       if (!isset($errors['reason']))
       {
         $errors['reason'] = 'Invalid Input detected. Please check and try again.';
@@ -1186,14 +1230,26 @@ class work_orderActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartedit======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executePartedit()---------------------------------------------------------
 
   /*
    * Moves a part via drag-and-drop in the workorder screen
    */
   public function executePartmove(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartmove======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
           
@@ -1211,11 +1267,22 @@ class work_orderActions extends sfActions
 
     $this->renderText("{success:true}");
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartmove======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executePartmove()---------------------------------------------------------
 
   public function executePartload(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartload======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
 
@@ -1238,6 +1305,8 @@ class work_orderActions extends sfActions
                   'quantity'            => $inst->outputQuantity(false),
                   'unit_cost'           => number_format($inst->getUnitCost(), 2, '.', ''),
                   'unit_price'          => number_format($inst->getUnitPrice(), 2, '.', ''),
+                  'broker_fees'         => number_format($inst->getBrokerFees(), 2, '.', ''),
+                  'shipping_fees'       => number_format($inst->getShippingFees(), 2, '.', ''),
                   'regular_price'       => number_format($var->calculateUnitPrice(), 2, '.', ''),
                   'estimate'            => $inst->getEstimate(),
                   'taxable_hst'         => ($inst->getTaxableHst() > 0),
@@ -1259,15 +1328,26 @@ class work_orderActions extends sfActions
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartload';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
 
-  }
+  }//executePartload()---------------------------------------------------------
 
   /**********************************/  
   /*      CUSTOM PART STUFF         */
   /**********************************/
   public function executePartcustomEdit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartcustomEdit';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
@@ -1325,6 +1405,8 @@ class work_orderActions extends sfActions
       $instance->setAllocated($request->getParameter('estimate') !== '1'); //true for 0 or 2
       $instance->setDelivered($request->getParameter('estimate') !== '1'); //true for 0 or 2
       $instance->setSerialNumber($request->getParameter('serial_number'));
+      $instance->setBrokerFees($request->getParameter('broker_fees'));
+      $instance->setShippingFees($request->getParameter('shipping_fees'));
       $instance->setUnitCost($request->getParameter('unit_cost'));
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setInternalNotes($request->getParameter('internal_notes'));
@@ -1358,11 +1440,23 @@ class work_orderActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartcustomEdit';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executePartcustomEdit()---------------------------------------------------
 
    public function executePartcustomLoad(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartcustomLoad';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
 
@@ -1376,6 +1470,8 @@ class work_orderActions extends sfActions
                   'custom_name'         => $inst->getCustomName(),
                   'custom_origin'       => $inst->getCustomOrigin(),
                   'quantity'            => $inst->outputQuantity(false),
+                  'broker_fees'         => number_format($inst->getBrokerFees(), 2, '.', ''),
+                  'shipping_fees'       => number_format($inst->getShippingFees(), 2, '.', ''),
                   'unit_cost'           => number_format($inst->getUnitCost(), 2, '.', ''),
                   'unit_price'          => number_format($inst->getUnitPrice(), 2, '.', ''),
                   'estimate'            => ($inst->getEstimate() && $inst->getDelivered() ? '2' : ($inst->getEstimate() ? '1' : '0')),
@@ -1390,8 +1486,14 @@ class work_orderActions extends sfActions
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executePartcustomLoad';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executePartcustomLoad()---------------------------------------------------
 
   /**********************************/
   /*      EXPENSES STUFF            */
@@ -1471,7 +1573,7 @@ class work_orderActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeExpenseedit()------------------------------------------------------
 
   /*
    * Moves an expense via drag-and-drop in the workorder screen
