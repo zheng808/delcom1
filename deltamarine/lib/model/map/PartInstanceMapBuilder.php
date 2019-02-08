@@ -72,6 +72,10 @@ class PartInstanceMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('QUANTITY', 'Quantity', 'DECIMAL', true, 8);
 
+		$tMap->addColumn('SHIPPING_FEES', 'ShippingFees', 'DECIMAL', true, 8);
+
+		$tMap->addColumn('BROKER_FEES', 'BrokerFees', 'DECIMAL', true, 8);
+
 		$tMap->addColumn('UNIT_PRICE', 'UnitPrice', 'DECIMAL', true, 8);
 
 		$tMap->addColumn('UNIT_COST', 'UnitCost', 'DECIMAL', false, 8);

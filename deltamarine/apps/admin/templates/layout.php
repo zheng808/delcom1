@@ -29,7 +29,7 @@
 
     <div id="footer">
       <div>
-        Development by <?php echo link_to('Wildfire Interactive', 'http://wildfireinteractive.ca'); ?>.
+        <!--Development by <php echo link_to('Wildfire Interactive', 'http://wildfireinteractive.ca'); ?>. -->
         <?php if (function_exists('xdebug_time_index')): ?>
           <?php if (($time = xdebug_time_index()) > 0): ?>
             Page took <?php echo round($time, 3);?>s to generate

@@ -47,7 +47,7 @@ sfConfig::add(array(
   'sf_charset' => 'utf-8',
   'sf_strip_comments' => true,
   'sf_max_forwards' => 5,
-  'sf_logging_enabled' => false,
+  'sf_logging_enabled' => true,
   'sf_default_culture' => 'en',
   'sf_prototype_web_dir' => '/sfProtoculousPlugin',
 ));

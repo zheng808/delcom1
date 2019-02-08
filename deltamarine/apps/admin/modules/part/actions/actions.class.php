@@ -142,6 +142,14 @@ class partActions extends sfActions
       {
         $variant->setUnitCost($request->getParameter('unit_cost'));
       }
+      if (((float) $request->getParameter('broker_fees')) > 0)
+      {
+        $variant->setBrokerFees($request->getParameter('broker_fees'));
+      }
+      if (((float) $request->getParameter('shipping_fees')) > 0)
+      {
+        $variant->setShippingFees($request->getParameter('shipping_fees'));
+      }
       if (((float) $request->getParameter('unit_price')) > 0)
       {
         $variant->setUnitPrice($request->getParameter('unit_price'));
@@ -247,6 +255,8 @@ class partActions extends sfActions
         'unit_cost' => $default->getUnitCost(),
         'markup_amount' => $default->getMarkupAmount(),
         'markup_percent' => $default->getMarkupPercent(),
+        'broker_fees' => $default->getBrokerFees(),
+        'shipping_fees' => $default->getShippingFees(),
         'unit_price' => $default->getUnitPrice(),
         'enviro_levy' => $default->getEnviroLevy(),
         'battery_levy' => $default->getBatteryLevy(),
@@ -339,6 +349,8 @@ class partActions extends sfActions
                             ? $request->getParameter('units') : null);
       $variant->setCostCalculationMethod($request->getParameter('cost_calculation_method'));
       $variant->setUnitCost($request->getParameter('unit_cost') > 0 ? $request->getParameter('unit_cost') : null);
+      $variant->setBrokerFees($request->getParameter('broker_fees') > 0 ? $request->getParameter('broker_fees') : null);
+      $variant->setShippingFees($request->getParameter('shipping_fees') > 0 ? $request->getParameter('shipping_fees') : null);
       $variant->setUnitPrice($request->getParameter('unit_price') > 0 ? $request->getParameter('unit_price') : null);
       $variant->setMarkupAmount($request->getParameter('markup_amount') > 0 ? $request->getParameter('markup_amount') : null);
       $variant->setMarkupPercent($request->getParameter('markup_percent') > 0 ? $request->getParameter('markup_percent') : null);
@@ -433,6 +445,8 @@ class partActions extends sfActions
         $instance->setTaxableHst(false); //no taxes on corrections
         $instance->setTaxablePst(false); //no taxes on corrections
         $instance->setTaxableGst(false); //no taxes on corrections
+        $instance->setShippingFees($instance->getShippingFees());
+        $instance->setBrokerFees($instance->getBrokerFees());
         $instance->setEnviroLevy($instance->getEnviroLevy());
         $instance->setBatteryLevy($instance->getBatteryLevy());
         $instance->setIsInventoryAdjustment(true);
@@ -514,6 +528,8 @@ class partActions extends sfActions
         $instance->setTaxableHst(false); //no taxes on corrections
         $instance->setTaxablePst(false); //no taxes on corrections
         $instance->setTaxableGst(false); //no taxes on corrections
+        $instance->setShippingFees($instance->getShippingFees());
+        $instance->setBrokerFees($instance->getBrokerFees());
         $instance->setEnviroLevy($instance->getEnviroLevy());
         $instance->setBatteryLevy($instance->getBatteryLevy());
         $instance->setIsInventoryAdjustment(true);
@@ -860,6 +876,8 @@ class partActions extends sfActions
               $instance->setTaxableHst(false); //no taxes on corrections
               $instance->setTaxablePst(false); //no taxes on corrections
               $instance->setTaxableGst(false); //no taxes on corrections
+              $instance->setShippingFees($instance->getShippingFees());
+              $instance->setBrokerFees($instance->getBrokerFees());
               $instance->setEnviroLevy($instance->getEnviroLevy());
               $instance->setBatteryLevy($instance->getBatteryLevy());
               $instance->setIsInventoryAdjustment(true);

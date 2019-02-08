@@ -91,6 +91,18 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 	protected $use_default_pricing;
 
 	/**
+	 * The value for the broker_fees field.
+	 * @var        string
+	 */
+	protected $broker_fees;
+
+  /**
+	 * The value for the shipping_fees field.
+	 * @var        string
+	 */
+	protected $shipping_fees;
+
+  /**
 	 * The value for the unit_price field.
 	 * @var        string
 	 */
@@ -519,6 +531,26 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 		return $this->use_default_pricing;
 	}
 
+		/**
+	 * Get the [broker_fees] column value.
+	 *
+	 * @return     string
+	 */
+	public function getBrokerFees()
+	{
+		return $this->broker_fees;
+	}
+
+  /**
+	 * Get the [shipping_fees] column value.
+	 *
+	 * @return     string
+	 */
+	public function getShippingFees()
+	{
+		return $this->shipping_fees;
+	}
+	
 	/**
 	 * Get the [unit_price] column value.
 	 * 
@@ -1060,6 +1092,46 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 	} // setUseDefaultPricing()
 
 	/**
+	 * Set the value of [broker_fees] column.
+	 *
+	 * @param      string $v new value
+	 * @return     PartVariant The current object (for fluent API support)
+	 */
+	public function setBrokerFees($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->broker_fees !== $v) {
+			$this->broker_fees = $v;
+			$this->modifiedColumns[] = PartVariantPeer::BROKER_FEES;
+		}
+
+		return $this;
+	} // setBrokerFees()
+
+  /**
+	 * Set the value of [shipping_fees] column.
+	 *
+	 * @param      string $v new value
+	 * @return     PartVariant The current object (for fluent API support)
+	 */
+	public function setShippingFees($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->shipping_fees !== $v) {
+			$this->shipping_fees = $v;
+			$this->modifiedColumns[] = PartVariantPeer::SHIPPING_FEES;
+		}
+
+		return $this;
+	} // setShippingFees()
+
+  /**
 	 * Set the value of [unit_price] column.
 	 * 
 	 * @param      string $v new value
@@ -1741,32 +1813,34 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 			$this->cost_calculation_method = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->unit_cost = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->use_default_pricing = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-			$this->unit_price = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->markup_amount = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-			$this->markup_percent = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
-			$this->taxable_hst = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
-			$this->taxable_gst = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
-			$this->taxable_pst = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
-			$this->enviro_levy = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
-			$this->battery_levy = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
-			$this->use_default_dimensions = ($row[$startcol + 19] !== null) ? (boolean) $row[$startcol + 19] : null;
-			$this->shipping_weight = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
-			$this->shipping_width = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
-			$this->shipping_height = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
-			$this->shipping_depth = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
-			$this->shipping_volume = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
-			$this->use_default_inventory = ($row[$startcol + 25] !== null) ? (boolean) $row[$startcol + 25] : null;
-			$this->track_inventory = ($row[$startcol + 26] !== null) ? (boolean) $row[$startcol + 26] : null;
-			$this->minimum_on_hand = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
-			$this->maximum_on_hand = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
-			$this->current_on_hand = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
-			$this->current_on_hold = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
-			$this->current_on_order = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
-			$this->location = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
-			$this->last_inventory_update = ($row[$startcol + 33] !== null) ? (string) $row[$startcol + 33] : null;
-			$this->standard_package_qty = ($row[$startcol + 34] !== null) ? (string) $row[$startcol + 34] : null;
-			$this->created_at = ($row[$startcol + 35] !== null) ? (string) $row[$startcol + 35] : null;
-			$this->stocking_notes = ($row[$startcol + 36] !== null) ? (string) $row[$startcol + 36] : null;
+			$this->broker_fees = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->shipping_fees = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->unit_price = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+			$this->markup_amount = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+			$this->markup_percent = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+			$this->taxable_hst = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+			$this->taxable_gst = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
+			$this->taxable_pst = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
+			$this->enviro_levy = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
+			$this->battery_levy = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
+			$this->use_default_dimensions = ($row[$startcol + 21] !== null) ? (boolean) $row[$startcol + 21] : null;
+			$this->shipping_weight = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+			$this->shipping_width = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
+			$this->shipping_height = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
+			$this->shipping_depth = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
+			$this->shipping_volume = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
+			$this->use_default_inventory = ($row[$startcol + 27] !== null) ? (boolean) $row[$startcol + 27] : null;
+			$this->track_inventory = ($row[$startcol + 28] !== null) ? (boolean) $row[$startcol + 28] : null;
+			$this->minimum_on_hand = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
+			$this->maximum_on_hand = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
+			$this->current_on_hand = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
+			$this->current_on_hold = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
+			$this->current_on_order = ($row[$startcol + 33] !== null) ? (string) $row[$startcol + 33] : null;
+			$this->location = ($row[$startcol + 34] !== null) ? (string) $row[$startcol + 34] : null;
+			$this->last_inventory_update = ($row[$startcol + 35] !== null) ? (string) $row[$startcol + 35] : null;
+			$this->standard_package_qty = ($row[$startcol + 36] !== null) ? (string) $row[$startcol + 36] : null;
+			$this->created_at = ($row[$startcol + 37] !== null) ? (string) $row[$startcol + 37] : null;
+			$this->stocking_notes = ($row[$startcol + 38] !== null) ? (string) $row[$startcol + 38] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -2699,7 +2773,9 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartVariantPeer::COST_CALCULATION_METHOD)) $criteria->add(PartVariantPeer::COST_CALCULATION_METHOD, $this->cost_calculation_method);
 		if ($this->isColumnModified(PartVariantPeer::UNIT_COST)) $criteria->add(PartVariantPeer::UNIT_COST, $this->unit_cost);
 		if ($this->isColumnModified(PartVariantPeer::USE_DEFAULT_PRICING)) $criteria->add(PartVariantPeer::USE_DEFAULT_PRICING, $this->use_default_pricing);
-		if ($this->isColumnModified(PartVariantPeer::UNIT_PRICE)) $criteria->add(PartVariantPeer::UNIT_PRICE, $this->unit_price);
+    if ($this->isColumnModified(PartVariantPeer::BROKER_FEES)) $criteria->add(PartVariantPeer::BROKER_FEES, $this->broker_fees);
+    if ($this->isColumnModified(PartVariantPeer::SHIPPING_FEES)) $criteria->add(PartVariantPeer::SHIPPING_FEES, $this->shipping_fees);
+    if ($this->isColumnModified(PartVariantPeer::UNIT_PRICE)) $criteria->add(PartVariantPeer::UNIT_PRICE, $this->unit_price);
 		if ($this->isColumnModified(PartVariantPeer::MARKUP_AMOUNT)) $criteria->add(PartVariantPeer::MARKUP_AMOUNT, $this->markup_amount);
 		if ($this->isColumnModified(PartVariantPeer::MARKUP_PERCENT)) $criteria->add(PartVariantPeer::MARKUP_PERCENT, $this->markup_percent);
 		if ($this->isColumnModified(PartVariantPeer::TAXABLE_HST)) $criteria->add(PartVariantPeer::TAXABLE_HST, $this->taxable_hst);
@@ -2799,7 +2875,11 @@ abstract class BasePartVariant extends BaseObject  implements Persistent {
 
 		$copyObj->setUseDefaultPricing($this->use_default_pricing);
 
-		$copyObj->setUnitPrice($this->unit_price);
+		$copyObj->setBrokerFees($this->broker_fees);
+
+    $copyObj->setShippingFees($this->shipping_fees);
+
+    $copyObj->setUnitPrice($this->unit_price);
 
 		$copyObj->setMarkupAmount($this->markup_amount);
 

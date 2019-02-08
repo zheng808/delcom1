@@ -50,6 +50,18 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	 */
 	protected $quantity;
 
+	  /**
+	 * The value for the broker_fees field.
+	 * @var        string
+	 */
+	protected $broker_fees;
+
+  /**
+   * The value for the shipping_fees field.
+   * @var        string
+   */
+	protected $shipping_fees;
+	
 	/**
 	 * The value for the unit_price field.
 	 * @var        string
@@ -303,6 +315,26 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	public function getQuantity()
 	{
 		return $this->quantity;
+	}
+
+	/**
+	 * Get the [broker_fees] column value.
+	 *
+	 * @return     string
+	 */
+	public function getBrokerFees()
+	{
+		return $this->broker_fees;
+	}
+
+  /**
+	 * Get the [shipping_fees] column value.
+	 *
+	 * @return     string
+	 */
+	public function getShippingFees()
+	{
+		return $this->shipping_fees;
 	}
 
 	/**
@@ -616,6 +648,46 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setQuantity()
+
+		/**
+	 * Set the value of [broker_fees] column.
+	 *
+	 * @param      string $v new value
+	 * @return     PartInstance The current object (for fluent API support)
+	 */
+	public function setBrokerFees($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->broker_fees !== $v) {
+			$this->broker_fees = $v;
+			$this->modifiedColumns[] = PartInstancePeer::BROKER_FEES;
+		}
+
+		return $this;
+	} // setBrokerFees()
+
+  /**
+	 * Set the value of [shipping_fees] column.
+	 *
+	 * @param      string $v new value
+	 * @return     PartInstance The current object (for fluent API support)
+	 */
+	public function setShippingFees($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->shipping_fees !== $v) {
+			$this->shipping_fees = $v;
+			$this->modifiedColumns[] = PartInstancePeer::SHIPPING_FEES;
+		}
+
+		return $this;
+	} // setShippingFees()
 
 	/**
 	 * Set the value of [unit_price] column.
@@ -1100,24 +1172,26 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$this->custom_name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->custom_origin = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->quantity = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->unit_price = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->unit_cost = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->taxable_hst = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->taxable_gst = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-			$this->taxable_pst = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-			$this->enviro_levy = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-			$this->battery_levy = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->supplier_order_item_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-			$this->workorder_item_id = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
-			$this->workorder_invoice_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
-			$this->added_by = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
-			$this->estimate = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
-			$this->allocated = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
-			$this->delivered = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
-			$this->serial_number = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
-			$this->date_used = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
-			$this->is_inventory_adjustment = ($row[$startcol + 21] !== null) ? (boolean) $row[$startcol + 21] : null;
-			$this->internal_notes = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+      $this->broker_fees = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+      $this->shipping_fees = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+      $this->unit_price = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+      $this->unit_cost = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->taxable_hst = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->taxable_gst = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+			$this->taxable_pst = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->enviro_levy = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->battery_levy = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+			$this->supplier_order_item_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
+			$this->workorder_item_id = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+			$this->workorder_invoice_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+			$this->added_by = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
+			$this->estimate = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
+			$this->allocated = ($row[$startcol + 19] !== null) ? (boolean) $row[$startcol + 19] : null;
+			$this->delivered = ($row[$startcol + 20] !== null) ? (boolean) $row[$startcol + 20] : null;
+			$this->serial_number = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
+			$this->date_used = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+			$this->is_inventory_adjustment = ($row[$startcol + 23] !== null) ? (boolean) $row[$startcol + 23] : null;
+			$this->internal_notes = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1583,57 +1657,63 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 				return $this->getQuantity();
 				break;
 			case 5:
+				return $this->getBrokerFees();
+				break;
+      case 6:
+  			return $this->getShippingFees();
+  			break;
+      case 7:
 				return $this->getUnitPrice();
 				break;
-			case 6:
+			case 8:
 				return $this->getUnitCost();
 				break;
-			case 7:
+			case 9:
 				return $this->getTaxableHst();
 				break;
-			case 8:
+			case 10:
 				return $this->getTaxableGst();
 				break;
-			case 9:
+			case 11:
 				return $this->getTaxablePst();
 				break;
-			case 10:
+			case 12:
 				return $this->getEnviroLevy();
 				break;
-			case 11:
+			case 13:
 				return $this->getBatteryLevy();
 				break;
-			case 12:
+			case 14:
 				return $this->getSupplierOrderItemId();
 				break;
-			case 13:
+			case 15:
 				return $this->getWorkorderItemId();
 				break;
-			case 14:
+			case 16:
 				return $this->getWorkorderInvoiceId();
 				break;
-			case 15:
+			case 17:
 				return $this->getAddedBy();
 				break;
-			case 16:
+			case 18:
 				return $this->getEstimate();
 				break;
-			case 17:
+			case 19:
 				return $this->getAllocated();
 				break;
-			case 18:
+			case 20:
 				return $this->getDelivered();
 				break;
-			case 19:
+			case 21:
 				return $this->getSerialNumber();
 				break;
-			case 20:
+			case 21:
 				return $this->getDateUsed();
 				break;
-			case 21:
+			case 22:
 				return $this->getIsInventoryAdjustment();
 				break;
-			case 22:
+			case 23:
 				return $this->getInternalNotes();
 				break;
 			default:
@@ -1662,24 +1742,26 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$keys[2] => $this->getCustomName(),
 			$keys[3] => $this->getCustomOrigin(),
 			$keys[4] => $this->getQuantity(),
-			$keys[5] => $this->getUnitPrice(),
-			$keys[6] => $this->getUnitCost(),
-			$keys[7] => $this->getTaxableHst(),
-			$keys[8] => $this->getTaxableGst(),
-			$keys[9] => $this->getTaxablePst(),
-			$keys[10] => $this->getEnviroLevy(),
-			$keys[11] => $this->getBatteryLevy(),
-			$keys[12] => $this->getSupplierOrderItemId(),
-			$keys[13] => $this->getWorkorderItemId(),
-			$keys[14] => $this->getWorkorderInvoiceId(),
-			$keys[15] => $this->getAddedBy(),
-			$keys[16] => $this->getEstimate(),
-			$keys[17] => $this->getAllocated(),
-			$keys[18] => $this->getDelivered(),
-			$keys[19] => $this->getSerialNumber(),
-			$keys[20] => $this->getDateUsed(),
-			$keys[21] => $this->getIsInventoryAdjustment(),
-			$keys[22] => $this->getInternalNotes(),
+      $keys[5] => $this->getBrokerFees(),
+      $keys[6] => $this->getShippingFees(),
+      $keys[7] => $this->getUnitPrice(),
+			$keys[8] => $this->getUnitCost(),
+			$keys[9] => $this->getTaxableHst(),
+			$keys[10] => $this->getTaxableGst(),
+			$keys[11] => $this->getTaxablePst(),
+			$keys[12] => $this->getEnviroLevy(),
+			$keys[13] => $this->getBatteryLevy(),
+			$keys[14] => $this->getSupplierOrderItemId(),
+			$keys[15] => $this->getWorkorderItemId(),
+			$keys[16] => $this->getWorkorderInvoiceId(),
+			$keys[17] => $this->getAddedBy(),
+			$keys[18] => $this->getEstimate(),
+			$keys[19] => $this->getAllocated(),
+			$keys[20] => $this->getDelivered(),
+			$keys[21] => $this->getSerialNumber(),
+			$keys[22] => $this->getDateUsed(),
+			$keys[23] => $this->getIsInventoryAdjustment(),
+			$keys[24] => $this->getInternalNotes(),
 		);
 		return $result;
 	}
@@ -1727,57 +1809,63 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 				$this->setQuantity($value);
 				break;
 			case 5:
-				$this->setUnitPrice($value);
+				$this->setBrokerFees($value);
 				break;
-			case 6:
+      case 6:
+  			$this->setShippingFees($value);
+  			break;
+      case 7:
+  			$this->setUnitPrice($value);
+  			break;
+			case 8:
 				$this->setUnitCost($value);
 				break;
-			case 7:
+			case 9:
 				$this->setTaxableHst($value);
 				break;
-			case 8:
+			case 10:
 				$this->setTaxableGst($value);
 				break;
-			case 9:
+			case 11:
 				$this->setTaxablePst($value);
 				break;
-			case 10:
+			case 12:
 				$this->setEnviroLevy($value);
 				break;
-			case 11:
+			case 13:
 				$this->setBatteryLevy($value);
 				break;
-			case 12:
+			case 14:
 				$this->setSupplierOrderItemId($value);
 				break;
-			case 13:
+			case 15:
 				$this->setWorkorderItemId($value);
 				break;
-			case 14:
+			case 16:
 				$this->setWorkorderInvoiceId($value);
 				break;
-			case 15:
+			case 17:
 				$this->setAddedBy($value);
 				break;
-			case 16:
+			case 18:
 				$this->setEstimate($value);
 				break;
-			case 17:
+			case 19:
 				$this->setAllocated($value);
 				break;
-			case 18:
+			case 20:
 				$this->setDelivered($value);
 				break;
-			case 19:
+			case 21:
 				$this->setSerialNumber($value);
 				break;
-			case 20:
+			case 22:
 				$this->setDateUsed($value);
 				break;
-			case 21:
+			case 23:
 				$this->setIsInventoryAdjustment($value);
 				break;
-			case 22:
+			case 24:
 				$this->setInternalNotes($value);
 				break;
 		} // switch()
@@ -1809,24 +1897,26 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[2], $arr)) $this->setCustomName($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setCustomOrigin($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setQuantity($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setUnitPrice($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setUnitCost($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setTaxableHst($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setTaxableGst($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setTaxablePst($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setEnviroLevy($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setBatteryLevy($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setSupplierOrderItemId($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setWorkorderItemId($arr[$keys[13]]);
-		if (array_key_exists($keys[14], $arr)) $this->setWorkorderInvoiceId($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setAddedBy($arr[$keys[15]]);
-		if (array_key_exists($keys[16], $arr)) $this->setEstimate($arr[$keys[16]]);
-		if (array_key_exists($keys[17], $arr)) $this->setAllocated($arr[$keys[17]]);
-		if (array_key_exists($keys[18], $arr)) $this->setDelivered($arr[$keys[18]]);
-		if (array_key_exists($keys[19], $arr)) $this->setSerialNumber($arr[$keys[19]]);
-		if (array_key_exists($keys[20], $arr)) $this->setDateUsed($arr[$keys[20]]);
-		if (array_key_exists($keys[21], $arr)) $this->setIsInventoryAdjustment($arr[$keys[21]]);
-		if (array_key_exists($keys[22], $arr)) $this->setInternalNotes($arr[$keys[22]]);
+    if (array_key_exists($keys[5], $arr)) $this->setBrokerFees($arr[$keys[5]]);
+    if (array_key_exists($keys[6], $arr)) $this->setShippingFees($arr[$keys[6]]);
+    if (array_key_exists($keys[7], $arr)) $this->setUnitPrice($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setUnitCost($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setTaxableHst($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setTaxableGst($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setTaxablePst($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setEnviroLevy($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setBatteryLevy($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setSupplierOrderItemId($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setWorkorderItemId($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setWorkorderInvoiceId($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setAddedBy($arr[$keys[17]]);
+		if (array_key_exists($keys[18], $arr)) $this->setEstimate($arr[$keys[18]]);
+		if (array_key_exists($keys[19], $arr)) $this->setAllocated($arr[$keys[19]]);
+		if (array_key_exists($keys[20], $arr)) $this->setDelivered($arr[$keys[20]]);
+		if (array_key_exists($keys[21], $arr)) $this->setSerialNumber($arr[$keys[21]]);
+		if (array_key_exists($keys[22], $arr)) $this->setDateUsed($arr[$keys[22]]);
+		if (array_key_exists($keys[23], $arr)) $this->setIsInventoryAdjustment($arr[$keys[23]]);
+		if (array_key_exists($keys[24], $arr)) $this->setInternalNotes($arr[$keys[24]]);
 	}
 
 	/**
@@ -1843,7 +1933,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartInstancePeer::CUSTOM_NAME)) $criteria->add(PartInstancePeer::CUSTOM_NAME, $this->custom_name);
 		if ($this->isColumnModified(PartInstancePeer::CUSTOM_ORIGIN)) $criteria->add(PartInstancePeer::CUSTOM_ORIGIN, $this->custom_origin);
 		if ($this->isColumnModified(PartInstancePeer::QUANTITY)) $criteria->add(PartInstancePeer::QUANTITY, $this->quantity);
-		if ($this->isColumnModified(PartInstancePeer::UNIT_PRICE)) $criteria->add(PartInstancePeer::UNIT_PRICE, $this->unit_price);
+    if ($this->isColumnModified(PartInstancePeer::BROKER_FEES)) $criteria->add(PartInstancePeer::BROKER_FEES, $this->broker_fees);
+    if ($this->isColumnModified(PartInstancePeer::SHIPPING_FEES)) $criteria->add(PartInstancePeer::SHIPPING_FEES, $this->shipping_fees);
+    if ($this->isColumnModified(PartInstancePeer::UNIT_PRICE)) $criteria->add(PartInstancePeer::UNIT_PRICE, $this->unit_price);
 		if ($this->isColumnModified(PartInstancePeer::UNIT_COST)) $criteria->add(PartInstancePeer::UNIT_COST, $this->unit_cost);
 		if ($this->isColumnModified(PartInstancePeer::TAXABLE_HST)) $criteria->add(PartInstancePeer::TAXABLE_HST, $this->taxable_hst);
 		if ($this->isColumnModified(PartInstancePeer::TAXABLE_GST)) $criteria->add(PartInstancePeer::TAXABLE_GST, $this->taxable_gst);
@@ -1923,7 +2015,11 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 
 		$copyObj->setQuantity($this->quantity);
 
-		$copyObj->setUnitPrice($this->unit_price);
+		$copyObj->setBrokerFees($this->broker_fees);
+
+    $copyObj->setShippingFees($this->shipping_fees);
+
+   $copyObj->setUnitPrice($this->unit_price);
 
 		$copyObj->setUnitCost($this->unit_cost);
 

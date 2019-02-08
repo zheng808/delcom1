@@ -84,6 +84,10 @@ class PartVariantMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('USE_DEFAULT_PRICING', 'UseDefaultPricing', 'BOOLEAN', true, null);
 
+		$tMap->addColumn('SHIPPING_FEES', 'ShippingFees', 'DECIMAL', true, 8);
+
+		$tMap->addColumn('BROKER_FEES', 'BrokerFees', 'DECIMAL', true, 8);
+
 		$tMap->addColumn('UNIT_PRICE', 'UnitPrice', 'DECIMAL', false, 8);
 
 		$tMap->addColumn('MARKUP_AMOUNT', 'MarkupAmount', 'DECIMAL', false, 8);
