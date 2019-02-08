@@ -401,12 +401,11 @@ class sfWebResponse extends sfResponse
    * @param  string $name  Header name
    *
    * @return string Normalized header
-   *
-  protected function normalizeHeaderName($name)
-  {
-    return preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));
-  }
-*/ 
+   */
+//  protected function normalizeHeaderName($name)
+//  {
+//    return preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));
+//  }
   protected function normalizeHeaderName($name)
     {
       // return preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));

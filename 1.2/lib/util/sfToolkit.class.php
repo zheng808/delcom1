@@ -382,12 +382,11 @@ class sfToolkit
    *
    * @param mixed $search        subject to search
    * @param array $replacePairs  array of search => replace pairs
-   *
-  public static function pregtr($search, $replacePairs)
-  {
-    return preg_replace(array_keys($replacePairs), array_values($replacePairs), $search);
-  }
-  */
+   */
+//  public static function pregtr($search, $replacePairs)
+//  {
+//    return preg_replace(array_keys($replacePairs), array_values($replacePairs), $search);
+//  }
   public static function pregtr($search, $replacePairs)
    {
      // return preg_replace(array_keys($replacePairs), array_values($replacePairs), $search);
