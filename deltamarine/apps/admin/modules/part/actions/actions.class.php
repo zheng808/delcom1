@@ -141,6 +141,9 @@ class partActions extends sfActions
       if (((float) $request->getParameter('unit_cost')) > 0)
       {
         $variant->setUnitCost($request->getParameter('unit_cost'));
+      } else if (!((float) $request->getParameter('unit_cost')) || ((float) $request->getParameter('unit_cost')) <= 0)
+      {
+        $variant->setUnitCost(0);
       }
       if (((float) $request->getParameter('broker_fees')) > 0)
       {
@@ -385,6 +388,12 @@ class partActions extends sfActions
    */
   public function executeMinmax(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeMinmax------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -412,10 +421,16 @@ class partActions extends sfActions
     {
       $valid = false;
       $errors['onhand'] = 'Invalid number entered!';
-    }    
-
+    } 
+    
     if ($valid)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '++ Checkpoint VALID ++';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+      
       $variant = $part->getDefaultVariant();
       $variant->setMinimumOnHand((int) $request->getParameter('min_quantity'));
       $variant->setMaximumOnHand((int) $request->getParameter('max_quantity'));
@@ -437,27 +452,80 @@ class partActions extends sfActions
       }
       else if ($difference > 0)
       {
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'New On-Hand < Current On-Hand';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+        
         $instance = new PartInstance();
         $instance->setPartVariant($variant);
         $instance->setQuantity($difference);
-        $instance->setUnitCost($variant->calculateUnitPrice());
+        $instance->setUnitPrice($variant->calculateUnitPrice());
+        //$instance->setUnitCost($variant->calculateUnitPrice());
         $instance->setDateUsed(time());
-        $instance->setTaxableHst(false); //no taxes on corrections
-        $instance->setTaxablePst(false); //no taxes on corrections
-        $instance->setTaxableGst(false); //no taxes on corrections
+        $instance->setTaxableHst(0); //no taxes on corrections
+        $instance->setTaxablePst(0); //no taxes on corrections
+        $instance->setTaxableGst(0); //no taxes on corrections
+        //$instance->setTaxableHst(false); //no taxes on corrections
+        //$instance->setTaxablePst(false); //no taxes on corrections
+        //$instance->setTaxableGst(false); //no taxes on corrections
         $instance->setShippingFees($instance->getShippingFees());
         $instance->setBrokerFees($instance->getBrokerFees());
         $instance->setEnviroLevy($instance->getEnviroLevy());
         $instance->setBatteryLevy($instance->getBatteryLevy());
+       
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'Updating part instance.....';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         $instance->setIsInventoryAdjustment(true);
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'done setIsInventoryAdjustment';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+        
         $instance->save();
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'done save';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         $instance->allocate();
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'done allocate';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         $instance->deliver();
-        $variant->setLastInventoryUpdate(time());        
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'done deliver';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
+        $variant->setLastInventoryUpdate(time()); 
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'done setLastInventoryUpdate';
+          $message = 'done updating part instance.....';
+          sfContext::getInstance()->getLogger()->info($message);
+        }       
       }
       //adding, so we need to add a part lot
       else
       {
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'New On-Hand > Current On-Hand';
+          sfContext::getInstance()->getLogger()->info($message);
+        }
+
         $lot = new PartLot();
         $lot->setPartVariant($variant);
         $lot->setQuantityReceived(-1 * $difference);
@@ -474,12 +542,24 @@ class partActions extends sfActions
     }
     else
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = '-- Checkpoint INVALID --';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       $errors['reason'] = 'Invalid Input detected. Please check and try again.';
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeMinmax------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeMinmax()-----------------------------------------------------------
 
 
   /*
@@ -487,6 +567,12 @@ class partActions extends sfActions
    */
   public function executeInventory(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeInventory------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -523,11 +609,15 @@ class partActions extends sfActions
         $instance = new PartInstance();
         $instance->setPartVariant($variant);
         $instance->setQuantity($difference);
-        $instance->setUnitCost($variant->calculateUnitPrice());
+        $instance->setUnitPrice($variant->calculateUnitPrice());
+//        $instance->setUnitCost($variant->calculateUnitPrice());
         $instance->setDateUsed(time());
-        $instance->setTaxableHst(false); //no taxes on corrections
-        $instance->setTaxablePst(false); //no taxes on corrections
-        $instance->setTaxableGst(false); //no taxes on corrections
+        $instance->setTaxableHst(0); //no taxes on corrections
+        $instance->setTaxablePst(0); //no taxes on corrections
+        $instance->setTaxableGst(0); //no taxes on corrections
+//        $instance->setTaxableHst(false); //no taxes on corrections
+//        $instance->setTaxablePst(false); //no taxes on corrections
+//        $instance->setTaxableGst(false); //no taxes on corrections
         $instance->setShippingFees($instance->getShippingFees());
         $instance->setBrokerFees($instance->getBrokerFees());
         $instance->setEnviroLevy($instance->getEnviroLevy());
@@ -566,8 +656,14 @@ class partActions extends sfActions
       sfContext::getInstance()->getLogger()->info($message);
     }
     
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeInventory------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeInventory()--------------------------------------------------------
 
   /*
    * print out barcodes for this part
@@ -575,6 +671,12 @@ class partActions extends sfActions
    */
   public function executeBarcodes(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeBarcodes------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
 
     $part = $this->loadPart($request);
@@ -600,14 +702,26 @@ class partActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeBarcodes------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeBarcodes()---------------------------------------------------------
 
   /*
    * deletes a part, if possible
    */
   public function executeDelete(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeDelete------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -617,8 +731,14 @@ class partActions extends sfActions
     $part->delete();
     $this->renderText('{success:true}');
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeDelete------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeDelete()-----------------------------------------------------------
 
 /////////////////////////////////// MANAGE SUPPLIERS ////////////////////////////////////
 
@@ -627,6 +747,12 @@ class partActions extends sfActions
    */
   public function executeSupplierEdit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeSupplierEdit------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -675,11 +801,23 @@ class partActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeSupplierEdit------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeSupplierEdit()-----------------------------------------------------
 
   public function executeSupplierRemove(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeSupplierRemove------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -689,8 +827,14 @@ class partActions extends sfActions
 
     $ps->delete();
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeSupplierRemove------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeSupplierRemove()---------------------------------------------------
 
 
 /////////////////////////////////// UTILITY FUNCTIONS ///////////////////////////////////
@@ -871,11 +1015,15 @@ class partActions extends sfActions
               $instance = new PartInstance();
               $instance->setPartVariant($variant);
               $instance->setQuantity($difference);
-              $instance->setUnitCost($variant->calculateUnitPrice());
+              $instance->setUnitPrice($variant->calculateUnitPrice());
+//              $instance->setUnitCost($variant->calculateUnitPrice());
               $instance->setDateUsed(time());
-              $instance->setTaxableHst(false); //no taxes on corrections
-              $instance->setTaxablePst(false); //no taxes on corrections
-              $instance->setTaxableGst(false); //no taxes on corrections
+              $instance->setTaxableHst(0); //no taxes on corrections
+              $instance->setTaxablePst(0); //no taxes on corrections
+              $instance->setTaxableGst(0); //no taxes on corrections
+//              $instance->setTaxableHst(false); //no taxes on corrections
+//              $instance->setTaxablePst(false); //no taxes on corrections
+//              $instance->setTaxableGst(false); //no taxes on corrections
               $instance->setShippingFees($instance->getShippingFees());
               $instance->setBrokerFees($instance->getBrokerFees());
               $instance->setEnviroLevy($instance->getEnviroLevy());

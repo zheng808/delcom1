@@ -444,6 +444,12 @@ class supplier_orderActions extends sfActions
    */
   public function executeReceiveitems(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeReceiveitems';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $order = $this->loadSupplierOrder($request);
@@ -453,11 +459,17 @@ class supplier_orderActions extends sfActions
     $c = new Criteria();
     $c->add(SupplierOrderItemPeer::SUPPLIER_ORDER_ID, $order->getId());
     $c->add(SupplierOrderItemPeer::ID, array_keys($receivedarray), Criteria::IN);
+    
     if ($order_items = SupplierOrderItemPeer::doSelect($c))
     {
       $special_received = false;
       foreach ($order_items AS $order_item)
       {
+        if (sfConfig::get('sf_logging_enabled'))
+        {
+          $message = 'receiving lot part part: '.$order_item->getPartVariantId();
+          sfContext::getInstance()->getLogger()->info($message);
+        }
         $receive_quantity = (isset($receivedarray[$order_item->getId()]) ? $receivedarray[$order_item->getId()] : 0);
         if ($receive_quantity > 0)
         {
@@ -467,7 +479,14 @@ class supplier_orderActions extends sfActions
           $lot->setQuantityRemaining($receive_quantity);
           $lot->setSupplierOrderItemId($order_item->getId());
           $lot->setReceivedDate(time());
-          $lot->setLandedCost($receivedcostarray[$order_item->getId()]);
+
+          $landedCost = $receivedcostarray[$order_item->getId()];
+          if ($landedCost === null || $landedCost === '' )
+          {
+            $landedCost = 0;
+          }
+          $lot->setLandedCost($landedCost);
+          
           $lot->save();
 
           $order_item->setQuantityCompleted($order_item->getQuantityCompleted() + $receive_quantity);
@@ -508,14 +527,26 @@ class supplier_orderActions extends sfActions
       $this->forward404();
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeReceiveitems';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeReceiveitems()-----------------------------------------------------
 
   /*
    * Outputs an HTML invoice
    */
   public function executeInvoice(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeInvoice';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $order = $this->loadSupplierOrder($request);
 
     $this->order = $order;
@@ -523,25 +554,55 @@ class supplier_orderActions extends sfActions
 
     sfConfig::set('sf_web_debug', false);
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeInvoice';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::SUCCESS;   
-  }
+  }//executeInvoice()----------------------------------------------------------
 
   //TODO
   public function executeChangeExpectedDate(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeChangeExpectedDate';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $c = new Criteria();
     $c->add(SupplierOrderPeer::ID, $request->getParameter('id') );
     $c->add(SupplierOrderPeer::DATE_EXPECTED, $request->getParameter('date') );
     SupplierOrderPeer::doUpdate($c);
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeChangeExpectedDate';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return $this->renderText('');
-  }
+  }//executeChangeExpectedDate()-----------------------------------------------
 
 
   private function loadSupplierOrder(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START loadSupplierOrder';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     $this->forward404Unless($order = SupplierOrderPeer::retrieveByPk($request->getParameter('id')));
 
-    return $order;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE loadSupplierOrder';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return $order;
+  }//loadSupplierOrder()-------------------------------------------------------
+
+}//supplier_order.action.class{}===============================================

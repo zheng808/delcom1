@@ -1377,11 +1377,34 @@ class work_orderActions extends sfActions
       $result = false;
       $errors['unit_price'] = 'Invalid Price specified. Price must not be negative!';
     }
+    
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Getting UNIT_COST';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
+    $unitCost = null;
     if ($request->getParameter('cost') && ((float) $request->getParameter('cost')) < 0)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid Cost specified. Cost must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       $result = false;
       $errors['unit_cost'] = 'Invalid Cost specified. Cost must not be negative!';
+    } else {
+      $unitCost = (float) $request->getParameter('cost');
     }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting UNIT_COST';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     if (!(((float) $request->getParameter('quantity')) > 0))
     {
       $result = false;
@@ -1407,7 +1430,8 @@ class work_orderActions extends sfActions
       $instance->setSerialNumber($request->getParameter('serial_number'));
       $instance->setBrokerFees($request->getParameter('broker_fees'));
       $instance->setShippingFees($request->getParameter('shipping_fees'));
-      $instance->setUnitCost($request->getParameter('unit_cost'));
+      $instance->setUnitCost($request->getParameter('cost'));
+      //$instance->setUnitCost($request->getParameter('unit_cost'));
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setInternalNotes($request->getParameter('internal_notes'));
 

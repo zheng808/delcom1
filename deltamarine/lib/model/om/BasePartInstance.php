@@ -1201,8 +1201,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 23; // 23 = PartInstancePeer::NUM_COLUMNS - PartInstancePeer::NUM_LAZY_LOAD_COLUMNS).
-
+			//return $startcol + 23; // 23 = PartInstancePeer::NUM_COLUMNS - PartInstancePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + PartInstancePeer::NUM_COLUMNS - PartInstancePeer::NUM_LAZY_LOAD_COLUMNS;
+ 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating PartInstance object", $e);
 		}
