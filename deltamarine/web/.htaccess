@@ -18,7 +18,7 @@ Options -Multiviews
   RewriteRule ^([^.]+)$ $1.html [QSA]
   RewriteCond %{REQUEST_FILENAME} !-f
 
-  RedirectMatch /touch$        /touch/build/testing/Delta/index.html
+  RedirectMatch /touch$        /touch/build/production/Delta/index.html
   RedirectMatch /touchtest$    /touch/build/testing/Delta/index.html
   RedirectMatch /touchprod$    /touch/build/production/Delta/index.html
   RedirectMatch /touch/build/Delta/production/index.html$     /touch/build/production/Delta/index.html

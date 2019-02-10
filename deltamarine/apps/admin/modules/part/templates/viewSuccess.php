@@ -557,6 +557,7 @@ var PartAddWin = new Ext.Window({
         var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
         var woBatteryLevy = Ext.getCmp('battery_levy').getValue();
 
+/* TODO: check for inventory on hand before adding */
 //        if (partAvailable >= woQuantity){
 //         partStatus = 'delivered';
 //        }
@@ -580,10 +581,13 @@ var PartAddWin = new Ext.Window({
               statusaction: partStatus,
             },
             success: function(){
+              location.reload(true);
+              
               PartAddWin.hide();
               Ext.Msg.hide();
-              reload_tree();
-              partslistStore.load();
+
+              //reload_tree();
+              //partslistStore.load();
             },
             failure: function(){
               PartAddWin.hide();
