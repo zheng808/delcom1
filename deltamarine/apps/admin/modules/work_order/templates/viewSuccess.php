@@ -711,7 +711,15 @@ var parts_list = new Ext.grid.GridPanel({
     sortable: true,
     flex: 1,
     renderer: function(val,meta,r){
-      return '<a href="<?php echo url_for('part/view?id='); ?>'+r.data.part_id+'">'+val+'</a>';
+      var namedisplay = '';
+      if (r.data.custom){
+        namedisplay = val;
+      }
+      else{
+        namedisplay = '<a href="<?php echo url_for('part/view?id='); ?>'+r.data.part_id+'">'+val+'</a>';
+      }
+
+      return namedisplay;
     }
   },{
     header: 'Date',
