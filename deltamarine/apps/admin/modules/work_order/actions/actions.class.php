@@ -775,6 +775,12 @@ class work_orderActions extends sfActions
    */
   public function executePartadd(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executePartadd======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
 
@@ -903,7 +909,11 @@ class work_orderActions extends sfActions
       }
 
       */
-
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'DONE executePartadd======================';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
 
     return sfView::NONE;
   } 
