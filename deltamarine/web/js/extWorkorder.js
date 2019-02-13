@@ -1542,7 +1542,7 @@ Ext.define('Ext.ux.PartQuickaddWin', {
             data = Ext.decode(response.responseText);
             if (data && data.parts.length > 0){
               if (data.parts && data.parts.length == 1){
-                showPartEditWin(data.parts[0]);
+                showPartEditWin(null, data.parts[0]);
               } else {
                 Ext.Msg.alert('Multiple Parts Found', 'Error: could not select part; matched multiple parts!');
               }      

@@ -1296,9 +1296,33 @@ class work_orderActions extends sfActions
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'isMethod POST';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     $workorder = $this->loadWorkorder($request);
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Retrieved workorder: ';
+      sfContext::getInstance()->getLogger()->info($message.$workorder->getId());
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Retrieving instance by request param: ';
+      sfContext::getInstance()->getLogger()->info($message.$request->getParameter('instance_id'));
+    }
+    
     $this->forward404Unless($inst = PartInstancePeer::retrieveByPk($request->getParameter('instance_id')));
   
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Retrieved instance by PK: ';
+      sfContext::getInstance()->getLogger()->info($message.$inst->getId());
+    }
+
     $var = $inst->getPartVariant();
     $part = $var->getPart();
     $order_id = ($inst->getSupplierOrderItemId() ? $inst->getSupplierOrderItem()->getSupplierOrderId() : null);
