@@ -1131,12 +1131,25 @@ class work_orderActions extends sfActions
         $instance->undeliver();
       }
 
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'setting values';
+        sfContext::getInstance()->getLogger()->info($message);
+        sfContext::getInstance()->getLogger()->info('unit Cost: '.$request->getParameter('unit_cost'));
+        sfContext::getInstance()->getLogger()->info('unit Price: '.$request->getParameter('unit_price'));
+        sfContext::getInstance()->getLogger()->info('enviro_levy: '.$request->getParameter('enviro_levy'));
+        sfContext::getInstance()->getLogger()->info('battery_levy: '.$request->getParameter('battery_levy'));
+        sfContext::getInstance()->getLogger()->info('broker_fees: '.$request->getParameter('broker_fees'));
+        sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
+      }
+
       //update values
       $old_parent = $instance->getWorkorderItem();
       $instance->setQuantity($new_quantity);
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setEnviroLevy($request->getParameter('enviro_levy'));
       $instance->setBatteryLevy($request->getParameter('battery_levy'));
+      $instance->setUnitCost($request->getParameter('unit_cost') ? $request->getParameter('unit_cost') : null);
       $instance->setSerialNumber($request->getParameter('serial') ? $request->getParameter('serial') : null);
       $instance->setWorkorderItemId($parent_item->getId());
       $instance->setEstimate($request->getParameter('estimate'));

@@ -41,6 +41,12 @@
         <td class="label">Unit Price:</td>
         <td><?php echo $part->getDefaultVariant()->outputUnitPrice(); ?></td>
       </tr>
+      <?php if (($part->getDefaultVariant()->getBrokerFees() && $part->getDefaultVariant()->getBrokerFees() > 0) || ($part->getDefaultVariant()->getShippingFees() && $part->getDefaultVariant()->getShippingFees() > 0)): ?>
+        <tr>
+          <td class="label">Broker Fees:</td><td>$<?php echo number_format($part->getDefaultVariant()->getBrokerFees(), 2); ?></td>
+          <td class="label">Shipping Fees:</td><td>$<?php echo number_format($part->getDefaultVariant()->getShippingFees(), 2); ?></td>
+        </tr>
+      <?php endif; ?>
       <?php if ($part->getDefaultVariant()->getEnviroLevy() || $part->getDefaultVariant()->getBatteryLevy()): ?>
         <tr>
           <?php if ($part->getDefaultVariant()->getEnviroLevy()): ?>
@@ -250,6 +256,10 @@ var unitPrice = null;
 
 var displayUnitPrice = '<?php echo $part->getDefaultVariant()->outputUnitPrice(); ?>';
 
+var unitCost = null;
+<?php if ($part->getDefaultVariant()->calculateUnitCost()): ?>
+  unitCost = <?php echo $part->getDefaultVariant()->calculateUnitCost(); ?>;
+<?php endif; ?>
 
 var partSku = '';
 <?php if ($part->getDefaultVariant()->getInternalSku()): ?>
@@ -264,6 +274,16 @@ var partBatteryLevy = 0;
 var partEnviroLevy = 0;
 <?php if ($part->getDefaultVariant()->getEnviroLevy()): ?>
   partEnviroLevy = '<?php echo $part->getDefaultVariant()->getEnviroLevy(); ?>';
+<?php endif; ?>
+
+var partShippingFees = 0;
+<?php if ($part->getDefaultVariant()->getShippingFees()): ?>
+partShippingFees = '<?php echo $part->getDefaultVariant()->getShippingFees(); ?>';
+<?php endif; ?>
+
+var partBrokerFees = 0;
+<?php if ($part->getDefaultVariant()->getBrokerFees()): ?>
+partBrokerFees = '<?php echo $part->getDefaultVariant()->getBrokerFees(); ?>';
 <?php endif; ?>
 
 
@@ -484,13 +504,35 @@ var PartAddWin = new Ext.Window({
         items: [
 
         {
-            xtype: 'textfield',
+            xtype: 'numberfield',
             fieldLabel: 'Unit Price',
             name: 'unit_price',
-            value: displayUnitPrice,
+            id: 'unit_price',
+            value: unitPrice,
             anchor: '-250',
-            disabled: true
+            minValue: 0,
+            //disabled: true,
+            forcePrecision: true,
+            allowBlank: false
           },{
+          xtype: 'numberfield',
+          name: 'shipping_fees',
+          id: 'shipping_fees',
+          fieldLabel: 'Shipping Fees',
+          value: partShippingFees,
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-250'
+        },{
+          xtype: 'numberfield',
+          name: 'broker_fees',
+          id: 'broker_fees',
+          fieldLabel: 'Broker Fees',
+          value: partBrokerFees,
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-250'
+        },{
           xtype: 'numberfield',
           name: 'enviro_levy',
           id: 'enviro_levy',
@@ -551,18 +593,25 @@ var PartAddWin = new Ext.Window({
       text: 'OK',
       formBind: true,
       handler: function(btn){
+
         var workorderId = Ext.getCmp('workorderField').getValue();
         var workorderItemId = Ext.getCmp('itemField').getValue();
         var woQuantity = Ext.getCmp('quantity').getValue();
         var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
         var woBatteryLevy = Ext.getCmp('battery_levy').getValue();
+        var woShippingFees = Ext.getCmp('shipping_fees').getValue();
+        var woBrokerFees = Ext.getCmp('broker_fees').getValue();
+        var woUnitPrice = Ext.getCmp('unit_price').getValue();
+        
 
 /* TODO: check for inventory on hand before adding */
 //        if (partAvailable >= woQuantity){
 //         partStatus = 'delivered';
 //        }
 
-       Ext.Ajax.request({
+        Ext.Msg.wait("Adding Part to Workorder " + workorderId);
+
+        Ext.Ajax.request({
             url: '<?php echo url_for('work_order/partedit'); ?>',
             method: 'POST',
             params: { 
@@ -570,17 +619,21 @@ var PartAddWin = new Ext.Window({
               workorder_id: workorderId, 
               instance_id: 'new',
               quantity: woQuantity,
-              unit_price: unitPrice,
+              unit_price: woUnitPrice,
+              unit_cost: unitCost,
               parent_id: workorderItemId,
               part_variant_id: partVarianceId,
               enviro_levy: woEnviroLevy,
               battery_levy: woBatteryLevy,
+              shipping_fees: woShippingFees,
+              broker_fees: woBrokerFees,
               estimate: includeEstimate,
               taxable_pst: partPstExempt,
               taxable_gst: partGstExempt,
               statusaction: partStatus,
             },
             success: function(){
+              Ext.Msg.hide();
               location.reload(true);
               
               PartAddWin.hide();
@@ -602,6 +655,7 @@ var PartAddWin = new Ext.Window({
               reload_tree();
             }
           });
+          
       }
     },{
       text: 'Cancel',
@@ -802,7 +856,7 @@ var PartEditWin = new Ext.Window({
   title: 'Edit Part',
   closable: false,
   width: 700,
-  height: 505,
+  height: 530,
   border: false,
   modal: true,
   resizable: false,
@@ -1057,6 +1111,20 @@ var PartEditWin = new Ext.Window({
           anchor: '-50'
         },{
           xtype: 'numberfield',
+          name: 'shipping_fees',
+          fieldLabel: 'Shipping Fees',
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-50'
+        },{
+          xtype: 'numberfield',
+          name: 'broker_fees',
+          fieldLabel: 'Broker Fees',
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-50'
+        },{
+          xtype: 'numberfield',
           name: 'unit_price',
           emptyText: 'Overrides Markups...',
           fieldLabel: 'Specify Price',
@@ -1086,7 +1154,7 @@ var PartEditWin = new Ext.Window({
         xtype: 'fieldset',
         columnWidth: 0.5,
         anchor: '-10',
-        minHeight: 220,
+        minHeight: 270,
         title: 'Inventory Settings',
         bodyStyle: 'padding: 5px 5px 30px 5px',
         items: [{
@@ -1223,7 +1291,7 @@ var PartEditWin = new Ext.Window({
           id: 'stocking_notes',
           name: 'stocking_notes',
           fieldLabel: 'Stocking Notes',
-          height: 50,
+          height: 80,
           anchor: '-25'          
         }]
       }]

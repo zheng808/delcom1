@@ -1565,6 +1565,7 @@ Ext.define('Ext.ux.PartEditWin', {
 
   title: 'Edit Part',
   width: 525,
+  //height: 800,
   autoShow: true,
   autoHeight: true,
   closeAction: 'destroy',
@@ -2131,6 +2132,22 @@ Ext.define('Ext.ux.PartEditWin', {
             forcePrecision: true,
             minValue: 0,
             value: 0
+          },{
+            xtype: 'numberfield',
+            name: 'shipping_fees',
+            fieldLabel: 'Shipping Fees',
+            minValue: 0,
+            labelWidth: 70,
+            forcePrecision: true,
+            anchor: '-5'
+          },{
+            xtype: 'numberfield',
+            name: 'broker_fees',
+            fieldLabel: 'Broker Fees',
+            minValue: 0,
+            labelWidth: 70,
+            forcePrecision: true,
+            anchor: '-5'
           }]
         },{
           border: false,

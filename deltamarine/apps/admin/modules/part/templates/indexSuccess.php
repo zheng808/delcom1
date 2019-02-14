@@ -21,6 +21,7 @@ var partAvailable = null;
 var partName = null;
 var partLocation = null;
 var unitPrice = null;
+var unitCost = null;
 var partSku = null;
 var partBatteryLevy = 0;
 var partEnviroLevy = 0;
@@ -28,6 +29,8 @@ var partStatus = 'estimate';
 var partPstExempt = 0;
 var partGstExempt = 0;
 var includeEstimate = 0;
+var partBrokerFees = 0;
+var partShippingFees = 0;
 
 var dupepartsStore = new Ext.data.JsonStore({
   fields: ['sku', 'part1id', 'part1name', 'part2id', 'part2name', 'part3id', 'part3name'],
@@ -344,17 +347,36 @@ var AddToWorkorderWin = new Ext.Window({
         layout: 'anchor',
         bodyStyle: 'padding: 5px 5px 5px 5px',
         items: [
-        {
-            xtype: 'textfield',
+          {
+            xtype: 'numberfield',
             fieldLabel: 'Unit Price',
-            id: 'unit_price',
             name: 'unit_price',
-            renderer: function(value, record){
-              return unitPrice;
-            },
-            anchor: '-25',
-            disabled: true
+            id: 'unit_price',
+            value: unitPrice,
+            anchor: '-300',
+            minValue: 0,
+            //disabled: true,
+            forcePrecision: true,
+            allowBlank: false
           },{
+          xtype: 'numberfield',
+          name: 'shipping_fees',
+          id: 'shipping_fees',
+          fieldLabel: 'Shipping Fees',
+          value: partShippingFees,
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-300'
+        },{
+          xtype: 'numberfield',
+          name: 'broker_fees',
+          id: 'broker_fees',
+          fieldLabel: 'Broker Fees',
+          value: partBrokerFees,
+          minValue: 0,
+          forcePrecision: true,
+          anchor: '-300'
+        },{
           xtype: 'numberfield',
           name: 'enviro_levy',
           id: 'enviro_levy',
@@ -419,13 +441,18 @@ var AddToWorkorderWin = new Ext.Window({
         var woQuantity = Ext.getCmp('quantity').getValue();
         var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
         var woBatteryLevy = Ext.getCmp('battery_levy').getValue();
-        
+        var woShippingFees = Ext.getCmp('shipping_fees').getValue();
+        var woBrokerFees = Ext.getCmp('broker_fees').getValue();
+        var woUnitPrice = Ext.getCmp('unit_price').getValue();
+
 //        var partStatus = 'estimate';
 //        if (partAvailable >= woQuantity){
 //          partStatus = 'delivered';
 //        }
 
-       Ext.Ajax.request({
+        Ext.Msg.wait("Adding Part to Workorder " + workorderId);
+
+        Ext.Ajax.request({
             url: '<?php echo url_for('work_order/partedit'); ?>',
             method: 'POST',
             params: { 
@@ -433,17 +460,22 @@ var AddToWorkorderWin = new Ext.Window({
               workorder_id: workorderId, 
               instance_id: 'new',
               quantity: woQuantity,
-              unit_price: unitPrice,
+              unit_price: woUnitPrice,
+              unit_cost: unitCost,
               parent_id: workorderItemId,
               part_variant_id: partVariantId,
               enviro_levy: woEnviroLevy,
               battery_levy: woBatteryLevy,
+              shipping_fees: woShippingFees,
+              broker_fees: woBrokerFees,
               estimate: includeEstimate,
               taxable_pst: partPstExempt,
               taxable_gst: partGstExempt, 
               statusaction: partStatus,
+
             },
             success: function(){
+              Ext.Msg.hide();
               AddToWorkorderWin.hide();
               Ext.Msg.hide();
               reload_tree();
@@ -1005,6 +1037,18 @@ var PartAddWin = new Ext.Window({
           minValue: 0,
           forcePrecision: true
         },{
+          //xtype: 'numberfield',
+          name: 'shipping_fees',
+          fieldLabel: 'Shipping Fees',
+          minValue: 0,
+          forcePrecision: true
+        },{
+          //xtype: 'numberfield',
+          name: 'broker_fees',
+          fieldLabel: 'Broker Fees',
+          minValue: 0,
+          forcePrecision: true
+        },{
           name: 'enviro_levy',
           fieldLabel: 'Enviro Levy ($)',
           minValue: 0,
@@ -1022,7 +1066,7 @@ var PartAddWin = new Ext.Window({
       },{
         xtype: 'fieldset',
         columnWidth: 0.30,
-        minHeight: 220,
+        minHeight: 270,
         title: 'Inventory Settings',
         bodyStyle: 'padding: 5px 5px 33px 5px',
         defaults: {
@@ -1157,7 +1201,7 @@ var PartAddWin = new Ext.Window({
       },{
         xtype: 'fieldset',
         columnWidth: 0.30,
-        minHeight: 220,
+        minHeight: 270,
         title: 'Main Supplier',
         bodyStyle: 'padding: 5px 5px 6px 5px;',
         defaults: {
@@ -1194,7 +1238,7 @@ var PartAddWin = new Ext.Window({
             fieldLabel: 'Supplier Notes',
             name: 'supplier_notes',
             emptyText: 'Enter price breaks, special order info, etc.',
-            height: 80,
+            height: 120,
             anchor: '-3',
             style: 'margin-left: 20px;'
           }]
@@ -1778,9 +1822,12 @@ var parts_grid = new Ext.grid.GridPanel({
         partName = record.data.name;
         partLocation = record.data.location;
         unitPrice = record.data.regular_price;
+        unitCost = record.data.unit_cost;
         partSku = record.data.sku;
         if (record.data.battery_levy >= 0) { partBatteryLevy = record.data.battery_levy }else{partBatteryLevy = 0};
         if (record.data.enviro_levy >= 0) { partEnviroLevy = record.data.enviro_levy }else{partEnviroLevy = 0};
+        if (record.data.shipping_fees >= 0) { partShippingFees = record.data.shipping_fees }else{partShippingFees = 0};
+        if (record.data.broker_fees >= 0) { partBrokerFees = record.data.broker_fees }else{partBrokerFees = 0};
 
         partStatus = 'estimate';
         
@@ -1794,6 +1841,8 @@ var parts_grid = new Ext.grid.GridPanel({
         Ext.getCmp('unit_price').setValue(unitPrice);
         Ext.getCmp('battery_levy').setValue(partBatteryLevy);
         Ext.getCmp('enviro_levy').setValue(partEnviroLevy);
+        Ext.getCmp('shipping_fees').setValue(partShippingFees);
+        Ext.getCmp('broker_fees').setValue(partBrokerFees);
 
         <?php if ($sf_user->hasCredential('workorder_add')): ?>
           

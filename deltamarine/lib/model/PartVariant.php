@@ -198,15 +198,18 @@ class PartVariant extends BasePartVariant
     }
     else if (($this->getMarkupAmount() || $this->getMarkupPercent()) && ($unit_cost = ($source_variant ? $source_variant->calculateUnitCost(false) : $this->calculateUnitCost(false))))
     {
+      $shipping_fees = $this->getShippingFees();
+      $broker_fees = $this->getBrokerFees();
+
       if ($this->getMarkupAmount())
       {
         //price is set by a specified increase over specified cost
-        $amount = $unit_cost + $this->getMarkupAmount();
+        $amount = ($unit_cost + $shipping_fees + $broker_fees) + $this->getMarkupAmount();
       }
       else
       {
         //price is set by a percentage increase over specified cost
-        $amount = $unit_cost * (1 + ($this->getMarkupPercent() / 100));
+        $amount = ($unit_cost + $shipping_fees + $broker_fees) * (1 + ($this->getMarkupPercent() / 100));
       }
       $save_amount = ($source_variant == null);
     }
