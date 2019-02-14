@@ -1127,7 +1127,7 @@ var supplierStore = new Ext.data.JsonStore({
       totalProperty: 'totalCount'
     }
   }
-});
+});//supplierStore()-----------------------------------------------------------
 
 var manufacturerStore = new Ext.data.JsonStore({
   fields: ['id','name'],
@@ -1138,7 +1138,7 @@ var manufacturerStore = new Ext.data.JsonStore({
       root: 'manufacturers'
     }
   }
-});
+});//manufacturerStore()-------------------------------------------------------
 
 var partsupplierStore = new Ext.data.JsonStore({
   fields: ['part_supplier_id', 'part_variant_id', 'supplier_id', 'supplier_name', 'supplier_sku', 'notes'],
@@ -1153,7 +1153,7 @@ var partsupplierStore = new Ext.data.JsonStore({
       idProperty: 'supplier_id'
     }
   }
-});
+});//partsupplierStore()-------------------------------------------------------
 
 
 
@@ -1268,6 +1268,20 @@ Ext.define('Ext.ux.PartCustomEditWin', {
       minValue: 0,
       width: 225
     },{
+      xtype: 'numberfield',
+      name: 'shipping_fees',
+      fieldLabel: 'Shipping Fees',
+      minValue: 0,
+      forcePrecision: true,
+      width: 225
+    },{
+      xtype: 'numberfield',
+      name: 'broker_fees',
+      fieldLabel: 'Broker Fees',
+      minValue: 0,
+      forcePrecision: true,
+      width: 225
+    },{
       itemId: 'estimate',
       xtype: 'acbuttongroup',
       fieldLabel: 'Estimate or Invoice',
@@ -1320,7 +1334,7 @@ Ext.define('Ext.ux.PartCustomEditWin', {
     }]
   }
 
-});
+});//Ext.ux.PartCustomEditWin()------------------------------------------------
 
 
 
@@ -1555,7 +1569,7 @@ Ext.define('Ext.ux.PartQuickaddWin', {
     }
   }
 
-});
+});//Ext.ux.PartQuickaddWin()--------------------------------------------------
 
 
 
@@ -2182,7 +2196,7 @@ Ext.define('Ext.ux.PartEditWin', {
     }]
 
   }
-});
+});//Ext.ux.PartEditWin()------------------------------------------------------
 
 /*********************************************/
 /*      EXPENSES STUFF                       */
