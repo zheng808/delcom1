@@ -296,6 +296,12 @@ class saleActions extends sfActions
    */
   public function executeAdditem(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START sale.action.executeAdditem==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $sale = $this->loadSale($request);
@@ -470,8 +476,14 @@ class saleActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE sale.action.executeAdditem==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  } 
+  }//executeAdditem()----------------------------------------------------------
 
 
   /*
@@ -479,6 +491,12 @@ class saleActions extends sfActions
    */
   public function executeEdititem(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START sale.action.executeEdititem==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $sale = $this->loadSale($request);
@@ -588,6 +606,8 @@ class saleActions extends sfActions
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setEnviroLevy($request->getParameter('enviro_levy'));
       $instance->setBatteryLevy($request->getParameter('battery_levy'));
+      $instance->setBrokerFees($request->getParameter('broker_fees'));
+      $instance->setShippingFees($request->getParameter('shipping_fees'));
       $instance->setSerialNumber($request->getParameter('serial') ? $request->getParameter('serial') : null);
 
       $instance->save();
@@ -633,8 +653,14 @@ class saleActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE sale.action.executeEdititem==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeEdititem()---------------------------------------------------------
 
   /*
    * attempts to delete an order in the line item

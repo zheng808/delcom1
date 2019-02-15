@@ -101,7 +101,7 @@ var itemsStore = new Ext.data.JsonStore({
            'units', 'quantity', 'returned', 'delivered', 'unit_cost', 'unit_price', 
            'regular_price', 'regular_markup_pct', 'regular_markup', 'calc_discount',
            'taxable_gst', 'taxable_pst', 'taxable_hst', 'enviro_levy', 'battery_levy', 'total',
-           'supplier_order_id', 'serial', 'has_serial_number', 'location', 'undelivered' ],  
+           'supplier_order_id', 'serial', 'has_serial_number', 'location', 'undelivered', 'broker_fees', 'shipping_fees' ],  
   autoLoad: true,
   remoteSort: true,
   proxy: {
@@ -1904,6 +1904,20 @@ var ItemEditWin = new Ext.Window({
             forcePrecision: true,
             minValue: 0,
             anchor: '-25'
+          },{
+            xtype: 'numberfield',
+            name: 'shipping_fees',
+            fieldLabel: 'Shipping Fees',
+            minValue: 0,
+            forcePrecision: true,
+            anchor: '-25'
+          },{
+            xtype: 'numberfield',
+            name: 'broker_fees',
+            fieldLabel: 'Broker Fees',
+            minValue: 0,
+            forcePrecision: true,
+            anchor: '-25'
           }]
         }]
       }]
@@ -1987,6 +2001,12 @@ var items_grid = new Ext.grid.GridPanel({
         }
         if (r.data.battery_levy > 0){
           extrainfo += '<div style="color: #88cc88; padding-left: 15px;"><strong>+ Battery Levy </strong>- $'+r.data.battery_levy+' ea</div>';
+        }
+        if (r.data.shipping_fees > 0){
+          extrainfo += '<div style="color: #88cc88; padding-left: 15px;"><strong>+ Shipping Fees </strong>- $'+r.data.shipping_fees+' ea</div>';
+        }
+        if (r.data.broker_fees> 0){
+          extrainfo += '<div style="color: #88cc88; padding-left: 15px;"><strong>+ Broker Fees</strong>- $'+r.data.broker_fees+' ea</div>';
         }
         if (r.data.supplier_order_id != ''){
           extrainfo += '<div style="padding-left: 15px;"><span style="color: #e88;">SPECIAL ORDER - </span><a href="<?php echo url_for('supplier_order/view?id='); ?>'+r.data.supplier_order_id+'">Order #'+r.data.supplier_order_id+'</a></div>';

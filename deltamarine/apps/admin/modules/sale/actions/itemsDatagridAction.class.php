@@ -5,6 +5,12 @@ class itemsDatagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START sale.itemsDatagridAction==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+      
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($sale = CustomerOrderPeer::retrieveByPk($request->getParameter('id')));
 
@@ -69,6 +75,8 @@ class itemsDatagridAction extends sfAction
                             'taxable_gst'         => ($inst->getTaxableGst() > 0) ? 1 : 0,
                             'enviro_levy'         => $inst->getEnviroLevy(),
                             'battery_levy'        => $inst->getBatteryLevy(),
+                            'broker_fees'        => $inst->getBrokerFees(),
+                            'shipping_fees'        => $inst->getShippingFees(),
                             'total'               => number_format($inst->getSubtotal(), 2),
                             'supplier_order_id'   => $order_id,
                             'serial'              => (string) $inst->getSerialNumber(),
@@ -86,6 +94,12 @@ class itemsDatagridAction extends sfAction
                        'items' => $itemsarray);
 
     $this->renderText(json_encode($dataarray));
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE sale.itemsDatagridAction==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
     return sfView::NONE;
   }
