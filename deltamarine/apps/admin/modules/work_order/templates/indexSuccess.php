@@ -72,7 +72,7 @@ var workordersStore = new Ext.data.JsonStore({
       idProperty: 'id'
     }
   }
-});
+});//workordersStore()---------------------------------------------------------
 
 var boatStore = new Ext.data.JsonStore({
   fields: ['id','name','make','model'],
@@ -555,7 +555,7 @@ var WorkOrderAddWin = new Ext.Window({
       }
     }]
   })
-});
+});//WorkOrderAddWin()---------------------------------------------------------
 
 var grid = new Ext.grid.GridPanel({
   minHeight: 500,

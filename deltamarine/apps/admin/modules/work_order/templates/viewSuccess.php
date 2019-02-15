@@ -282,7 +282,7 @@ var billingStore = new Ext.data.JsonStore({
 var partsfindStore = new Ext.data.JsonStore({
   fields: ['part_id', 'part_variant_id', 'name', 'sku', 'units', 'available', 'regular_price', 'unit_cost',
            'track_inventory', 'has_serial_number', 'category_path', 'location', 'enviro_levy', 'battery_levy',
-           'min_quantity', 'max_quantity'],
+           'min_quantity', 'max_quantity','manufacturer_sku'],
   remoteSort: true,
   pagesize: 50,
   sorters: [{ property: 'name', direction: 'ASC' }],
@@ -540,7 +540,7 @@ var PartMoveWin = new Ext.Window({
 });//PartMoveWin()-------------------------------------------------------------
 
 var PartAddWin = new Ext.Window({
-  width: 550,
+  width: 650,
   height: 600,
   modal: true,
   id: 'partadd',
@@ -567,8 +567,19 @@ var PartAddWin = new Ext.Window({
         sortable: true,
         width: 80
       },{
+        header: "M SKU",
+        dataIndex: 'manufacturer_sku',
+        sortable: true,
+        width: 80
+      },{
         header: "Category",
         dataIndex: 'category_path',
+        hideable: true,
+        sortable: true,
+        width: 140
+      },{
+        header: "Location",
+        dataIndex: 'location',
         hideable: true,
         sortable: true,
         width: 140
