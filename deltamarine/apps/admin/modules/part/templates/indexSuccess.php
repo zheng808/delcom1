@@ -25,7 +25,7 @@ var unitCost = null;
 var partSku = null;
 var partBatteryLevy = 0;
 var partEnviroLevy = 0;
-var partStatus = 'estimate';
+var partStatus = 'delivered';
 var partPstExempt = 0;
 var partGstExempt = 0;
 var includeEstimate = 0;
@@ -402,7 +402,7 @@ var AddToWorkorderWin = new Ext.Window({
           itemId: 'pstField',
           xtype: 'acbuttongroup',
           name: 'pstField',
-          value: 0,
+          value: '1',
           fieldLabel: 'PST Exempt',
           items: [
                 { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST' },
@@ -417,7 +417,7 @@ var AddToWorkorderWin = new Ext.Window({
           itemId: 'gstField',
           xtype: 'acbuttongroup',
           name: 'gstField',
-          value: 0,
+          value:'1',
           fieldLabel: 'GST Exempt',
           items: [
                 { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST' },
@@ -445,56 +445,63 @@ var AddToWorkorderWin = new Ext.Window({
         var woBrokerFees = Ext.getCmp('broker_fees').getValue();
         var woUnitPrice = Ext.getCmp('unit_price').getValue();
 
-//        var partStatus = 'estimate';
-//        if (partAvailable >= woQuantity){
-//          partStatus = 'delivered';
-//        }
 
-        Ext.Msg.wait("Adding Part to Workorder " + workorderId);
+        if (partAvailable >= woQuantity || partStatus == 'estimate'){
 
-        Ext.Ajax.request({
-            url: '<?php echo url_for('work_order/partedit'); ?>',
-            method: 'POST',
-            params: { 
-              id: workorderId, 
-              workorder_id: workorderId, 
-              instance_id: 'new',
-              quantity: woQuantity,
-              unit_price: woUnitPrice,
-              unit_cost: unitCost,
-              parent_id: workorderItemId,
-              part_variant_id: partVariantId,
-              enviro_levy: woEnviroLevy,
-              battery_levy: woBatteryLevy,
-              shipping_fees: woShippingFees,
-              broker_fees: woBrokerFees,
-              estimate: includeEstimate,
-              taxable_pst: partPstExempt,
-              taxable_gst: partGstExempt, 
-              statusaction: partStatus,
 
-            },
-            success: function(){
-              Ext.Msg.hide();
-              AddToWorkorderWin.hide();
-              Ext.Msg.hide();
-              reload_tree();
-              partslistStore.load();
-            },
-            failure: function(){
-              AddToWorkorderWin.hide();
-              Ext.Msg.hide();
-              Ext.Msg.show({
-                icon: Ext.MessageBox.ERROR,
-                buttons: Ext.MessageBox.OK,
-                msg: 'Could not move part! Reload page and try again.',
-                modal: true,
-                title: 'Error'
-              });
-              reload_tree();
-            }
-          });
+          Ext.Msg.wait("Adding Part to Workorder " + workorderId);
 
+          Ext.Ajax.request({
+              url: '<?php echo url_for('work_order/partedit'); ?>',
+              method: 'POST',
+              params: { 
+                id: workorderId, 
+                workorder_id: workorderId, 
+                instance_id: 'new',
+                quantity: woQuantity,
+                unit_price: woUnitPrice,
+                unit_cost: unitCost,
+                parent_id: workorderItemId,
+                part_variant_id: partVariantId,
+                enviro_levy: woEnviroLevy,
+                battery_levy: woBatteryLevy,
+                shipping_fees: woShippingFees,
+                broker_fees: woBrokerFees,
+                estimate: includeEstimate,
+                taxable_pst: partPstExempt,
+                taxable_gst: partGstExempt, 
+                statusaction: partStatus,
+
+              },
+              success: function(){
+                Ext.Msg.hide();
+                AddToWorkorderWin.hide();
+                Ext.Msg.hide();
+                reload_tree();
+                partslistStore.load();
+              },
+              failure: function(){
+                AddToWorkorderWin.hide();
+                Ext.Msg.hide();
+                Ext.Msg.show({
+                  icon: Ext.MessageBox.ERROR,
+                  buttons: Ext.MessageBox.OK,
+                  msg: 'Could not move part! Reload page and try again.',
+                  modal: true,
+                  title: 'Error'
+                });
+                reload_tree();
+              }
+            });
+          } else {
+            Ext.Msg.show({
+                  icon: Ext.MessageBox.ERROR,
+                  buttons: Ext.MessageBox.OK,
+                  msg: 'There is not enough quantity in stock for this item. There are only ' + partAvailable + '. Please ensure Inventory is available, or add this part as Estimate only',
+                  modal: true,
+                  title: 'Not Enough Stock'
+                });
+          }
       }
     },{
       text: 'Cancel',
@@ -1829,11 +1836,7 @@ var parts_grid = new Ext.grid.GridPanel({
         if (record.data.shipping_fees >= 0) { partShippingFees = record.data.shipping_fees }else{partShippingFees = 0};
         if (record.data.broker_fees >= 0) { partBrokerFees = record.data.broker_fees }else{partBrokerFees = 0};
 
-        partStatus = 'estimate';
-        
-        if (partAvailable > 0){
-          partStatus = 'delivered';
-        }
+        partStatus = 'delivered';
 
         Ext.getCmp('part_name').setValue(partName);
         Ext.getCmp('part_location').setValue(partLocation);

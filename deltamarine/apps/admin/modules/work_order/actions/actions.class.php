@@ -1432,7 +1432,7 @@ class work_orderActions extends sfActions
     }
 
     $unitCost = null;
-    if ($request->getParameter('cost') && ((float) $request->getParameter('cost')) < 0)
+    if ($request->getParameter('unit_cost') && ((float) $request->getParameter('unit_cost')) < 0)
     {
       if (sfConfig::get('sf_logging_enabled'))
       {
@@ -1443,13 +1443,55 @@ class work_orderActions extends sfActions
       $result = false;
       $errors['unit_cost'] = 'Invalid Cost specified. Cost must not be negative!';
     } else {
-      $unitCost = (float) $request->getParameter('cost');
+      $unitCost = (float) $request->getParameter('unit_cost');
     }
 
     if (sfConfig::get('sf_logging_enabled'))
     {
-      $message = 'Done getting UNIT_COST';
-      sfContext::getInstance()->getLogger()->info($message);
+      $message = 'Done getting UNIT_COST - ';
+      sfContext::getInstance()->getLogger()->info($message.$unitCost);
+    }
+
+    $brokerFees = null;
+    if ($request->getParameter('broker_fees') && ((float) $request->getParameter('broker_fees')) < 0)
+    {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid broker fees specified. Fees must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
+      $result = false;
+      $errors['broker_fees'] = 'Invalid broker fees specified. Fees must not be negative!';
+    } else {
+      $brokerFees = (float) $request->getParameter('broker_fees');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting broker_fees - ';
+      sfContext::getInstance()->getLogger()->info($message.$brokerFees);
+    }
+
+    $shippingFees = null;
+    if ($request->getParameter('shipping_fees') && ((float) $request->getParameter('shipping_fees')) < 0)
+    {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid shipping fees specified. Fees must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
+      $result = false;
+      $errors['shipping_fees'] = 'Invalid shipping fees specified. Fees must not be negative!';
+    } else {
+      $shippingFees = (float) $request->getParameter('shipping_fees');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting shipping_fees - ';
+      sfContext::getInstance()->getLogger()->info($message.$shippingFees);
     }
 
     if (!(((float) $request->getParameter('quantity')) > 0))
@@ -1475,10 +1517,11 @@ class work_orderActions extends sfActions
       $instance->setAllocated($request->getParameter('estimate') !== '1'); //true for 0 or 2
       $instance->setDelivered($request->getParameter('estimate') !== '1'); //true for 0 or 2
       $instance->setSerialNumber($request->getParameter('serial_number'));
-      $instance->setBrokerFees($request->getParameter('broker_fees'));
-      $instance->setShippingFees($request->getParameter('shipping_fees'));
-      $instance->setUnitCost($request->getParameter('cost'));
+      $instance->setBrokerFees($brokerFees);
+      $instance->setShippingFees($shippingFees);
+      //$instance->setUnitCost($request->getParameter('cost'));
       //$instance->setUnitCost($request->getParameter('unit_cost'));
+      $instance->setUnitCost($unitCost);
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setInternalNotes($request->getParameter('internal_notes'));
 
