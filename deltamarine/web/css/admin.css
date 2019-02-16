@@ -28,6 +28,8 @@ body, td, button, .x-body   { font-family: Lato, Arial, Helvetica, sans-serif; f
 button { font-size: 12px; display: block; cursor: hand; }
 
 a { color: #F28157; }
+a.redlink { color: #FF0000; text-decoration: none; }
+a.blacklink { color: #000000; text-decoration: none; }
 p a img { border: none; margin-right: 5px; }
 a.button, .button {
   margin: 0 0.58em 0.67em 0; font-size: 12px; font-weight: bold; height: 22px; line-height: 22px; border: 1px solid #F26052; color: #FFF; 

@@ -1647,14 +1647,18 @@ var parts_grid = new Ext.grid.GridPanel({
     renderer: function (value, metaData, record, rowIndex, colIndex, store) {
       if(record.get('active') != 1){
         if (store.proxy.extraParams.show_inactive == '2'){
-          return '<span style="color: red;">' + value + '</span>';
+          //return '<span style="color: red;">' + value + '</span>';
+          return '<span style="color: red;"><a class="redlink" href="<?php echo url_for('part/view?id='); ?>'+record.data.part_id+'">' + value + '</a></span>';
         } else {
-          return '<span style="color: red; text-decoration: line-through;">' + value + '</span>';
+          //return '<span style="color: red; text-decoration: line-through;">' + value + '</span>';
+          return '<span style="color: red; text-decoration: line-through;"><a class="redlink" href="<?php echo url_for('part/view?id='); ?>'+record.data.part_id+'">' + value + '</a></span>';
         }
       } else {
-        return value;
+        return '<a class="blacklink" href="<?php echo url_for('part/view?id='); ?>'+record.data.part_id+'">' + value + '</a>';
       }
     }
+
+
   },{
     header: "Delta SKU",
     width: 100,
@@ -1664,8 +1668,8 @@ var parts_grid = new Ext.grid.GridPanel({
     itemId: 'parts_mfrsku',
     header: 'Mfr SKU',
     width: 100,
-    dataIndex: 'manufacturer_sku',
-    hidden: true    
+    //hidden: true    
+    dataIndex: 'manufacturer_sku'
   },{
     itemId: 'parts_category',
     header: "Category",
