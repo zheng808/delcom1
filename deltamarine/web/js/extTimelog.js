@@ -519,6 +519,7 @@ Ext.define('Ext.ux.TimelogEditWin', {
       fieldLabel: 'Employee Notes',
       xtype: 'textarea',
       name: 'employee_notes',
+      allowBlank: false,
       anchor: '-25',
       height: 85,
       visibleIf: {
