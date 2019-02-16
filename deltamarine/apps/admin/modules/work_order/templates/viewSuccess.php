@@ -567,7 +567,7 @@ var PartAddWin = new Ext.Window({
         sortable: true,
         width: 80
       },{
-        header: "M SKU",
+        header: "Mfr SKU",
         dataIndex: 'manufacturer_sku',
         sortable: true,
         width: 80
