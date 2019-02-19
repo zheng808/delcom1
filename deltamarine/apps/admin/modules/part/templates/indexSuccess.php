@@ -31,6 +31,7 @@ var partGstExempt = 0;
 var includeEstimate = 0;
 var partBrokerFees = 0;
 var partShippingFees = 0;
+var partShowInactive = 0;
 
 var dupepartsStore = new Ext.data.JsonStore({
   fields: ['sku', 'part1id', 'part1name', 'part2id', 'part2name', 'part3id', 'part3name'],
@@ -78,7 +79,7 @@ var partsStore = new Ext.data.JsonStore({
     simpleSortMode: true,
     extraParams: { 
       show_pricing : '1',
-      show_inactive: '1' <?php echo ($belowmin ? ",\ninv: 'under'" : ''); ?>
+      show_inactive: partShowInactive <?php echo ($belowmin ? ",\ninv: 'under'" : ''); ?>
     },
     reader: {
       root: 'parts',
@@ -1957,6 +1958,10 @@ var updateFilterButtonVal = function (btn, pressed){
       parts_grid.down('#parts_expected').setVisible(btn.valueField == 'under');
       parts_grid.down('#parts_onorder').setVisible(btn.valueField == 'under');
     }
+    if (btn.toggleGroup == 'show_inactive')
+    {
+      partShowInactive = newval;
+    }
   } 
 };//updateFilterButtonVal()----------------------------------------------------
 
@@ -2257,7 +2262,7 @@ var filter = new Ext.Panel({
         parts_grid.down('#parts_mfrsku').hide();
         parts_grid.down('#parts_category').show();
         is_resetting = false;
-        
+
         Ext.getCmp('index_pager').moveFirst();
       }
     }]
