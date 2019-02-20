@@ -241,10 +241,13 @@ var partStatus = 'delivered';
 
 var partLocation = '';
 <?php if ($part->getDefaultVariant()->getLocation()): ?>
-  partLocation = "<?php echo $part->getDefaultVariant()->getLocation(); ?>";
+  //partLocation = "<?php echo $part->getDefaultVariant()->getLocation(); ?>";
+  partLocation = '<?php echo str_replace('"', '\"', str_replace("'", "\'",  $part->getDefaultVariant()->getLocation())); ?>';
 <?php endif; ?>
 
-var partName = "<?php echo $part->getName(); ?>";
+
+//var partName = "<?php echo $part->getName(); ?>";
+var partName = '<?php echo str_replace('"', '\"', str_replace("'", "\'",  $part->getName())); ?>';
 
 var unitPrice = null;
 <?php if ($part->getDefaultVariant()->calculateUnitPrice()): ?>
@@ -260,7 +263,9 @@ var unitCost = null;
 
 var partSku = '';
 <?php if ($part->getDefaultVariant()->getInternalSku()): ?>
-  partSku = '<?php echo $part->getDefaultVariant()->getInternalSku(); ?>';
+  //partSku = '<?php echo $part->getDefaultVariant()->getInternalSku(); ?>';
+  partSku = '<?php echo str_replace('"', '\"', str_replace("'", "\'",  $part->getDefaultVariant()->getInternalSku())); ?>';
+
 <?php endif; ?>
 
 var partBatteryLevy = 0;
