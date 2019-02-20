@@ -2153,7 +2153,8 @@ Ext.define('Ext.ux.PartEditWin', {
             minValue: 0,
             labelWidth: 70,
             forcePrecision: true,
-            anchor: '-5'
+            anchor: '-5',
+            value: 0
           },{
             xtype: 'numberfield',
             name: 'broker_fees',
@@ -2161,7 +2162,8 @@ Ext.define('Ext.ux.PartEditWin', {
             minValue: 0,
             labelWidth: 70,
             forcePrecision: true,
-            anchor: '-5'
+            anchor: '-5',
+            value: 0
           }]
         },{
           border: false,

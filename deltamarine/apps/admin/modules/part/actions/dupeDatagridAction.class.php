@@ -5,6 +5,12 @@ class dupeDatagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START dupeDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
 
     //GET THE LIST OF DUPLICATE SKUs
@@ -80,7 +86,13 @@ class dupeDatagridAction extends sfAction
 
     $this->renderText(json_encode($dataarray));
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE dupeDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//dupeDatagridAction{}========================================================

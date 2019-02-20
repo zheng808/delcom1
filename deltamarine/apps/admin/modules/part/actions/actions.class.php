@@ -230,10 +230,22 @@ class partActions extends sfActions
    */
   public function executeView(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeView====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->part = $this->loadPart($request);
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeView====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::SUCCESS;
-  }
+  }//executeView()-------------------------------------------------------------
 
   /*
    * Load a part's information for editing
@@ -278,7 +290,7 @@ class partActions extends sfActions
     $this->renderText('{success:true,data:'.json_encode($data).'}');
 
     return sfView::NONE;
-  }
+  }//executeLoad()-------------------------------------------------------------
 
   /*
    * save a part's information after editing
@@ -381,7 +393,7 @@ class partActions extends sfActions
       sfContext::getInstance()->getLogger()->info($message);
     }
     return sfView::NONE;
-  }
+  }//executeEdit()-------------------------------------------------------------
 
 /*
    * updates the inventory level for this part
@@ -854,7 +866,7 @@ class partActions extends sfActions
     $this->renderText('{success:true,parts:'.json_encode($partsarray).'}');
 
     return sfView::NONE;
-  }
+  }//executeFindByBarcode()----------------------------------------------------
 
   public function executeAddBarcode(sfWebRequest $request) {
     $code = $request->getParameter('code');
@@ -893,18 +905,31 @@ class partActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeAddBarcode()-------------------------------------------------------
 
 
   private function loadPart(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START loadPart====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     if ($request->getParameter('part_id')){
       $this->forward404Unless($part = PartPeer::retrieveByPkJoinMost($request->getParameter('part_id')));
     } else {
       $this->forward404Unless($part = PartPeer::retrieveByPkJoinMost($request->getParameter('id')));
     }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE loadPart====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return $part;
-  }
+  }//loadPart()----------------------------------------------------------------
   
 ///////////////////////////// INVENTORY UPDATING /////////////////////////////////////
 
@@ -914,7 +939,7 @@ class partActions extends sfActions
   public function executeBulkInventory(sfWebRequest $request)
   {
     return sfView::SUCCESS;
-  }
+  }//executeBulkInventory()----------------------------------------------------
 
   public function executeBulkInventoryReview(sfWebRequest $request)
   {
@@ -975,7 +1000,7 @@ class partActions extends sfActions
     $this->final_data = $final_data;
 
     return sfView::SUCCESS;
-  }
+  }//executeBulkInventoryReview()----------------------------------------------
 
   //update inventory levels for all requested items
   public function executeBulkInventoryPost(sfWebRequest $request)
@@ -1066,7 +1091,7 @@ class partActions extends sfActions
     $this->count_errored   = $count_errored;
 
     return sfView::SUCCESS;
-  }
+  }//executeBulkInventoryPost()------------------------------------------------
 
 ///////////////////////////// CATEGORIES MANAGEMENT /////////////////////////////////////
 

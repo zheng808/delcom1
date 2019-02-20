@@ -5,6 +5,12 @@ class inventorySheetAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START inventorySheetAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     set_time_limit(0);
     ini_set('memory_limit','512M');
     
@@ -289,8 +295,13 @@ class inventorySheetAction extends sfAction
 
     $workbook->close();
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE inventorySheetAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//execute()-----------------------------------------------------------------
 
-
-}
+}//inventorySheetAction{}======================================================

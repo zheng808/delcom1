@@ -5,6 +5,11 @@ class datagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START customer.datagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     //$this->forward404Unless($request->isXmlHttpRequest());
     
     $c = new Criteria();
@@ -66,7 +71,13 @@ class datagridAction extends sfAction
 
     $this->renderText(json_encode($dataarray));
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE customer.datagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//datagridAction{}============================================================

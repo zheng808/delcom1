@@ -5,6 +5,12 @@ class categorieslistAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START categorieslistAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
 
     $tree = PartCategoryPeer::retrieveAllTree();
@@ -16,7 +22,13 @@ class categorieslistAction extends sfAction
 
     $this->renderText('{success:true,categories:'.json_encode($output).'}');
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE categorieslistAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//categorieslistAction{}======================================================

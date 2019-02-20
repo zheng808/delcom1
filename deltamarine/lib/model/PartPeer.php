@@ -4,6 +4,15 @@ class PartPeer extends BasePartPeer
 {
   public static function retrieveByPkJoinMost($pk, Criteria $c = null, $con = null)
   {
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START PartPeer.retrieveByPkJoinMost====================';
+      sfContext::getInstance()->getLogger()->info($message);
+      sfContext::getInstance()->getLogger()->info('Part ID: '.$pk);
+    }
+
+
     if (!$c) $c = new Criteria();
 
     if ( $pk ) $c->add(self::ID, $pk);
@@ -100,6 +109,13 @@ class PartPeer extends BasePartPeer
     }
     unset($variants, $stmt);  
 
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE PartPeer.retrieveByPkJoinMost====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     if ($part)
     {
       $part->setPartVariantsFullyLoaded(true);
@@ -109,7 +125,7 @@ class PartPeer extends BasePartPeer
     {
       return null;
     }
-  }
+  }//retrieveByPkJoinMost()----------------------------------------------------
 
 
   //THIS IS DONE AS A TWO STEP PROCESS

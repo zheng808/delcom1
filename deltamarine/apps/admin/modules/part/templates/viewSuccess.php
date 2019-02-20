@@ -233,7 +233,7 @@ var supplierStore = new Ext.data.JsonStore({
  * 
  * 
  */
-var partVarianceId = <?php echo $part->getDefaultVariant()->getId(); ?>;
+var partVariantId = <?php echo $part->getDefaultVariant()->getId(); ?>;
 var partAvailable = '<?php echo $part->getDefaultVariant()->getCurrentAvailable(); ?>';
 var includeEstimate = 0;
 
@@ -241,10 +241,10 @@ var partStatus = 'delivered';
 
 var partLocation = '';
 <?php if ($part->getDefaultVariant()->getLocation()): ?>
-  partLocation = '<?php echo $part->getDefaultVariant()->getLocation(); ?>';
+  partLocation = "<?php echo $part->getDefaultVariant()->getLocation(); ?>";
 <?php endif; ?>
 
-var partName = '<?php echo $part->getName(); ?>';
+var partName = "<?php echo $part->getName(); ?>";
 
 var unitPrice = null;
 <?php if ($part->getDefaultVariant()->calculateUnitPrice()): ?>
@@ -616,7 +616,7 @@ var PartAddWin = new Ext.Window({
                 unit_price: woUnitPrice,
                 unit_cost: unitCost,
                 parent_id: workorderItemId,
-                part_variant_id: partVarianceId,
+                part_variant_id: partVariantId,
                 enviro_levy: woEnviroLevy,
                 battery_levy: woBatteryLevy,
                 shipping_fees: woShippingFees,
@@ -628,21 +628,23 @@ var PartAddWin = new Ext.Window({
               },
               success: function(){
                 Ext.Msg.hide();
-                location.reload(true);
                 
                 PartAddWin.hide();
                 Ext.Msg.hide();
+                location.reload(true);
+
 
                 //reload_tree();
                 //partslistStore.load();
               },
               failure: function(){
+                Ext.Msg.hide();
                 PartAddWin.hide();
                 Ext.Msg.hide();
                 Ext.Msg.show({
                   icon: Ext.MessageBox.ERROR,
                   buttons: Ext.MessageBox.OK,
-                  msg: 'Could not move part! Reload page and try again.',
+                  msg: 'Could not add part! Reload page and try again.',
                   modal: true,
                   title: 'Error'
                 });

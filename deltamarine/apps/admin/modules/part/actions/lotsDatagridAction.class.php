@@ -5,6 +5,12 @@ class lotsDatagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START lotsDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($part = PartPeer::retrieveByPk($request->getParameter('id')));
 
@@ -84,7 +90,13 @@ class lotsDatagridAction extends sfAction
 
     $this->renderText(json_encode($dataarray));
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE lotsDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//lotsDatagridAction{}========================================================

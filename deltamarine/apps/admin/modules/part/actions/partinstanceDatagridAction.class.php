@@ -5,6 +5,12 @@ class partinstanceDatagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START partinstanceDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
 
     $c = new Criteria();
@@ -185,7 +191,13 @@ class partinstanceDatagridAction extends sfAction
 
     $this->renderText(json_encode($dataarray));
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE partinstanceDatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//partinstanceDatagridAction{}================================================

@@ -5,6 +5,12 @@ class supplierdatagridAction extends sfAction
 
   public function execute($request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START supplierdatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($variant = PartVariantPeer::retrieveByPk($request->getParameter('id')));
 
@@ -26,7 +32,13 @@ class supplierdatagridAction extends sfAction
 
     $this->renderText(json_encode($dataarray));
 
-    return sfView::NONE;
-  }
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE supplierdatagridAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
-}
+    return sfView::NONE;
+  }//execute()-----------------------------------------------------------------
+
+}//supplierdatagridAction{}====================================================
