@@ -266,6 +266,12 @@ propel:
     shop_supplies_surcharge: { type: decimal, size: 5, scale: 2, default: 0 }
     moorage_surcharge:       { type: decimal, size: 5, scale: 2, default: 0 } # percentage (depricated)
     moorage_surcharge_amt:   { type: decimal, size: 8, scale: 2, default: 0 }
+    exemption_file:          { type: varchar(255) }
+    canada_entry_num:        { type: varchar(255) }
+    canada_entry_date:       { type: timestamp }
+    usa_entry_num:           { type: varchar(255) }
+    usa_entry_date:          { type: timestamp }
+
 
   workorder_category:
     id:                     ~

@@ -91,7 +91,7 @@ class work_orderActions extends sfActions
     $this->renderText(json_encode($dataarray));
 
     return sfView::NONE;
-  }
+  }//executeHaulins()----------------------------------------------------------
 
 
   /*
@@ -153,7 +153,7 @@ class work_orderActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeAdd()--------------------------------------------------------------
 
   public function executeView(sfWebRequest $request)
   {
@@ -161,7 +161,7 @@ class work_orderActions extends sfActions
     $this->workorder = $workorder;
 
     return sfView::SUCCESS;
-  }
+  }//executeView()-------------------------------------------------------------
 
   public function executeDelete(sfWebRequest $request)
   {
@@ -180,10 +180,15 @@ class work_orderActions extends sfActions
     {
       $this->forward404();
     }
-  }
+  }//executeDelete()-----------------------------------------------------------
 
   public function executeEdit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeEdit======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }    
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
     $workorder = $this->loadWorkorder($request);
@@ -223,6 +228,26 @@ class work_orderActions extends sfActions
       $workorder->setHaulinDate($request->getParameter('haulin') ? strtotime($request->getParameter('haulin').' '.$request->getParameter('haulin_time')): null);
       $workorder->setStatus($request->getParameter('status'));
       $workorder->setSummaryColor($request->getParameter('color_code','FFFFFF'));
+
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Setting Canada Entry Num';
+        sfContext::getInstance()->getLogger()->info($message);
+      }  
+      $workorder->setCanadaEntryNum($request->getParameter('canada_entry_num') ? $request->getParameter('canada_entry_num') : null);
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Setting Canada Entry Date';
+        sfContext::getInstance()->getLogger()->info($message);
+      }  
+      $workorder->setCanadaEntryDate($request->getParameter('canada_entry_date') ? strtotime($request->getParameter('canada_entry_date')) : null);
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Finished Setting Canada Entry Num and Date';
+        sfContext::getInstance()->getLogger()->info($message);
+      }  
+
+
       if ($cat = WorkorderCategoryPeer::retrieveByPk($request->getParameter('workorder_category_id')))
       {
         $workorder->setWorkorderCategoryId($cat->getId());
@@ -404,9 +429,13 @@ class work_orderActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
-
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done executeEdit======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    } 
     return sfView::NONE;
-  }
+  }//executeEdit()-------------------------------------------------------------
 
   /**********************************/
   /*      ITEM METHODS              */
@@ -949,6 +978,36 @@ class work_orderActions extends sfActions
 
     return sfView::NONE;
   }//executePartdelete()-------------------------------------------------------
+
+  public function executeAttachExemption(sfWebRequest $request)
+  {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeAttachExemption======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
+    $this->forward404Unless($request->isMethod('post'));
+    //$this->forward404Unless($request->isXmlHttpRequest());
+    
+    //LOAD AND CHECK THE WORKORDER
+    $workorder = $this->loadWorkorder($request);
+    $this->forward404If($workorder->getStatus() == 'Completed' || $workorder->getStatus() == 'Cancelled');
+    
+    $filename = $request->getParameter('file_name');
+
+    $workorder->setExemptionFile($filename);
+    
+    $workorder->save();
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeAttachExemption======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    return sfView::NONE;
+
+  }//executeAttachExemption()--------------------------------------------------
 
   public function executePartedit(sfWebRequest $request)
   {

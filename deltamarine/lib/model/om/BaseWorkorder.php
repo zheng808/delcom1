@@ -154,6 +154,14 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	 */
 	protected $moorage_surcharge_amt;
 
+	protected $exemption_file;
+
+	protected $canada_entry_num;
+	protected $canada_entry_date;
+	protected $usa_entry_num;
+	protected $usa_entry_date;
+
+
 	/**
 	 * @var        Customer
 	 */
@@ -600,6 +608,86 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	{
 		return $this->moorage_surcharge_amt;
 	}
+
+	/**
+	 * Get the [exemption_file] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getExemptionFile()
+	{
+		return $this->exemption_file;
+	}
+
+
+	public function getCanadaEntryNum()
+	{
+		return $this->canada_entry_num;
+	}
+
+	public function getCanadaEntryDate($format = 'Y-m-d')
+	{
+		if ($this->canada_entry_date === null) {
+			return null;
+		}
+
+
+		if ($this->canada_entry_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->canada_entry_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->canada_entry_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	public function getUsaEntryNum()
+	{
+		return $this->usa_entry_num;
+	}
+	
+	public function getUsaEntryDate($format = 'Y-m-d')
+	{
+		if ($this->usa_entry_date === null) {
+			return null;
+		}
+
+
+		if ($this->usa_entry_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->usa_entry_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->usa_entry_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
 
 	/**
 	 * Set the value of [id] column.
@@ -1158,6 +1246,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		return $this;
 	} // setMoorageSurcharge()
 
+
 	/**
 	 * Set the value of [moorage_surcharge_amt] column.
 	 * 
@@ -1177,6 +1266,133 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setMoorageSurchargeAmt()
+
+
+	public function setExemptionFile($v)
+	{
+
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->exemption_file !== $v) {
+			$this->exemption_file = $v;
+			$this->modifiedColumns[] = WorkorderPeer::EXEMPTION_FILE;
+		}
+
+		return $this;
+	}//setExemptionFile()
+
+	public function setCanadaEntryNum($v)
+	{
+    if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->canada_entry_num !== $v) {
+			$this->canada_entry_num = $v;
+			$this->modifiedColumns[] = WorkorderPeer::CANADA_ENTRY_NUM;
+		}
+
+		return $this;
+	}
+	public function setCanadaEntryDate($v)
+	{
+    // we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->canada_entry_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->canada_entry_date !== null && $tmpDt = new DateTime($this->canada_entry_date)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->canada_entry_date = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = WorkorderPeer::CANADA_ENTRY_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+	public function setUseEntryNum($v)
+	{
+    if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->usa_entry_num !== $v) {
+			$this->usa_entry_num = $v;
+			$this->modifiedColumns[] = WorkorderPeer::USA_ENTRY_NUM;
+		}
+
+		return $this;
+	}
+	public function setUsaEntryDate($v)
+	{
+    // we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->canada_entusa_entry_datery_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->usa_entry_date !== null && $tmpDt = new DateTime($this->usa_entry_date)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->usa_entry_date = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = WorkorderPeer::USA_ENTRY_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+
+
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -1268,6 +1484,11 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$this->shop_supplies_surcharge = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
 			$this->moorage_surcharge = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
 			$this->moorage_surcharge_amt = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
+			$this->exemption_file = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
+			$this->canada_entry_num = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+			$this->canada_entry_date = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
+			$this->usa_entry_num = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
+			$this->usa_entry_date = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1277,7 +1498,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 21; // 21 = WorkorderPeer::NUM_COLUMNS - WorkorderPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 22; // 22 = WorkorderPeer::NUM_COLUMNS - WorkorderPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Workorder object", $e);
@@ -1789,12 +2010,27 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			case 20:
 				return $this->getMoorageSurchargeAmt();
 				break;
+			case 21:
+				return $this->getExemptionFile();
+				break;
+			case 22:
+				return $this->getCanadaEntryNum();
+				break;
+			case 23:
+				return $this->getCanadaEntryDate();
+				break;
+			case 24:
+			return $this->getUsaEntryNum();
+			break;
+			case 25:
+				return $this->getUsaEntryDate();
+				break;
 			default:
 				return null;
 				break;
 		} // switch()
 	}
-
+	
 	/**
 	 * Exports the object as an array.
 	 *
@@ -1831,10 +2067,15 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$keys[18] => $this->getShopSuppliesSurcharge(),
 			$keys[19] => $this->getMoorageSurcharge(),
 			$keys[20] => $this->getMoorageSurchargeAmt(),
+			$keys[21] => $this->getExemptionFile(),
+			$keys[22] => $this->getCanadaEntryNum(),
+			$keys[23] => $this->getCanadaEntryDate(),
+			$keys[24] => $this->getUsaEntryNum(),
+			$keys[25] => $this->getUsaEntryDate(),
 		);
 		return $result;
 	}
-
+	
 	/**
 	 * Sets a field from the object by name passed in as a string.
 	 *
@@ -1925,9 +2166,24 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			case 20:
 				$this->setMoorageSurchargeAmt($value);
 				break;
+			case 21:
+				$this->setExemptionFile($value);
+				break;
+			case 22:
+			$this->setCanadaEntryNum($value);
+			break;
+			case 23:
+				$this->setCanadaEntryDate($value);
+				break;
+			case 24:
+			$this->setUsaEntryNum($value);
+			break;
+			case 25:
+				$this->setUsaEntryDate($value);
+				break;
 		} // switch()
 	}
-
+	
 	/**
 	 * Populates the object using an array.
 	 *
@@ -1970,8 +2226,13 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[18], $arr)) $this->setShopSuppliesSurcharge($arr[$keys[18]]);
 		if (array_key_exists($keys[19], $arr)) $this->setMoorageSurcharge($arr[$keys[19]]);
 		if (array_key_exists($keys[20], $arr)) $this->setMoorageSurchargeAmt($arr[$keys[20]]);
+		if (array_key_exists($keys[21], $arr)) $this->setExemptionFile($arr[$keys[21]]);
+		if (array_key_exists($keys[22], $arr)) $this->setCanadaEntryNum($arr[$keys[22]]);
+		if (array_key_exists($keys[23], $arr)) $this->setCanadaEntryDate($arr[$keys[23]]);
+		if (array_key_exists($keys[24], $arr)) $this->setUsaEntryNum($arr[$keys[24]]);
+		if (array_key_exists($keys[25], $arr)) $this->setUsaEntryDate($arr[$keys[25]]);
 	}
-
+	
 	/**
 	 * Build a Criteria object containing the values of all modified columns in this object.
 	 *
@@ -2002,6 +2263,11 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderPeer::SHOP_SUPPLIES_SURCHARGE)) $criteria->add(WorkorderPeer::SHOP_SUPPLIES_SURCHARGE, $this->shop_supplies_surcharge);
 		if ($this->isColumnModified(WorkorderPeer::MOORAGE_SURCHARGE)) $criteria->add(WorkorderPeer::MOORAGE_SURCHARGE, $this->moorage_surcharge);
 		if ($this->isColumnModified(WorkorderPeer::MOORAGE_SURCHARGE_AMT)) $criteria->add(WorkorderPeer::MOORAGE_SURCHARGE_AMT, $this->moorage_surcharge_amt);
+		if ($this->isColumnModified(WorkorderPeer::EXEMPTION_FILE)) $criteria->add(WorkorderPeer::EXEMPTION_FILE, $this->exemption_file);
+		if ($this->isColumnModified(WorkorderPeer::CANADA_ENTRY_NUM)) $criteria->add(WorkorderPeer::CANADA_ENTRY_NUM, $this->canada_entry_num);
+		if ($this->isColumnModified(WorkorderPeer::CANADA_ENTRY_DATE)) $criteria->add(WorkorderPeer::CANADA_ENTRY_DATE, $this->canada_entry_date);
+		if ($this->isColumnModified(WorkorderPeer::USA_ENTRY_NUM)) $criteria->add(WorkorderPeer::USA_ENTRY_NUM, $this->usa_entry_num);
+		if ($this->isColumnModified(WorkorderPeer::USA_ENTRY_DATE)) $criteria->add(WorkorderPeer::USA_ENTRY_DATE, $this->usa_entry_date);
 
 		return $criteria;
 	}
@@ -2096,6 +2362,15 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 		$copyObj->setMoorageSurchargeAmt($this->moorage_surcharge_amt);
 
+		$copyObj->setExemptionFile($this->exemption_file);
+
+		$copyObj->setCanadaEntryNum($this->canada_entry_num);
+
+		$copyObj->setCanadaEntryDate($this->canada_entry_date);
+
+		$copyObj->setUsaEntryNum($this->usa_entry_num);
+
+		$copyObj->setUsaEntryDate($this->usa_entry_date);
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of

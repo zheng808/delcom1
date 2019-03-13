@@ -331,7 +331,7 @@ class Workorder extends BaseWorkorder
     $stmt->execute(); 
   }
 
-
+  
   public function getWorkorderPayments($criteria = null, PropelPDO $con = null)
   {
     if ($criteria === null) 

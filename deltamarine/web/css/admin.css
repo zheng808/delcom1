@@ -259,6 +259,7 @@ table.x-btn { margin: 3px }
 .x-date-picker button { display: inline; background-image: none; background-color: #083772; }
 
 .x-btn-button .add,          .x-btn-button .add:hover          { background-image: url(/images/silkicon/add.png); }
+.x-btn-button .attach,       .x-btn-button .attach:hover       { background-image: url(/images/silkicon/attach.png); }
 .x-btn-button .delete,       .x-btn-button .delete:hover       { background-image: url(/images/silkicon/delete.png); }
 .x-btn-button .building,     .x-btn-button .building:hover     { background-image: url(/images/silkicon/building.png); }
 .x-btn-button .buildingedit, .x-btn-button .buildingedit:hover { background-image: url(/images/silkicon/building_edit.png); }

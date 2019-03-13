@@ -19,7 +19,7 @@ abstract class BaseWorkorderPeer {
 	const CLASS_DEFAULT = 'lib.model.Workorder';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 21;
+	const NUM_COLUMNS = 26;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -87,6 +87,16 @@ abstract class BaseWorkorderPeer {
 	/** the column name for the MOORAGE_SURCHARGE_AMT field */
 	const MOORAGE_SURCHARGE_AMT = 'workorder.MOORAGE_SURCHARGE_AMT';
 
+	const EXEMPTION_FILE = 'workorder.EXEMPTION_FILE';
+
+	const CANADA_ENTRY_NUM = 'workorder.CANADA_ENTRY_NUM';
+
+	const CANADA_ENTRY_DATE = 'workorder.CANADA_ENTRY_DATE';
+
+	const USA_ENTRY_NUM = 'workorder.USA_ENTRY_NUM';
+
+	const USA_ENTRY_DATE = 'workorder.USA_ENTRY_DATE';
+
 	/**
 	 * An identiy map to hold any loaded instances of Workorder objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -108,11 +118,11 @@ abstract class BaseWorkorderPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'CustomerBoatId', 'WorkorderCategoryId', 'Status', 'SummaryColor', 'SummaryNotes', 'HauloutDate', 'HaulinDate', 'CreatedOn', 'StartedOn', 'CompletedOn', 'HstExempt', 'GstExempt', 'PstExempt', 'CustomerNotes', 'InternalNotes', 'ForRigging', 'ShopSuppliesSurcharge', 'MoorageSurcharge', 'MoorageSurchargeAmt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'customerBoatId', 'workorderCategoryId', 'status', 'summaryColor', 'summaryNotes', 'hauloutDate', 'haulinDate', 'createdOn', 'startedOn', 'completedOn', 'hstExempt', 'gstExempt', 'pstExempt', 'customerNotes', 'internalNotes', 'forRigging', 'shopSuppliesSurcharge', 'moorageSurcharge', 'moorageSurchargeAmt', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::CUSTOMER_BOAT_ID, self::WORKORDER_CATEGORY_ID, self::STATUS, self::SUMMARY_COLOR, self::SUMMARY_NOTES, self::HAULOUT_DATE, self::HAULIN_DATE, self::CREATED_ON, self::STARTED_ON, self::COMPLETED_ON, self::HST_EXEMPT, self::GST_EXEMPT, self::PST_EXEMPT, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::FOR_RIGGING, self::SHOP_SUPPLIES_SURCHARGE, self::MOORAGE_SURCHARGE, self::MOORAGE_SURCHARGE_AMT, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'customer_boat_id', 'workorder_category_id', 'status', 'summary_color', 'summary_notes', 'haulout_date', 'haulin_date', 'created_on', 'started_on', 'completed_on', 'hst_exempt', 'gst_exempt', 'pst_exempt', 'customer_notes', 'internal_notes', 'for_rigging', 'shop_supplies_surcharge', 'moorage_surcharge', 'moorage_surcharge_amt', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'CustomerBoatId', 'WorkorderCategoryId', 'Status', 'SummaryColor', 'SummaryNotes', 'HauloutDate', 'HaulinDate', 'CreatedOn', 'StartedOn', 'CompletedOn', 'HstExempt', 'GstExempt', 'PstExempt', 'CustomerNotes', 'InternalNotes', 'ForRigging', 'ShopSuppliesSurcharge', 'MoorageSurcharge', 'MoorageSurchargeAmt', 'ExemptionFile','CanadaEntryNum','CanadaEntryDate','UsaEntryNum','UsaEntryDate', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'customerBoatId', 'workorderCategoryId', 'status', 'summaryColor', 'summaryNotes', 'hauloutDate', 'haulinDate', 'createdOn', 'startedOn', 'completedOn', 'hstExempt', 'gstExempt', 'pstExempt', 'customerNotes', 'internalNotes', 'forRigging', 'shopSuppliesSurcharge', 'moorageSurcharge', 'moorageSurchargeAmt', 'exemptionFile','canadaEntryNum','canadaEntryDate','usaEntryNum','usaEntryDate', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::CUSTOMER_BOAT_ID, self::WORKORDER_CATEGORY_ID, self::STATUS, self::SUMMARY_COLOR, self::SUMMARY_NOTES, self::HAULOUT_DATE, self::HAULIN_DATE, self::CREATED_ON, self::STARTED_ON, self::COMPLETED_ON, self::HST_EXEMPT, self::GST_EXEMPT, self::PST_EXEMPT, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::FOR_RIGGING, self::SHOP_SUPPLIES_SURCHARGE, self::MOORAGE_SURCHARGE, self::MOORAGE_SURCHARGE_AMT, self::EXEMPTION_FILE, self::CANADA_ENTRY_NUM, self::CANADA_ENTRY_DATE, self::USA_ENTRY_NUM, self::USA_ENTRY_DATE,),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'customer_boat_id', 'workorder_category_id', 'status', 'summary_color', 'summary_notes', 'haulout_date', 'haulin_date', 'created_on', 'started_on', 'completed_on', 'hst_exempt', 'gst_exempt', 'pst_exempt', 'customer_notes', 'internal_notes', 'for_rigging', 'shop_supplies_surcharge', 'moorage_surcharge', 'moorage_surcharge_amt', 'exemption_file','canada_entry_num','canada_entry_date','usa_entry_num','usa_entry_date', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,22, 23, 24, 25,)
 	);
 
 	/**
@@ -122,11 +132,11 @@ abstract class BaseWorkorderPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'CustomerBoatId' => 2, 'WorkorderCategoryId' => 3, 'Status' => 4, 'SummaryColor' => 5, 'SummaryNotes' => 6, 'HauloutDate' => 7, 'HaulinDate' => 8, 'CreatedOn' => 9, 'StartedOn' => 10, 'CompletedOn' => 11, 'HstExempt' => 12, 'GstExempt' => 13, 'PstExempt' => 14, 'CustomerNotes' => 15, 'InternalNotes' => 16, 'ForRigging' => 17, 'ShopSuppliesSurcharge' => 18, 'MoorageSurcharge' => 19, 'MoorageSurchargeAmt' => 20, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'customerBoatId' => 2, 'workorderCategoryId' => 3, 'status' => 4, 'summaryColor' => 5, 'summaryNotes' => 6, 'hauloutDate' => 7, 'haulinDate' => 8, 'createdOn' => 9, 'startedOn' => 10, 'completedOn' => 11, 'hstExempt' => 12, 'gstExempt' => 13, 'pstExempt' => 14, 'customerNotes' => 15, 'internalNotes' => 16, 'forRigging' => 17, 'shopSuppliesSurcharge' => 18, 'moorageSurcharge' => 19, 'moorageSurchargeAmt' => 20, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::CUSTOMER_BOAT_ID => 2, self::WORKORDER_CATEGORY_ID => 3, self::STATUS => 4, self::SUMMARY_COLOR => 5, self::SUMMARY_NOTES => 6, self::HAULOUT_DATE => 7, self::HAULIN_DATE => 8, self::CREATED_ON => 9, self::STARTED_ON => 10, self::COMPLETED_ON => 11, self::HST_EXEMPT => 12, self::GST_EXEMPT => 13, self::PST_EXEMPT => 14, self::CUSTOMER_NOTES => 15, self::INTERNAL_NOTES => 16, self::FOR_RIGGING => 17, self::SHOP_SUPPLIES_SURCHARGE => 18, self::MOORAGE_SURCHARGE => 19, self::MOORAGE_SURCHARGE_AMT => 20, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'customer_boat_id' => 2, 'workorder_category_id' => 3, 'status' => 4, 'summary_color' => 5, 'summary_notes' => 6, 'haulout_date' => 7, 'haulin_date' => 8, 'created_on' => 9, 'started_on' => 10, 'completed_on' => 11, 'hst_exempt' => 12, 'gst_exempt' => 13, 'pst_exempt' => 14, 'customer_notes' => 15, 'internal_notes' => 16, 'for_rigging' => 17, 'shop_supplies_surcharge' => 18, 'moorage_surcharge' => 19, 'moorage_surcharge_amt' => 20, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'CustomerBoatId' => 2, 'WorkorderCategoryId' => 3, 'Status' => 4, 'SummaryColor' => 5, 'SummaryNotes' => 6, 'HauloutDate' => 7, 'HaulinDate' => 8, 'CreatedOn' => 9, 'StartedOn' => 10, 'CompletedOn' => 11, 'HstExempt' => 12, 'GstExempt' => 13, 'PstExempt' => 14, 'CustomerNotes' => 15, 'InternalNotes' => 16, 'ForRigging' => 17, 'ShopSuppliesSurcharge' => 18, 'MoorageSurcharge' => 19, 'MoorageSurchargeAmt' => 20, 'ExemptionFile' => 21, 'CanadaEntryNum' => 22,'CanadaEntryDate' => 23,'UsaEntryNum' => 24,'UsaEntryDate' => 25, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'customerBoatId' => 2, 'workorderCategoryId' => 3, 'status' => 4, 'summaryColor' => 5, 'summaryNotes' => 6, 'hauloutDate' => 7, 'haulinDate' => 8, 'createdOn' => 9, 'startedOn' => 10, 'completedOn' => 11, 'hstExempt' => 12, 'gstExempt' => 13, 'pstExempt' => 14, 'customerNotes' => 15, 'internalNotes' => 16, 'forRigging' => 17, 'shopSuppliesSurcharge' => 18, 'moorageSurcharge' => 19, 'moorageSurchargeAmt' => 20, 'exemptionFile' => 21,  'canadaEntryNum' => 22,'canadaEntryDate' => 23,'usaEntryNum' => 24,'usaEntryDate' => 25, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::CUSTOMER_BOAT_ID => 2, self::WORKORDER_CATEGORY_ID => 3, self::STATUS => 4, self::SUMMARY_COLOR => 5, self::SUMMARY_NOTES => 6, self::HAULOUT_DATE => 7, self::HAULIN_DATE => 8, self::CREATED_ON => 9, self::STARTED_ON => 10, self::COMPLETED_ON => 11, self::HST_EXEMPT => 12, self::GST_EXEMPT => 13, self::PST_EXEMPT => 14, self::CUSTOMER_NOTES => 15, self::INTERNAL_NOTES => 16, self::FOR_RIGGING => 17, self::SHOP_SUPPLIES_SURCHARGE => 18, self::MOORAGE_SURCHARGE => 19, self::MOORAGE_SURCHARGE_AMT => 20, self::EXEMPTION_FILE => 21,  self::CANADA_ENTRY_NUM => 22, self::CANADA_ENTRY_DATE => 23, self::USA_ENTRY_NUM => 24, self::USA_ENTRY_DATE => 25,),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'customer_boat_id' => 2, 'workorder_category_id' => 3, 'status' => 4, 'summary_color' => 5, 'summary_notes' => 6, 'haulout_date' => 7, 'haulin_date' => 8, 'created_on' => 9, 'started_on' => 10, 'completed_on' => 11, 'hst_exempt' => 12, 'gst_exempt' => 13, 'pst_exempt' => 14, 'customer_notes' => 15, 'internal_notes' => 16, 'for_rigging' => 17, 'shop_supplies_surcharge' => 18, 'moorage_surcharge' => 19, 'moorage_surcharge_amt' => 20, 'exemption_file' => 21, 'canada_entry_num' => 22,'canada_entry_date' => 23,'usa_entry_num' => 24,'usa_entry_date' => 25, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,)
 	);
 
 	/**
@@ -250,6 +260,15 @@ abstract class BaseWorkorderPeer {
 
 		$criteria->addSelectColumn(WorkorderPeer::MOORAGE_SURCHARGE_AMT);
 
+		$criteria->addSelectColumn(WorkorderPeer::EXEMPTION_FILE);
+
+		$criteria->addSelectColumn(WorkorderPeer::CANADA_ENTRY_NUM);
+
+		$criteria->addSelectColumn(WorkorderPeer::CANADA_ENTRY_DATE);
+
+		$criteria->addSelectColumn(WorkorderPeer::USA_ENTRY_NUM);
+
+		$criteria->addSelectColumn(WorkorderPeer::USA_ENTRY_DATE);
 	}
 
 	/**

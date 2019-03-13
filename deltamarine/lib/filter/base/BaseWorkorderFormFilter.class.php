@@ -34,6 +34,11 @@ class BaseWorkorderFormFilter extends BaseFormFilterPropel
       'shop_supplies_surcharge' => new sfWidgetFormFilterInput(),
       'moorage_surcharge'       => new sfWidgetFormFilterInput(),
       'moorage_surcharge_amt'   => new sfWidgetFormFilterInput(),
+      'exemption_file'          => new sfWidgetFormFilterInput(),
+      'canada_entry_num'          => new sfWidgetFormFilterInput(),
+      'canada_entry_date'          => new sfWidgetFormFilterInput(),
+      'usa_entry_num'          => new sfWidgetFormFilterInput(),
+      'usa_entry_date'          => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -57,6 +62,11 @@ class BaseWorkorderFormFilter extends BaseFormFilterPropel
       'shop_supplies_surcharge' => new sfValidatorSchemaFilter('text', new sfValidatorNumber(array('required' => false))),
       'moorage_surcharge'       => new sfValidatorSchemaFilter('text', new sfValidatorNumber(array('required' => false))),
       'moorage_surcharge_amt'   => new sfValidatorSchemaFilter('text', new sfValidatorNumber(array('required' => false))),
+      'exemption_file'          => new sfValidatorPass(array('required' => false)),
+      'canada_entry_num'           => new sfValidatorPass(array('required' => false)),
+      'canada_entry_date'              => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
+      'usa_entry_num'           => new sfValidatorPass(array('required' => false)),
+      'usa_entry_date'              => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
     ));
 
     $this->widgetSchema->setNameFormat('workorder_filters[%s]');
@@ -95,6 +105,11 @@ class BaseWorkorderFormFilter extends BaseFormFilterPropel
       'shop_supplies_surcharge' => 'Number',
       'moorage_surcharge'       => 'Number',
       'moorage_surcharge_amt'   => 'Number',
+      'exemption_file'          => 'Text',
+      'canada_entry_num'        => 'Text',
+      'canada_entry_date'       => 'Date',
+      'usa_entry_num'           => 'Text',
+      'usa_entry_date'          => 'Date',
     );
   }
 }

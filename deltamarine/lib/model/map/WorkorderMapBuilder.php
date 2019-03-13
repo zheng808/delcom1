@@ -104,6 +104,16 @@ class WorkorderMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('MOORAGE_SURCHARGE_AMT', 'MoorageSurchargeAmt', 'DECIMAL', false, 8);
 
+		$tMap->addColumn('EXEMPTION_FILE', 'ExemptionFile', 'VARCHAR', true, 255);
+
+		$tMap->addColumn('CANADA_ENTRY_NUM', 'CanadaEntryNum', 'VARCHAR', true, 255);
+
+		$tMap->addColumn('CANADA_ENTRY_DATE', 'CanadaEntryDate', 'TIMESTAMP', true, 255);
+
+		$tMap->addColumn('USA_ENTRY_NUM', 'UsaEntryNum', 'VARCHAR', true, 255);
+
+		$tMap->addColumn('USA_ENTRY_DATE', 'UsaEntryDate', 'TIMESTAMP', true, 255);
+
 	} // doBuild()
 
 } // WorkorderMapBuilder

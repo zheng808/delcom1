@@ -46,6 +46,11 @@
         $haulout =    '<td class="label">Haulout Date:</td><td>'.$workorder->getHauloutDateTime('M j, Y').'</td>';
         $haulin  =    '<td class="label">Relaunch Date:</td><td>'.$workorder->getHaulinDateTime('M j, Y').'</td>';
         $status =     '<td class="label">Tasks Complete:</td><td>'.implode('/',$workorder->getItemsProgress()).'</td>';
+        $exemptionFile =  '<td class="label">Exemption File:</td><td><a href="/uploads/'.$workorder->getExemptionFile().'" target="_blank">'.$workorder->getExemptionFile().'</a></td>';
+
+        $cdnEntryNum  =    '<td class="label">Canadian Entry Number:</td><td>'.$workorder->getCanadaEntryNum().'</td>';
+        $cdnEntryDate  =    '<td class="label">Canadian Entry Date:</td><td>'.$workorder->getCanadaEntryDate('M j, Y').'</td>';
+
         $blank = '<td class="label"></td><td class="blank"></td>';
 
         if ($workorder->getPstExempt() || $workorder->getGstExempt())
@@ -66,18 +71,22 @@
          if ($workorder->getHauloutDate())
          {
             echo '<tr>'.$haulout.$haulin.'</tr>';
-            echo '<tr>'.$status.$blank.'</tr>';
+            echo '<tr>'.$status.$exemptionFile.'</tr>';
          }
          else
          {
-           echo '<tr>'.$status.$blank.'</tr>';
+           echo '<tr>'.$status.$exemptionFile.'</tr>';
          }
         }
         else 
         {
           echo '<tr>'.$created.$started.'</tr><tr>'.$completed.$blank.'</tr>';
           if ($workorder->getHauloutDate()) echo '<tr>'.$haulout.$haulin.'</tr>';
-          echo '<tr>'.$status.$blank.'</tr>';
+          echo '<tr>'.$status.$exemptionFile.'</tr>';
+        }
+        if ($workorder->getCanadaEntryDate())
+        {
+           echo '<tr>'.$cdnEntryNum.$cdnEntryDate.'</tr>';
         }
       ?>
     </table>
@@ -1150,6 +1159,90 @@ var customerBoatStore = new Ext.data.JsonStore({
   }
 });
 
+
+
+var uploadFormWin = new Ext.Window({
+  title: 'Upload Exemption Letter',
+  width: 400,
+  height: 150,
+  border: false,
+  modal: true,
+  resizable: false,
+  closeAction: 'hide',
+  layout: 'fit',
+
+  items: new Ext.form.FormPanel({
+    fileUpload: true,
+    id: 'fileuploadform',
+    url: '<?php echo url_for('/util/file-upload.php'); ?>',
+    bodyStyle: 'padding: 10px 10px 0 10px;',
+    labelWidth: 50,
+    defaults: {
+        anchor: '95%',
+        allowBlank: false,
+        msgTarget: 'side'
+    },
+    items: [{
+      xtype: 'hidden',
+      name: 'workorderId',
+      value: <?php echo $workorder->getId(); ?>
+    },{
+        xtype: 'filefield',
+        id: 'fileToUpload',
+        emptyText: 'Select a file',
+        fieldLabel: 'File',
+        name: 'fileToUpload',
+        buttonText: 'Browse'   
+    }]   
+    ,
+    buttons: [{
+    text: 'Upload',
+    handler: function() {
+        var form = this.up('form').getForm();
+        if(form.isValid()){
+            form.submit({
+                url: '/util/file-upload.php',
+                waitMsg: 'Uploading file...',
+                success: function(form,action) {
+                    Ext.Msg.alert('Success', action.result.msg);
+                    uploadFormWin.hide();
+
+                    var filename = action.result.data.name;
+
+                    Ext.Ajax.request({
+                      url: '<?php echo url_for('work_order/attachExemption'); ?>',
+                      method: 'POST',
+                      params: { 
+                        id: this_workorder_id, 
+                        workorder_id: this_workorder_id, 
+                        file_name: filename
+                      },
+                      success: function(){
+                        var myMask = new Ext.LoadMask(Ext.getBody(), {msg: "Work Order Updated"});
+                        myMask.show();
+                        location.href = '<?php echo url_for('work_order/view?id='.$workorder->getId()); ?>';
+                      }
+                    }); 
+                },
+                failure: function (form,action) {
+                  Ext.Msg.alert('Failure', 'Could not upload file.  Please try again later '); //action.result.msg);
+                  //Ext.Msg.alert('Failure', action.result.msg);
+                  uploadFormWin.hide();
+                }
+            });
+        }
+    }
+}]
+
+})
+});
+
+
+
+
+
+
+
 Ext.define('Ext.ux.WorkorderEditWin', {
   extend: 'Ext.ux.acFormWindow',
 
@@ -1515,6 +1608,24 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         maxValue: '6:00 PM',
         increment: 10,
         value: <?php echo ($workorder->getHaulinDate('G') > 0 ? '\''.$workorder->getHaulinDate('g:i A').'\'' : 'null'); ?>
+      }]
+    },{
+      xtype: 'fieldcontainer',
+      fieldLabel: 'Canada Entry Num and Date',
+      layout: 'hbox',
+      items: [{
+        xtype: 'text',
+        flex: 1,
+        name: 'canada_entry_num',
+        value: <?php echo ($workorder->getCanadaEntryNum() ? '\''.$workorder->getCanadaEntryNum().'\'' : 'null'); ?>
+      },{
+       xtype: 'splitter'
+      },{
+        xtype: 'datefield',
+        flex: 1,
+        format: 'M j, Y',
+        name: 'canada_entry_date',
+        value: <?php echo ($workorder->getCanadaEntryDate() ? '\''.$workorder->getCanadaEntryDate('M j, Y').'\'' : 'null'); ?>
       }]
     },{
       itemId: 'holdaction',
@@ -2665,6 +2776,14 @@ var workorder_toolbar = new Ext.Toolbar({
       <?php else: ?>
         Ext.Msg.alert('Permission Denied','You do not have permission to delete workorders');
       <?php endif; ?>
+    }
+  },'-',{
+    text: 'Attach Exemption',
+    iconCls: 'attach',
+    handler: function(){
+      //alert('1');
+       uploadFormWin.show();
+       //new Ext.ux.UploadFormWin();
     }
   },'->',{
     text: 'View Change History',
