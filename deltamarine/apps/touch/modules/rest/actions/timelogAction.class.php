@@ -182,6 +182,10 @@ class timelogAction extends restInterfaceAction
       $errors['payroll_hours'] = 'Can\'t enter a zero-time timelog!';
     }
 
+    if (trim($req->notes) == '' || $req->notes === null){
+      $result = false;
+      $errors['notes'] = 'Must supply Timelog notes!';
+    }
     if ($req->billable == 1)
     {
       if (!($wo = WorkorderPeer::retrieveByPk($req->workorder_id)))
