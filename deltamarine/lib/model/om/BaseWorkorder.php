@@ -1337,7 +1337,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 		return $this;
 	}
-	public function setUseEntryNum($v)
+	public function setUsaEntryNum($v)
 	{
     if ($v !== null) {
 			$v = (string) $v;

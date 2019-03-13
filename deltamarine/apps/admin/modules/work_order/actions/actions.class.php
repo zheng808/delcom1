@@ -235,12 +235,14 @@ class work_orderActions extends sfActions
         sfContext::getInstance()->getLogger()->info($message);
       }  
       $workorder->setCanadaEntryNum($request->getParameter('canada_entry_num') ? $request->getParameter('canada_entry_num') : null);
+      $workorder->setUsaEntryNum($request->getParameter('usa_entry_num') ? $request->getParameter('usa_entry_num') : null);
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Setting Canada Entry Date';
         sfContext::getInstance()->getLogger()->info($message);
       }  
       $workorder->setCanadaEntryDate($request->getParameter('canada_entry_date') ? strtotime($request->getParameter('canada_entry_date')) : null);
+      $workorder->setUsaEntryDate($request->getParameter('usa_entry_date') ? strtotime($request->getParameter('usa_entry_date')) : null);
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Finished Setting Canada Entry Num and Date';

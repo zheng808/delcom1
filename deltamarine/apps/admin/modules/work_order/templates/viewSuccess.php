@@ -50,6 +50,8 @@
 
         $cdnEntryNum  =    '<td class="label">Canadian Entry Number:</td><td>'.$workorder->getCanadaEntryNum().'</td>';
         $cdnEntryDate  =    '<td class="label">Canadian Entry Date:</td><td>'.$workorder->getCanadaEntryDate('M j, Y').'</td>';
+        $usaEntryNum  =    '<td class="label">USA Entry Number:</td><td>'.$workorder->getUsaEntryNum().'</td>';
+        $usaEntryDate  =    '<td class="label">USA Entry Date:</td><td>'.$workorder->getUsaEntryDate('M j, Y').'</td>';
 
         $blank = '<td class="label"></td><td class="blank"></td>';
 
@@ -84,9 +86,13 @@
           if ($workorder->getHauloutDate()) echo '<tr>'.$haulout.$haulin.'</tr>';
           echo '<tr>'.$status.$exemptionFile.'</tr>';
         }
-        if ($workorder->getCanadaEntryDate())
+        if ($workorder->getCanadaEntryNum() || $workorder->getCanadaEntryDate())
         {
            echo '<tr>'.$cdnEntryNum.$cdnEntryDate.'</tr>';
+        }
+        if ($workorder->getUsaEntryNum() || $workorder->getUsaEntryDate())
+        {
+           echo '<tr>'.$usaEntryNum.$usaEntryDate.'</tr>';
         }
       ?>
     </table>
@@ -1614,7 +1620,7 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       fieldLabel: 'Canada Entry Num and Date',
       layout: 'hbox',
       items: [{
-        xtype: 'text',
+        xtype: 'textfield',
         flex: 1,
         name: 'canada_entry_num',
         value: <?php echo ($workorder->getCanadaEntryNum() ? '\''.$workorder->getCanadaEntryNum().'\'' : 'null'); ?>
@@ -1626,6 +1632,24 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         format: 'M j, Y',
         name: 'canada_entry_date',
         value: <?php echo ($workorder->getCanadaEntryDate() ? '\''.$workorder->getCanadaEntryDate('M j, Y').'\'' : 'null'); ?>
+      }]
+    },{
+      xtype: 'fieldcontainer',
+      fieldLabel: 'USA Entry Num and Date',
+      layout: 'hbox',
+      items: [{
+        xtype: 'textfield',
+        flex: 1,
+        name: 'usa_entry_num',
+        value: <?php echo ($workorder->getUsaEntryNum() ? '\''.$workorder->getUsaEntryNum().'\'' : 'null'); ?>
+      },{
+       xtype: 'splitter'
+      },{
+        xtype: 'datefield',
+        flex: 1,
+        format: 'M j, Y',
+        name: 'usa_entry_date',
+        value: <?php echo ($workorder->getUsaEntryDate() ? '\''.$workorder->getUsaEntryDate('M j, Y').'\'' : 'null'); ?>
       }]
     },{
       itemId: 'holdaction',
