@@ -46,7 +46,7 @@
         $haulout =    '<td class="label">Haulout Date:</td><td>'.$workorder->getHauloutDateTime('M j, Y').'</td>';
         $haulin  =    '<td class="label">Relaunch Date:</td><td>'.$workorder->getHaulinDateTime('M j, Y').'</td>';
         $status =     '<td class="label">Tasks Complete:</td><td>'.implode('/',$workorder->getItemsProgress()).'</td>';
-        $exemptionFile =  '<td class="label">Exemption File:</td><td><a href="/uploads/'.$workorder->getExemptionFile().'" target="_blank">'.$workorder->getExemptionFile().'</a></td>';
+        $exemptionFile =  '<td class="label">Exemption File:</td><td><a href="/uploads/exemptions/'.$workorder->getExemptionFile().'" target="_blank">'.$workorder->getExemptionFile().'</a></td>';
 
         $cdnEntryNum  =    '<td class="label">Canadian Entry Number:</td><td>'.$workorder->getCanadaEntryNum().'</td>';
         $cdnEntryDate  =    '<td class="label">Canadian Entry Date:</td><td>'.$workorder->getCanadaEntryDate('M j, Y').'</td>';
@@ -1190,8 +1190,12 @@ var uploadFormWin = new Ext.Window({
     },
     items: [{
       xtype: 'hidden',
-      name: 'workorderId',
+      name: 'object_id',
       value: <?php echo $workorder->getId(); ?>
+    },{
+      xtype: 'hidden',
+      name: 'object_dir',
+      value: 'exemptions/'
     },{
         xtype: 'filefield',
         id: 'fileToUpload',

@@ -9,13 +9,14 @@ if ($_FILES["fileToUpload"]["error"] > 0)
 }
 
 $msg = '';
+$object_id = $_POST["object_id"];
+$object_dir = $_POST["object_dir"];
 $target_dir = '../uploads/';
-$workorder_id = $_POST["workorderId"];
 
-$target_file = $target_dir . $workorder_id .'_' . basename($_FILES["fileToUpload"]["name"]);
+$target_file = $target_dir . $object_dir . $object_id .'_' . basename($_FILES["fileToUpload"]["name"]);
 $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 $file_size = round($_FILES["fileToUpload"]["size"] / 1024, 2) . "  Kilo Bytes";
-$file_name = $workorder_id .'_' . $_FILES["fileToUpload"]["name"];
+$file_name = $object_id .'_' . $_FILES["fileToUpload"]["name"];
 
 
 
