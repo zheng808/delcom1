@@ -7,4 +7,4 @@ cd /var/www/uploads
 sudo mkdir exemptions
 sudo chmod -R 777 exemptions
 
-ln -s /var/www/uploads /var/www/delta/deltamarine/web/uploads
+sudo ln -s /var/www/uploads /var/www/delta/deltamarine/web/uploads

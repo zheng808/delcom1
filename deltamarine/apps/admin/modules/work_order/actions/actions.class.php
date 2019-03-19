@@ -1713,7 +1713,7 @@ class work_orderActions extends sfActions
       $expense->setInvoice($request->getParameter('estimate') != '1');
       $expense->setCustomerNotes($request->getParameter('customer_notes'));
       $expense->setInternalNotes($request->getParameter('internal_notes'));
-      $expense->setCost($request->getParameter('cost'));
+      $expense->setCost($request->getParameter('cost') ? $request->getParameter('cost') : 0);
       $expense->setOrigin($request->getParameter('origin'));
       $expense->setPrice($request->getParameter('price'));
 
