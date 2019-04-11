@@ -2046,15 +2046,25 @@ class work_orderActions extends sfActions
 
   public function executeAddinvoice(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START work_order.action.executeAddinvoice======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
     $workorder = $this->loadWorkorder($request);
+    if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('loaded workorder - WO: '.$workorder->getId());}
 
     //validate
     $valid = true;
     $errors = array();
 
+    if (sfConfig::get('sf_logging_enabled')) {sfContext::getInstance()->getLogger()->info('getting date');}
     $date = strtotime($request->getParameter('date'));
+
+    if (sfConfig::get('sf_logging_enabled')) {sfContext::getInstance()->getLogger()->info('getting time');}
     if ($date && (date('Ymd', $date) == date('Ymd')))
     {
       $date = time();
@@ -2062,28 +2072,47 @@ class work_orderActions extends sfActions
 
     if (!$date)
     {
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('VALIDATION FAIL - !date');}
       $valid = false;
       $errors['date'] = 'Invalid Date entered!';
     }
     if ($date > time())
     {
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('VALIDATION FAIL - date > time');}
       $valid = false;
       $errors['date'] = 'Cannot set the billing date in the future';
     }
-    
+    if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('done with date');}
+        
     //add invoice if valid
     if ($valid)
     {
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('VALID - add invoice');}
+
+      if (sfConfig::get('sf_logging_enabled')){
+
+        sfContext::getInstance()->getLogger()->info('inserting invoice: issue date:'.$date);
+      }
       $invoice = new Invoice();
       $invoice->setIssuedDate($date);
       $invoice->save();
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 1 - invoice');}
 
+      if (sfConfig::get('sf_logging_enabled')){
+
+        sfContext::getInstance()->getLogger()->info('inserting wo invoice: invoice id:'.$invoice->getId().', wo id:'.$workorder->getId());
+      }
       $wo_invoice = new WorkorderInvoice();
       $wo_invoice->setWorkorderId($workorder->getId());
       $wo_invoice->setInvoiceId($invoice->getId());
       $wo_invoice->save();
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 2 - wo invoice');}
       
       //add all unassigned items before the invoice date
+      if (sfConfig::get('sf_logging_enabled')){
+
+        sfContext::getInstance()->getLogger()->info('updating parts: wo invoice id:'.$wo_invoice->getId().', wo id:'.$workorder->getId());
+      }
       $update_parts = 'UPDATE '.WorkorderItemPeer::TABLE_NAME.', '.PartInstancePeer::TABLE_NAME.
         ' SET '.PartInstancePeer::WORKORDER_INVOICE_ID.' = '.$wo_invoice->getId().
         ' WHERE '.WorkorderItemPeer::WORKORDER_ID.' = '.$workorder->getId().
@@ -2094,6 +2123,8 @@ class work_orderActions extends sfActions
       $con = Propel::getConnection();
       $stmt = $con->prepare($update_parts);
       $stmt->execute();        
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('updated parts');}
+
       $update_expenses = 'UPDATE '.WorkorderItemPeer::TABLE_NAME.', '.WorkorderExpensePeer::TABLE_NAME.
         ' SET '.WorkorderExpensePeer::WORKORDER_INVOICE_ID.' = '.$wo_invoice->getId().
         ' WHERE '.WorkorderItemPeer::WORKORDER_ID.' = '.$workorder->getId().
@@ -2104,6 +2135,8 @@ class work_orderActions extends sfActions
       $con = Propel::getConnection();
       $stmt = $con->prepare($update_expenses);
       $stmt->execute();
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('updated expenses');}
+
       $update_timelogs = 'UPDATE '.WorkorderItemPeer::TABLE_NAME.', '.TimelogPeer::TABLE_NAME.
         ' SET '.TimelogPeer::WORKORDER_INVOICE_ID.' = '.$wo_invoice->getId().
         ' WHERE '.WorkorderItemPeer::WORKORDER_ID.' = '.$workorder->getId().
@@ -2114,14 +2147,18 @@ class work_orderActions extends sfActions
       $con = Propel::getConnection();
       $stmt = $con->prepare($update_timelogs);
       $stmt->execute();
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('updated timelogs');}
 
       //calculate the invoice totals for quick retrieval later
       $wo_invoice->calculateTotal();
-   
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('done adding invoice - calc total');}
+
       $this->renderText('{success:true}');
     }
     else
     {
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('NOT VALID - skip adding invoice');}
+
       if (!isset($errors['reason']))
       {
         $errors['reason'] = 'Invalid Input detected. Please check and try again.';
@@ -2129,6 +2166,11 @@ class work_orderActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE work_order.action.executeAddinvoice======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     return sfView::NONE;
   }
 
