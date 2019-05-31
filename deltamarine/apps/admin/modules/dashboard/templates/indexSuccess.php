@@ -97,6 +97,11 @@ var haulout_datagrid = new Ext.grid.GridPanel({
     dataIndex: 'boattype',
     sortable: false,
     flex: 1
+  },{
+    header: "Customer",
+    dataIndex: 'customer',
+    sortable: false,
+    flex: 1
   }],
 
   selModel: new Ext.selection.RowModel({
@@ -156,6 +161,11 @@ var haulin_datagrid = new Ext.grid.GridPanel({
   },{
     header: "Boat Type",
     dataIndex: 'boattype',
+    sortable: false,
+    flex: 1
+  },{
+    header: "Customer",
+    dataIndex: 'customer',
     sortable: false,
     flex: 1
   }],
