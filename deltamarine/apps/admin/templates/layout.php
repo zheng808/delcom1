@@ -29,7 +29,7 @@
 
     <div id="footer">
       <div>
-        Development by <a href='http://www.bruneltech.com' target='_blank'> Brunel Technical Services Ltd. <img src='/images/Bridge.png' alt='BrunelTech Bridge' height='20' width='47'> </a> 
+        Development by <a href='http://www.bruneltech.com' target='_blank'> Brunel Technical Solutions <img src='/images/Bridge.png' alt='BrunelTech Bridge' height='20' width='47'> </a> 
         <?php if (function_exists('xdebug_time_index')): ?>
           <?php if (($time = xdebug_time_index()) > 0): ?>
             Page took <?php echo round($time, 3);?>s to generate

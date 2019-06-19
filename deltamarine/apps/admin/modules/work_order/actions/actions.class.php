@@ -2096,7 +2096,7 @@ class work_orderActions extends sfActions
       $invoice = new Invoice();
       $invoice->setIssuedDate($date);
       $invoice->save();
-      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 1 - invoice');}
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 1 - invoice: '.$invoice->getId());}
 
       if (sfConfig::get('sf_logging_enabled')){
 
@@ -2106,7 +2106,7 @@ class work_orderActions extends sfActions
       $wo_invoice->setWorkorderId($workorder->getId());
       $wo_invoice->setInvoiceId($invoice->getId());
       $wo_invoice->save();
-      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 2 - wo invoice');}
+      if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('savepoint 2 - wo invoice: '.$wo_invoice->getId());}
       
       //add all unassigned items before the invoice date
       if (sfConfig::get('sf_logging_enabled')){
