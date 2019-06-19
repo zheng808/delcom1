@@ -49,7 +49,8 @@ class work_orderActions extends sfActions
         'id'       => $workorder->getId(), 
         'boat'     => $workorder->getCustomerBoat()->getName(),
         'boattype' => $workorder->getCustomerBoat()->getMakeModel(),
-        'haulout'  => $workorder->getHauloutDateTime('m/d/Y')
+        'haulout'  => $workorder->getHauloutDateTime('m/d/Y'),
+        'customer' => $workorder->getCustomer()->getName()
        );
     }
     $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);
@@ -84,7 +85,8 @@ class work_orderActions extends sfActions
         'id'       => $workorder->getId(), 
         'boat'     => $workorder->getCustomerBoat()->getName(),
         'boattype' => $workorder->getCustomerBoat()->getMakeModel(),
-        'haulin'  => $workorder->getHaulinDateTime('m/d/Y')
+        'haulin'   => $workorder->getHaulinDateTime('m/d/Y'),
+        'customer' => $workorder->getCustomer()->getName()
        );
     }
     $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);
