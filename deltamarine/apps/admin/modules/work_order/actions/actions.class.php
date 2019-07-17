@@ -1051,6 +1051,11 @@ class work_orderActions extends sfActions
     //check for quantity
     $new_quantity = (float) $request->getParameter('quantity');
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      sfContext::getInstance()->getLogger()->info('New quantity: '.$new_quantity);
+    }
+
     if (!is_numeric($new_quantity) || ($new_quantity < 0))
     {
       $valid = false;
@@ -1077,16 +1082,35 @@ class work_orderActions extends sfActions
       $errors['reason'] = 'Invalid Price specified. Price must not be negative!';
     }
 
+    if ($valid && sfConfig::get('sf_logging_enabled'))
+    {
+      sfContext::getInstance()->getLogger()->info('Unit Price is valid ');
+    } else {
+      sfContext::getInstance()->getLogger()->info('Unit Price is NOT valid ');
+    }
+
+
     //check for valid parent
     if (!($parent_item = WorkorderItemPeer::retrieveByPk($request->getParameter('parent_id'))))
     {
       $valid = false;
       $errors['parent_id'] = 'Invalid Parent task was specified!';
+      sfContext::getInstance()->getLogger()->info('Task is valid: Invalid Parent task was specified! ');
+
     }
     else if ($parent_item->isRoot())
     {
       $valid = false;
       $errors['parent_id'] = 'Cannot select root item for a part; each part must be assigned to a specific task.';
+      sfContext::getInstance()->getLogger()->info('Task is valid: Cannot select root item for a part; each part must be assigned to a specific task. ');
+
+    }
+
+    if ($valid && sfConfig::get('sf_logging_enabled'))
+    {
+      sfContext::getInstance()->getLogger()->info('Task is valid ');
+    } else {
+      sfContext::getInstance()->getLogger()->info('Task  is NOT valid ');
     }
 
     //check for valid part

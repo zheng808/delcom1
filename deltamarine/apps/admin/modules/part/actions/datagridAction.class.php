@@ -291,6 +291,8 @@ class datagridAction extends sfAction
                            'taxable_gst' => '',
                            'unit_cost' => '',
                            'unit_price' => '',
+                           'shipping_fees' => '',
+                           'broker_fees' => ''
                           );
         if ($show_supplier_info)
         {
@@ -317,7 +319,9 @@ class datagridAction extends sfAction
                              'enviro_levy' => ($show_pricing && $variant->getEnviroLevy() ? $variant->getEnviroLevy() : 0),
                              'battery_levy' => ($show_pricing && $variant->getBatteryLevy() ? $variant->getBatteryLevy() : 0),
                              'unit_cost' => ($show_pricing ? $variant->calculateUnitCost() : null),
-                             'regular_price' => ($show_pricing ? $variant->calculateUnitPrice() : null)
+                             'regular_price' => ($show_pricing ? $variant->calculateUnitPrice() : null),
+                             'shipping_fees' => ($variant->getShippingFees() ? $variant->getShippingFees() : 0),
+                             'broker_fees' => ($variant->getBrokerFees() ? $variant->getBrokerFees() : 0)
                            );
           if ($show_supplier_info)
           {
@@ -357,7 +361,9 @@ class datagridAction extends sfAction
                            'regular_price' => ($show_pricing ? $variant->calculateUnitPrice() : null),
                            'standard_package_qty' => ($variant->getStandardPackageQty() ? $variant->getQuantity('standard', false) : ''),
                            'stocking_notes' => (string) str_replace("\n",'<br />',$variant->getStockingNotes()),
-                           'created_at' => ($variant->getCreatedAt() ? $variant->getCreatedAt('M j, Y') : '')
+                           'created_at' => ($variant->getCreatedAt() ? $variant->getCreatedAt('M j, Y') : ''),
+                           'shipping_fees' => ($variant->getShippingFees() ? $variant->getShippingFees() : 0),
+                             'broker_fees' => ($variant->getBrokerFees() ? $variant->getBrokerFees() : 0)
                          );
         if ($show_supplier_info)
         {
