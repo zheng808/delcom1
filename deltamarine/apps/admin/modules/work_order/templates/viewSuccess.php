@@ -113,6 +113,8 @@ var partShippingFees = 0;
 var partBrokerFees = 0;
 var partQuantity = 1;
 var partTaskId = 0;
+var minQuantity = 0;
+var maxQuantity = 0;
 
 var partId = '';
 var partVariantId = '';
@@ -450,6 +452,8 @@ function showPartEditWindow(inst_id, wo, data){
     manufacturerSku = data.manufacturer_sku;
     shippingFees = data.shipping_fees;
     brokerFees = data.broker_fees;
+    minQuantity = data.min_quantity;
+    maxQuantity = data.max_quantity;
 
     workorderItemsStore.proxy.setExtraParam('workorder_id', this_workorder_id);
     workorderItemsStore.load();
@@ -466,7 +470,7 @@ function showPartEditWindow(inst_id, wo, data){
     Ext.getCmp('enviro_levy').setValue(partEnviroLevy);
     Ext.getCmp('battery_levy').setValue(partBatteryLevy);
 
-    Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+data.min_quantity+', Max: '+data.max_quantity+')') ;
+    Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
 
   }
@@ -750,7 +754,33 @@ var PartAddSelectedWin = new Ext.Window({
         }]}
   ],
     buttons: [
-      
+      {
+
+    text: 'Update Inventory',
+    iconCls: 'inventory',
+    handler: function(){
+      <?php if ($sf_user->hasCredential('parts_inventory')): ?>
+        PartInvWin.show();
+        Ext.getCmp('part_id').setValue(partId);
+        //Ext.getCmp('partinvform').setDisabled(true);
+        //Ext.getCmp('partinvform').load({
+        //  url: '/part/load/id/'+partId,
+        //  failure: function (form, action){
+        //    Ext.Msg.alert("Load Failed", "Could not load part info for editing");
+        //    Ext.getCmp('partinvform').setDisabled(false);
+        //    PartInvWin.hide();
+        //  },
+        //  success: function (form, action){
+        //    Ext.getCmp('partinvform').setDisabled(false);
+        //    Ext.getCmp('partinv_field').focus(true, 200);
+        //  }
+        //});
+      <?php else: ?>
+        Ext.Msg.alert('Permission Denied','Your user not have permission to update part inventory.');
+      <?php endif; ?>
+    }
+  
+      },
       {
       text: 'Add More',
       formBind: true,
@@ -913,6 +943,85 @@ var PartAddSelectedWin = new Ext.Window({
   })
   
 });//PartAddSelectedWin()------------------------------------------------------
+
+
+
+
+
+
+            
+var PartInvWin = new Ext.Window({
+  title: 'Adjust Inventory Level',
+  closable: false,
+  width: 300,
+  height: 125,
+  border: false,
+  modal: true,
+  resizable: false,
+  closeAction: 'hide',
+  layout: 'fit',
+
+  items: new Ext.form.FormPanel({
+    fieldDefaults: { labelAlign: 'left', labelWidth: 150 },
+    id: 'partinvform',
+    url: '/part/inventory',
+    bodyStyle: 'padding: 15px 10px 0 10px;',
+    items: [{
+      xtype: 'hidden',
+      id: 'part_id',
+      name: 'id'
+    },{
+      id: 'partinv_field',
+      xtype: 'numberfield',
+      name: 'current_on_hand',
+      minValue: 0,
+      anchor: '-25',
+      fieldLabel: 'NEW In-Stock Inventory',
+      allowBlank: false
+    }],
+
+    buttons:[{
+      text: 'Save',
+      formBind: true,
+      handler:function(){
+        PartInvWin.hide();
+        this.findParentByType('form').getForm().submit({
+          waitTitle: 'Please Wait',
+          waitMsg: 'Updating Inventory...',
+          success:function(form,action){
+            partAvailable = Ext.getCmp('partinv_field').getValue();
+            Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
+          },
+          failure:function(form,action){
+            if(action.failureType == 'server'){
+              obj = Ext.JSON.decode(action.response.responseText);
+              myMsg = obj.errors.reason;
+            }else{
+              myMsg = 'Could not save part. Try again later!';
+            }
+            Ext.Msg.show({
+              closable:false, 
+              fn: function(){ PartInvWin.show(); },
+              modal: true,
+              title: 'Oops',
+              icon: Ext.MessageBox.ERROR,
+              buttons: Ext.MessageBox.OK,
+              msg: myMsg
+            });
+          }
+        });
+      }
+    },{
+      text: 'Cancel',
+      handler:function(btn){
+        PartInvWin.hide();
+      }
+    }]
+  })
+});//PartInvWin()--------------------------------------------------------------
+
+
+
 
 
 //=========================================================================
