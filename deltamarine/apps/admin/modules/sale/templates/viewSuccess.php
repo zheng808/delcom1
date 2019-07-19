@@ -95,13 +95,13 @@ var billtotals_template = new Ext.XTemplate(
   '</table>'
 );
 
-
 var itemsStore = new Ext.data.JsonStore({
   fields: ['customer_order_item', 'part_variant_id', 'part_id', 'name', 'custom_name', 'sku',
            'units', 'quantity', 'returned', 'delivered', 'unit_cost', 'unit_price', 
            'regular_price', 'regular_markup_pct', 'regular_markup', 'calc_discount',
            'taxable_gst', 'taxable_pst', 'taxable_hst', 'enviro_levy', 'battery_levy', 'total',
-           'supplier_order_id', 'serial', 'has_serial_number', 'location', 'undelivered', 'broker_fees', 'shipping_fees' ],  
+           'supplier_order_id', 'serial', 'has_serial_number', 'location', 'undelivered', 'broker_fees', 
+           'shipping_fees', 'internal_notes', 'custom_origin'],  
   autoLoad: true,
   remoteSort: true,
   proxy: {
@@ -350,6 +350,274 @@ function AddItemSelect(record,focusquantity,setquantity){
   }
   updateItemAddQuantity();
 }
+
+/*
+* TODO
+*/
+function showAddCustomPartWin(partInstId){
+  
+    var pst_rate = 0;
+    var gst_rate = 0;
+    var pst_exempt = 0;
+    var gst_exempt = 0;
+
+    //config.title = 'Add One-Off Part';
+  
+  new Ext.ux.PartCustomEditWin(config);
+  
+};//showAddCustomPartWin()-----------------------------------------------------
+//showPartCustomEditWin()----------------------------------------------------
+
+
+var CustomPartEditWin = new Ext.Window({
+  title: 'Add Custom Part',
+  closable: false,
+  width: 450,
+  height: 400,
+  border: false,
+  modal: true,
+  resizable: false,
+  closeAction: 'hide',
+  layout: 'fit',
+
+  items: new Ext.FormPanel({
+    id: 'customPartEditForm',
+    url: '<?php echo url_for('sale/custompartedit?id='.$sale->getId()); ?>',
+    bodyStyle: 'padding:15px 10px 0 10px',
+    fieldDefaults: { labelAlign: 'left' },
+    items: [{
+      xtype: 'hidden',
+      id: 'customadd_idfield',
+      name: 'customer_order_item',
+      value: 'new',
+    },{
+      name: 'custom_name',
+      id: 'customadd_labelfield',
+      fieldLabel: 'Label/Description',
+      xtype: 'textfield',
+      allowBlank: false,
+      anchor: '-25'
+    },{
+      xtype: 'numberfield',
+      name: 'quantity',
+      id: 'customadd_quantity',
+      fieldLabel: 'Quantity',
+      value: 1,
+      forcePrecision: true,
+      allowBlank: false,
+      minValue: 0,
+      anchor: '-25'
+    },{
+      layout: 'column',
+      border: false,
+      items: [{
+        border: false,
+        columnWidth: 0.5,
+        layout: 'anchor',
+        items: [{
+          xtype: 'numberfield',
+          name: 'unit_price',
+          id: 'customadd_price',
+          fieldLabel: 'Unit Price',
+          minValue: 0,
+          allowBlank: false,
+          forcePrecision: true,
+          anchor: '-25'
+        }]
+      },{
+        border: false,
+        columnWidth: 0.5,
+        layout: 'anchor',
+        items: [{
+          xtype: 'numberfield',
+          name: 'unit_cost',
+          id: 'customadd_cost',
+          fieldLabel: 'Unit Cost (Optional)',
+          forcePrecision: true,
+          minValue: 0,
+          anchor: '-25'
+        }]
+      }]
+    },{
+      layout: 'column',
+      border: false,
+      items: [{
+        border: false,
+        columnWidth: 0.5,
+        layout: 'anchor',
+        items: [{
+          xtype: 'numberfield',
+          name: 'shipping_fees',
+          id: 'customadd_shippingfees',
+          fieldLabel: 'Shipping Fees',
+          minValue: 0,
+          allowBlank: true,
+          forcePrecision: true,
+          anchor: '-25'
+        }]
+      },{
+        border: false,
+        columnWidth: 0.5,
+        layout: 'anchor',
+        items: [{
+          xtype: 'numberfield',
+          name: 'broker_fees',
+          id: 'customadd_brokerfees',
+          fieldLabel: 'Broker Fees',
+          forcePrecision: true,
+          minValue: 0,
+          anchor: '-25'
+        }]
+      }]
+    },{
+      name: 'serial_number',
+      id: 'customadd_serialnumber',
+      fieldLabel: 'Serial Number',
+      xtype: 'textfield',
+      allowBlank: true,
+      anchor: '-25'
+    },{
+      name: 'custom_origin',
+      id: 'customadd_origin',
+      fieldLabel: 'Country of Origin',
+      xtype: 'textfield',
+      allowBlank: true,
+      anchor: '-25'
+    },{
+      xtype: 'fieldcontainer',
+      fieldLabel: 'PST',
+      layout: 'hbox',
+      width: 300,
+      items: [{
+        xtype: 'hidden',
+        name: 'taxable_pst',
+        value: <?php echo ($sale->getPstExempt() ? 0 : 1); ?>,
+        listeners: { change: function(field, value){
+          selBtn = field.next('button[valueField='+ (value == '1' ? 1 : 0)+']');
+          if (!selBtn.pressed) selBtn.toggle(true);
+        }}
+      },{          
+        xtype: 'button',
+        toggleGroup: 'customaddpst',
+        allowDepress: false,
+        <?php if (!$sale->getPstExempt()): ?>
+        pressed: true,
+        <?php endif; ?>
+        flex: 1,
+        cls: 'buttongroup-first',
+        text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST',
+        valueField: 1,
+        listeners: { toggle: function(btn, pressed){
+          if (pressed) btn.prev('hidden').setValue(btn.valueField);
+        }}
+      },{
+        xtype: 'button',
+        toggleGroup: 'customaddpst',
+        allowDepress: false,
+        <?php if ($sale->getPstExempt()): ?>
+        pressed: true,
+        <?php endif; ?>        
+        flex: 1,
+        cls: 'buttongroup-last',
+        text: 'PST Exempt',
+        valueField: 0,
+        listeners: { toggle: function(btn, pressed){
+          if (pressed) btn.prev('hidden').setValue(btn.valueField);
+        }}
+      }]          
+    },{
+      xtype: 'fieldcontainer',
+      fieldLabel: 'GST',
+      layout: 'hbox',
+      width: 300,
+      items: [{
+        xtype: 'hidden',
+        name: 'taxable_gst',
+        value: <?php echo ($sale->getGstExempt() ? 0 : 1); ?>,
+        listeners: { change: function(field, value){
+          selBtn = field.next('button[valueField='+(value == '1' ? 1 : 0)+']');
+          if (!selBtn.pressed) selBtn.toggle(true);
+        }}
+      },{
+        xtype: 'button',
+        toggleGroup: 'customaddgst',
+        allowDepress: false,
+        <?php if (!$sale->getGstExempt()): ?>
+        pressed: true,
+        <?php endif; ?>
+        flex: 1,
+        cls: 'buttongroup-first',
+        text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST',
+        valueField: 1,
+        listeners: { toggle: function(btn, pressed){
+          if (pressed) btn.prev('hidden').setValue(btn.valueField);
+        }}
+      },{
+        xtype: 'button',
+        toggleGroup: 'customaddgst',
+        allowDepress: false,
+        <?php if ($sale->getGstExempt()): ?>
+        pressed: true,
+        <?php endif; ?>        
+        flex: 1,
+        cls: 'buttongroup-last',
+        text: 'GST Exempt',
+        valueField: 0,
+        listeners: { toggle: function(btn, pressed){
+          if (pressed) btn.prev('hidden').setValue(btn.valueField);
+        }}
+      }]        
+    },{
+      fieldLabel: 'Internal Notes',
+      xtype: 'textarea',
+      name: 'internal_notes',
+      anchor: '-25',
+      height: 85      
+    }],
+
+    buttons:[{
+      text: 'Save',
+      formBind: true,
+      handler:function(){
+        CustomPartEditWin.hide();
+        this.findParentByType('form').getForm().submit({
+          waitTitle: 'Please Wait',
+          waitMsg: 'Saving Changes...',
+          success:function(form,action){
+            form.reset();
+            items_grid.getStore().load();
+          },
+          failure:function(form,action){
+            myMsg = '';
+            if(action.failureType == 'server'){
+              obj = Ext.JSON.decode(action.response.responseText);
+              myMsg = obj.errors.reason;
+            } else {
+              myMsg = 'Could not save changes. Try again later!';
+            }
+            if (myMsg != ''){
+              Ext.Msg.show({
+                closable:false, 
+                fn: function(){ CustomPartEditWin.show(); },
+                modal: true,
+                title: 'Oops',
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.MessageBox.OK,
+                msg: myMsg
+              });
+            }
+          }
+        });
+      }
+    },{
+      text: 'Cancel',
+      handler:function(){
+        this.findParentByType('window').hide();
+        this.findParentByType('form').getForm().reset();
+      }
+    }]
+  })
+});
 
 
 var SaleEditWin = new Ext.Window({
@@ -755,6 +1023,7 @@ var ExpenseEditWin = new Ext.Window({
     }]
   })
 });
+
 
 var ItemAddWin = new Ext.Window({
   width: 550,
@@ -2136,6 +2405,11 @@ var items_grid = new Ext.grid.GridPanel({
               Ext.getCmp('editquantity').setMinValue(0.001);
               Ext.getCmp('editquantity').setMaxValue(5000);
             }
+          } else if (selected.data.shipping_fees || selected.data.broker_fees || selected.data.internal_notes || selected.data.custom_origin || selected.data.serial){
+            CustomPartEditWin.show();
+            CustomPartEditWin.setTitle('Edit Custom Part / Expense');
+            form = Ext.getCmp('customPartEditForm');
+            form.form.loadRecord(selected);
           } else {
             ExpenseEditWin.show();
             ExpenseEditWin.setTitle('Edit Expense');
@@ -2188,6 +2462,19 @@ var items_grid = new Ext.grid.GridPanel({
         <?php endif; ?>
       }
     },'->',{
+      text: 'Add Custom Part',
+      iconCls: 'add',
+      disabled: false,
+      handler: function(){
+        <?php if ($sf_user->hasCredential('sales_edit')): ?>
+          CustomPartEditWin.show();
+          CustomPartEditWin.setTitle('Add Custom Part');
+          Ext.getCmp('customPartEditForm').getForm().reset();
+        <?php else: ?>
+          Ext.Msg.alert('Permission Denied', 'Your user does not have permission to edit sales.');
+        <?php endif; ?>
+      }
+    },'-',{
       text: 'Add Part',
       iconCls: 'add',
       disabled: false,

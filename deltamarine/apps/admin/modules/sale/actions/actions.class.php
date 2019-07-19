@@ -166,7 +166,7 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeAdd()--------------------------------------------------------------
 
 
   /*
@@ -226,11 +226,17 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeEdit()-------------------------------------------------------------
 
 
-  public function executeExpenseedit(sfWebRequest $request)
+  public function executeCustompartedit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START sale.action.executeCustompartedit==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     $this->forward404Unless($this->getUser()->hasCredential('sales_edit'));
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
@@ -252,10 +258,173 @@ class saleActions extends sfActions
       $valid = false;
       $errors['price'] = 'Invalid Price specified. Price must not be negative!';
     }
+
+
+    $unitCost = null;
     if ($request->getParameter('unit_cost') && ((float) $request->getParameter('unit_cost')) < 0)
     {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid Cost specified. Cost must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
       $valid = false;
-      $errors['cost'] = 'Invalid Cost specified. Cost must not be negative!';
+      $errors['unit_cost'] = 'Invalid Cost specified. Cost must not be negative!';
+    } else {
+      $unitCost = (float) $request->getParameter('unit_cost');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting UNIT_COST - ';
+      sfContext::getInstance()->getLogger()->info($message.$unitCost);
+    }
+
+    $brokerFees = null;
+    if ($request->getParameter('broker_fees') && ((float) $request->getParameter('broker_fees')) < 0)
+    {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid broker fees specified. Fees must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
+      $valid = false;
+      $errors['broker_fees'] = 'Invalid broker fees specified. Fees must not be negative!';
+    } else {
+      $brokerFees = (float) $request->getParameter('broker_fees');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting broker_fees - ';
+      sfContext::getInstance()->getLogger()->info($message.$brokerFees);
+    }
+
+    $shippingFees = null;
+    if ($request->getParameter('shipping_fees') && ((float) $request->getParameter('shipping_fees')) < 0)
+    {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid shipping fees specified. Fees must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
+      $valid = false;
+      $errors['shipping_fees'] = 'Invalid shipping fees specified. Fees must not be negative!';
+    } else {
+      $shippingFees = (float) $request->getParameter('shipping_fees');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting shipping_fees - ';
+      sfContext::getInstance()->getLogger()->info($message.$shippingFees);
+    }
+
+    if (!(((float) $request->getParameter('quantity')) > 0))
+    {
+      $valid = false;
+      $errors['quantity'] = 'Invalid Quantity specified. Must be positive';
+    }
+
+
+
+
+
+    if ($valid)
+    {
+      //create new records if needed
+      if (!$item || !$instance) 
+      {
+        $item = new CustomerOrderItem();
+        $item->setCustomerOrderId($sale->getId());
+        $instance = new PartInstance();
+        $instance->setQuantity(1);
+        $instance->setPartVariantId(null);
+      }
+
+      $instance->setCustomName($request->getParameter('custom_name'));
+      $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
+      $instance->setTaxablePst($request->getParameter('taxable_pst') ? ($instance->getTaxablePst() != 0 ? $instance->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
+      $instance->setTaxableGst($request->getParameter('taxable_gst') ? ($instance->getTaxableGst() != 0 ? $instance->getTaxableGst() : sfConfig::get('app_gst_rate')) : 0);
+      $instance->setUnitPrice($request->getParameter('unit_price'));
+      $instance->setUnitCost($unitCost);
+
+      $instance->setCustomOrigin($request->getParameter('custom_origin'));
+      $instance->setQuantity($request->getParameter('quantity'));
+      $instance->setSerialNumber($request->getParameter('serial_number'));
+      $instance->setBrokerFees($brokerFees);
+      $instance->setShippingFees($shippingFees);
+      $instance->setInternalNotes($request->getParameter('internal_notes'));
+
+      $instance->save();
+
+      $item->setPartInstance($instance);
+      $item->save();
+
+    }
+    else
+    {
+      $errors['reason'] = 'Invalid Input detected. Please check and try again.';
+      $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE sale.action.executeCustompartedit==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
+    return sfView::NONE;
+  }//executeCustompartedit()----------------------------------------------------
+
+
+  public function executeExpenseedit(sfWebRequest $request)
+  {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START sale.action.executeExpenseedit==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
+    $this->forward404Unless($this->getUser()->hasCredential('sales_edit'));
+    $this->forward404Unless($request->isMethod('post'));
+    //$this->forward404Unless($request->isXmlHttpRequest());
+    $sale = $this->loadSale($request);    
+
+    if ($request->getParameter('customer_order_item') != 'new')
+    {
+      $this->forward404Unless($item = CustomerOrderItemPeer::retrieveByPk($request->getParameter('customer_order_item')));
+      $this->forward404Unless($item->getCustomerOrderId() == $sale->getId());
+      $this->forward404Unless($instance = $item->getPartInstance());
+    }    
+
+    //validate
+    $valid = true;
+    $errors = array();
+
+    if (!(((float) $request->getParameter('unit_price')) >= 0))
+    {
+      $valid = false;
+      $errors['price'] = 'Invalid Price specified. Price must not be negative!';
+    }
+ 
+    
+    $unitCost = null;
+    if ($request->getParameter('unit_cost') && ((float) $request->getParameter('unit_cost')) < 0)
+    {
+      if (sfConfig::get('sf_logging_enabled'))
+      {
+        $message = 'Invalid Cost specified. Cost must not be negative!';
+        sfContext::getInstance()->getLogger()->info($message);
+      }
+
+      $valid = false;
+      $errors['unit_cost'] = 'Invalid Cost specified. Cost must not be negative!';
+    } else {
+      $unitCost = (float) $request->getParameter('unit_cost');
     }
 
     if ($valid)
@@ -275,7 +444,7 @@ class saleActions extends sfActions
       $instance->setTaxablePst($request->getParameter('taxable_pst') ? ($instance->getTaxablePst() != 0 ? $instance->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
       $instance->setTaxableGst($request->getParameter('taxable_gst') ? ($instance->getTaxableGst() != 0 ? $instance->getTaxableGst() : sfConfig::get('app_gst_rate')) : 0);
       $instance->setUnitPrice($request->getParameter('unit_price'));
-      $instance->setUnitCost($request->getParameter('unit_cost'));
+      $instance->setUnitCost($unitCost);
       $instance->save();
 
       $item->setPartInstance($instance);
@@ -288,8 +457,14 @@ class saleActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE sale.action.executeExpenseedit==========================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
-  }
+  }//executeExpenseedit()------------------------------------------------------
 
   /*
    * creates a new lineitem
@@ -682,7 +857,7 @@ class saleActions extends sfActions
     $this->renderText('{success:true}');
 
     return sfView::NONE;
-  }
+  }//executeDeleteitem()-------------------------------------------------------
   
 
   public function executeChangestatus(sfWebRequest $request)
@@ -771,7 +946,7 @@ class saleActions extends sfActions
     }
     
     return sfView::NONE;
-  }
+  }//executeChangestatus()-----------------------------------------------------
 
   /*
    * Sets specific items as being shipped
@@ -852,7 +1027,7 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeShipitems()--------------------------------------------------------
 
   /*
    * initiates a return of items
@@ -926,7 +1101,7 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeReturnitems()------------------------------------------------------
 
   public function executeDeletereturn(sfWebRequest $request)
   {
@@ -943,7 +1118,7 @@ class saleActions extends sfActions
     $this->renderText('{success:true}');
 
     return sfView::NONE;
-  }
+  }//executeDeletereturn()-----------------------------------------------------
 
   public function executeDeletepayment(sfWebRequest $request)
   {
@@ -959,7 +1134,7 @@ class saleActions extends sfActions
     $this->renderText('{success:true}');
 
     return sfView::NONE;
-  }
+  }//executeDeletepayment()----------------------------------------------------
 
   public function executeAddpayment(sfWebRequest $request)
   {
@@ -1028,7 +1203,7 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeAddpayment()-------------------------------------------------------
 
   public function executeQuickcheckout(sfWebRequest $request)
   {
@@ -1163,7 +1338,7 @@ class saleActions extends sfActions
     }
 
     return sfView::NONE;
-  }
+  }//executeQuickcheckout()----------------------------------------------------
 
 
   /*
@@ -1196,7 +1371,7 @@ class saleActions extends sfActions
     $pdf->Output('sale_'.$sale->getId().'_'.date('Y-M-d').'.pdf');
 
     return sfView::NONE;   
-  }
+  }//executeInvoice()----------------------------------------------------------
 
 
   protected function loadSale(sfWebRequest $request)
@@ -1204,6 +1379,6 @@ class saleActions extends sfActions
     $this->forward404Unless(($sale = CustomerOrderPeer::retrieveByPk($request->getParameter('id'))),
                              sprintf('Object sale does not exist (%s).', $request->getParameter('id')));
     return $sale;
-  }
+  }//loadSale()----------------------------------------------------------------
   
-}
+}//action.class{}==============================================================

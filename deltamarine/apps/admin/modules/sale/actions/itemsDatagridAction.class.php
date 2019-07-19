@@ -75,13 +75,15 @@ class itemsDatagridAction extends sfAction
                             'taxable_gst'         => ($inst->getTaxableGst() > 0) ? 1 : 0,
                             'enviro_levy'         => $inst->getEnviroLevy(),
                             'battery_levy'        => $inst->getBatteryLevy(),
-                            'broker_fees'        => $inst->getBrokerFees(),
-                            'shipping_fees'        => $inst->getShippingFees(),
+                            'broker_fees'         => $inst->getBrokerFees(),
+                            'shipping_fees'       => $inst->getShippingFees(),
                             'total'               => number_format($inst->getSubtotal(), 2),
                             'supplier_order_id'   => $order_id,
                             'serial'              => (string) $inst->getSerialNumber(),
                             'has_serial_number'   => ($part ? (int) $part->getHasSerialNumber() : 0),
-                            'location'            => ($var ? (string) $var->getLocation() : '')
+                            'location'            => ($var ? (string) $var->getLocation() : ''),
+                            'internal_notes'      => $inst->getInternalNotes(),
+                            'custom_origin'       => $inst->getCustomOrigin()
                           );
     }
     $dataarray = array('subtotal' => number_format($sale->getTotals('subtotal'),2),

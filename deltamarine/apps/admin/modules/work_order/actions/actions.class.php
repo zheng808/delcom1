@@ -1479,7 +1479,7 @@ class work_orderActions extends sfActions
   {
     if (sfConfig::get('sf_logging_enabled'))
     {
-      $message = 'START executePartcustomEdit';
+      $message = 'START executePartcustomEdit=================================';
       sfContext::getInstance()->getLogger()->info($message);
     }
 
@@ -1643,7 +1643,7 @@ class work_orderActions extends sfActions
 
     if (sfConfig::get('sf_logging_enabled'))
     {
-      $message = 'DONE executePartcustomEdit';
+      $message = 'DONE executePartcustomEdit===================================';
       sfContext::getInstance()->getLogger()->info($message);
     }
 

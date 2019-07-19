@@ -753,6 +753,7 @@ var PartAddSelectedWin = new Ext.Window({
           }
         }]}
   ],
+    buttonAlign: 'left',
     buttons: [
       {
 
@@ -762,25 +763,12 @@ var PartAddSelectedWin = new Ext.Window({
       <?php if ($sf_user->hasCredential('parts_inventory')): ?>
         PartInvWin.show();
         Ext.getCmp('part_id').setValue(partId);
-        //Ext.getCmp('partinvform').setDisabled(true);
-        //Ext.getCmp('partinvform').load({
-        //  url: '/part/load/id/'+partId,
-        //  failure: function (form, action){
-        //    Ext.Msg.alert("Load Failed", "Could not load part info for editing");
-        //    Ext.getCmp('partinvform').setDisabled(false);
-        //    PartInvWin.hide();
-        //  },
-        //  success: function (form, action){
-        //    Ext.getCmp('partinvform').setDisabled(false);
-        //    Ext.getCmp('partinv_field').focus(true, 200);
-        //  }
-        //});
       <?php else: ?>
         Ext.Msg.alert('Permission Denied','Your user not have permission to update part inventory.');
       <?php endif; ?>
     }
   
-      },
+      },'->',
       {
       text: 'Add More',
       formBind: true,
