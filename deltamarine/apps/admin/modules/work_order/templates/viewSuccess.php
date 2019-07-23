@@ -115,6 +115,7 @@ var partQuantity = 1;
 var partTaskId = 0;
 var minQuantity = 0;
 var maxQuantity = 0;
+var woTaskId = 'Select New Task...';
 
 var partId = '';
 var partVariantId = '';
@@ -454,6 +455,9 @@ function showPartEditWindow(inst_id, wo, data){
     brokerFees = data.broker_fees;
     minQuantity = data.min_quantity;
     maxQuantity = data.max_quantity;
+    partQuantity = 1;
+
+    partTaskId = woTaskId;
 
     workorderItemsStore.proxy.setExtraParam('workorder_id', this_workorder_id);
     workorderItemsStore.load();
@@ -469,6 +473,7 @@ function showPartEditWindow(inst_id, wo, data){
     Ext.getCmp('broker_fees').setValue(brokerFees);
     Ext.getCmp('enviro_levy').setValue(partEnviroLevy);
     Ext.getCmp('battery_levy').setValue(partBatteryLevy);
+    Ext.getCmp('part_quantity').setValue(partQuantity);
 
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
@@ -557,6 +562,9 @@ var PartAddSelectedWin = new Ext.Window({
           listeners: {
             'select': function(field,r){
                partTaskId = field.getValue();
+            },
+            'afterrender': function(field, r){
+              field.setValue(woTaskId);
             }
           }
         },{
@@ -573,14 +581,15 @@ var PartAddSelectedWin = new Ext.Window({
             xtype: 'numberfield',
             name: 'part_quantity',
             itemId: 'part_quantity',
+            id: 'part_quantity',
             fieldLabel: 'Quantity',
             allowBlank: false,
-            minValue: 0,
+            minValue: 0.001,
             maxValue: 5000,
             anchor: '-25',
             value: partQuantity,
             listeners: {
-            'select': function(field,r){
+            'change': function(field,r){
               partQuantity = field.getValue();
             }
           }
@@ -810,13 +819,14 @@ var PartAddSelectedWin = new Ext.Window({
               },
               success: function(){
                 Ext.Msg.hide();
-                
+
                 PartAddSelectedWin.hide();
                 Ext.Msg.hide();
                 //location.reload(true);
                 showPartAddWin();
                 reload_tree();
                 partslistStore.load();
+                partsfindStore.load({params: {start: 0, limit: 50}}); 
               },
               failure: function(){
                 Ext.Msg.hide();
@@ -832,6 +842,7 @@ var PartAddSelectedWin = new Ext.Window({
                 reload_tree();
               }
             });
+
           } else {
             Ext.Msg.show({
                   icon: Ext.MessageBox.ERROR,
@@ -3010,6 +3021,7 @@ var workorder_tree = new Ext.tree.TreePanel({
           Ext.getCmp('wo_tasks_movebutton').setDisabled(true);
 
           if (/^[0-9]+$/.test(node.data.id)){
+            woTaskId = node.data.id;
             Ext.getCmp('woi_copybutton').setDisabled(false);
             <?php if ($workorder->isInProgress() || $workorder->isEstimate()): ?>
               Ext.getCmp('woi_editbutton').setDisabled(false);

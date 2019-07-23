@@ -405,7 +405,7 @@ var CustomPartEditWin = new Ext.Window({
       value: 1,
       forcePrecision: true,
       allowBlank: false,
-      minValue: 0,
+      minValue: 0.001,
       anchor: '-25'
     },{
       layout: 'column',
