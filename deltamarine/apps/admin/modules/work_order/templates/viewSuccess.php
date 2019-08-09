@@ -134,8 +134,8 @@ var workorder_id = <?php echo $workorder->getId(); ?>;
 var workorder_estimate = <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>;
 var pst_rate = <?php echo sfConfig::get('app_pst_rate'); ?>;
 var gst_rate = <?php echo sfConfig::get('app_gst_rate'); ?>;
-var partPstExempt = <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>;
-var partGstExempt = <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>;
+var partPstTaxed = <?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>;
+var partGstTaxed = <?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>;
 
 
 
@@ -732,7 +732,7 @@ var PartAddSelectedWin = new Ext.Window({
           itemId: 'pstField',
           xtype: 'acbuttongroup',
           name: 'pstField',
-          value: '<?php echo ($workorder->getPstExempt() ? '1' : '0'); ?>', 
+          value: '<?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>', 
           anchor: '-100',
           fieldLabel: 'PST Exempt',
           items: [
@@ -741,14 +741,14 @@ var PartAddSelectedWin = new Ext.Window({
           listeners: { 
             change: function(field){
               var value = field.getValue();
-              partPstExempt = value;
+              partPstTaxed = value;
             }
           }
         },{
           itemId: 'gstField',
           xtype: 'acbuttongroup',
           name: 'gstField',
-          value: '<?php echo ($workorder->getGstExempt() ? '1' : '0'); ?>',
+          value: '<?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>',
           anchor: '-100',
           fieldLabel: 'GST Exempt',
           items: [
@@ -757,7 +757,7 @@ var PartAddSelectedWin = new Ext.Window({
           listeners: { 
             change: function(field){
               var value = field.getValue();
-              partGstExempt = value;
+              partGstTaxed = value;
             }
           }
         }]}
@@ -813,8 +813,8 @@ var PartAddSelectedWin = new Ext.Window({
                 shipping_fees: woShippingFees,
                 broker_fees: woBrokerFees,
                 estimate: includeEstimate,
-                taxable_pst: partPstExempt,
-                taxable_gst: partGstExempt,
+                taxable_pst: partPstTaxed,
+                taxable_gst: partGstTaxed,
                 statusaction: partStatus,
               },
               success: function(){
@@ -891,8 +891,8 @@ var PartAddSelectedWin = new Ext.Window({
                 shipping_fees: woShippingFees,
                 broker_fees: woBrokerFees,
                 estimate: includeEstimate,
-                taxable_pst: partPstExempt,
-                taxable_gst: partGstExempt,
+                taxable_pst: partPstTaxed,
+                taxable_gst: partGstTaxed,
                 statusaction: partStatus,
               },
               success: function(){
