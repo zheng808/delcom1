@@ -35,8 +35,11 @@
             Page took <?php echo round($time, 3);?>s to generate
           <?php endif; ?>
         <?php endif; ?>
+        <div class="alignright">v1.2.1 </div>
       </div>
+      
     </div>
+    
   <script type="text/javascript">
     var clockdiv = Ext.get('statustime');
     var updateClock = function(){
