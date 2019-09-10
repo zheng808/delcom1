@@ -56,21 +56,21 @@ class supplierActions extends sfActions
       $errors['net_days'] = 'Invalid payment terms selected';
     }
     //check for valid credit_limit
-    if ($limit = $request->getParameter('credit_limit'))
+    $limit = $request->getParameter('credit_limit') ? $request->getParameter('credit_limit') : 0;
+
+    if (!is_numeric($limit))
     {
-      if (!is_numeric($limit))
-      {
-        $result = false;
-        $errors['net_days'] = 'Invalid credit limit. Must be positive number';
-      }
+      $result = false;
+      $errors['net_days'] = 'Invalid credit limit. Must be positive number';
     }
+    
 
     //SAVE CHANGES
     if ($result)
     {
       $supplier->setAccountNumber($request->getParameter('account_number'));
       $supplier->setNetDays($request->getParameter('net_days'));
-      $supplier->setCreditLimit($request->getParameter('credit_limit'));
+      $supplier->setCreditLimit($limit);
       $supplier->save();
       $contact->setDepartmentName($request->getParameter('department_name'));
       $contact->setWorkPhone($request->getParameter('work_phone'));
@@ -115,6 +115,12 @@ class supplierActions extends sfActions
    */
   public function executeAdd(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeAdd ============================================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    
     $this->forward404Unless($request->isMethod('post'));
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -138,14 +144,16 @@ class supplierActions extends sfActions
       $errors['net_days'] = 'Invalid payment terms selected';
     }
     //check for valid credit_limit
-    if ($limit = $request->getParameter('credit_limit'))
-    {
+    if (sfConfig::get('sf_logging_enabled')) { sfContext::getInstance()->getLogger()->info('start retrieving the credit limit'); }
+    $limit = $request->getParameter('credit_limit') ? $request->getParameter('credit_limit') : 0;
+      if (sfConfig::get('sf_logging_enabled')) { sfContext::getInstance()->getLogger()->info('Limit: '.$limit); }
+
       if (!is_numeric($limit))
       {
         $result = false;
         $errors['net_days'] = 'Invalid credit limit. Must be positive number';
       }
-    }
+    if (sfConfig::get('sf_logging_enabled')) { sfContext::getInstance()->getLogger()->info('done retrieving the credit limit'); }
 
     //SAVE CHANGES
     if ($result)
@@ -177,7 +185,7 @@ class supplierActions extends sfActions
       $supplier = new Supplier();
       $supplier->setAccountNumber($request->getParameter('account_number'));
       $supplier->setNetDays($request->getParameter('net_days'));
-      $supplier->setCreditLimit($request->getParameter('credit_limit'));
+      $supplier->setCreditLimit($limit);
       $supplier->setWfCRM($contact);
       $supplier->save();
 
@@ -187,6 +195,12 @@ class supplierActions extends sfActions
     {
       $errors['reason'] = 'Invalid Input detected. Please check errors and try again';
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeAdd ============================================';
+      sfContext::getInstance()->getLogger()->info($message);
     }
 
     return sfView::NONE;
