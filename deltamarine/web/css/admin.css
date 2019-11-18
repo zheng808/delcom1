@@ -56,6 +56,10 @@ th { background-color: #E7EFEF; border: 1px solid #CDDDDD; font-weight: bold; }
 tr.odd { background-color: #F6F6F6; }
 tr.added { background-color: #ccfdd1; }
 tr.empty { background-color: #fdd3cc; }
+td.red-cell { background-color: #FF3333}
+td.green-cell { background-color: #33DD33}
+td.blue-cell { background-color: #0000DD}
+td.orange-cell { background-color: #FFA500}
 td.left { text-align: left; padding-left: 8px;}
 td.subheader { background-color: #F4FAFA; }
 td.highlighted { font-weight: bold; border-width: 2px; background-color: #F4F4FA;}
@@ -73,6 +77,10 @@ table.formtable th label {font-weight: normal; }
 
 table.infotable { border: none; background: transparent; border-collapse: separate; }
 table.infotable td { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #f4f4f4; }
+table.infotable td.red-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #FF3333; }
+table.infotable td.green-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #33DD33; }
+table.infotable td.blue-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #0000DD; }
+table.infotable td.orange-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #FFA500; }
 table.infotable td.label { text-align: right; padding-right: 5px; font-weight: bold;  width: 110px; border: none; background: transparent; }
 table.infotable td.blank { width: auto; border: none; background-color: transparent; }
 
@@ -289,6 +297,7 @@ table.x-btn { margin: 3px }
 .x-btn-button .icon-collapse-all, .x-btn-button .icon-collapse-all:hover { background-image: url(/images/icon-collapse-all.gif); }
 .x-btn-button .flag,         .x-btn-button .flag:hover         { background-image: url(/images/silkicon/flag_red.png); }
 .x-btn-button .approve,      .x-btn-button .approve:hover      { background-image: url(/images/silkicon/tick.png); }
+.x-btn-button .deny,         .x-btn-button .deny:hover         { background-image: url(/images/silkicon/cross.png); }
 .x-btn-button .reject,       .x-btn-button .reject:hover       { background-image: url(/images/silkicon/error.png); }
 .x-btn-button .money,        .x-btn-button .money:hover        { background-image: url(/images/silkicon/coins.png); }
 .x-btn-button .moneyadd,     .x-btn-button .moneyadd:hover     { background-image: url(/images/silkicon/coins_add.png); }
@@ -496,7 +505,7 @@ a.buttongroup-bottom, .buttongroup-bottom input {
 .blocky {
   display: inline-block;
   padding: 1px 5px; 
-  margin: -1px 4px -1px 0;
+  margin: -1px 4px -1px 0; 
 }
 
 .blocky.bl-white  { background: #F8F8F8; color: #000; border: 1px solid #DDD; }

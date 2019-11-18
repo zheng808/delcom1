@@ -55,13 +55,26 @@
 
         $blank = '<td class="label"></td><td class="blank"></td>';
 
-        if ($workorder->getPstExempt() || $workorder->getGstExempt())
+        $taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">Unknown</td>';
+        if ($workorder->getPstExempt() && $workorder->getGstExempt())
         {
-          echo '<tr>';
-          echo '<td class="label">PST Exempt:</td><td>'.($workorder->getPstExempt() ? '<strong>YES</strong>' : 'No').'</td>';
-          echo '<td class="label">GST Exempt:</td><td>'.($workorder->getGstExempt() ? '<strong>YES</strong>' : 'No').'</td>';
-          echo '</tr>';
+          $taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">NO TAX</td>';
+        } elseif ($workorder->getPstExempt() && !$workorder->getGstExempt())
+        {
+          $taxStatus = '<td class="label">Tax Status:</td><td class="orange-cell">GST ONLY</td>';
+        } elseif (!$workorder->getPstExempt() && $workorder->getGstExempt())
+        {
+          $taxStatus = '<td class="label">Tax Status:</td><td class="orange-cell">PST ONLY</td>';
+        } elseif (!$workorder->getPstExempt() && !$workorder->getGstExempt())
+        {
+          $taxStatus = '<td class="label">Tax Status:</td><td class="green-cell">FULL TAX</td>';
         }
+
+        echo '<tr>';
+        echo '<td class="label">PST Exempt:</td><td>'.($workorder->getPstExempt() ? '<strong>YES</strong>' : 'No').'</td>';
+        echo '<td class="label">GST Exempt:</td><td>'.($workorder->getGstExempt() ? '<strong>YES</strong>' : 'No').'</td>';
+        echo '</tr>';
+      
 
         if ($workorder->isEstimate())
         {
@@ -69,7 +82,7 @@
         }
         else if ($workorder->isInProgress()) 
         { 
-         echo '<tr>'.$created.$started.'</tr>';
+         echo '<tr>'.$created.$taxStatus.'</tr>';
          if ($workorder->getHauloutDate())
          {
             echo '<tr>'.$haulout.$haulin.'</tr>';
@@ -82,7 +95,7 @@
         }
         else 
         {
-          echo '<tr>'.$created.$started.'</tr><tr>'.$completed.$blank.'</tr>';
+          echo '<tr>'.$created.$taxStatus.'</tr><tr>'.$completed.$blank.'</tr>';
           if ($workorder->getHauloutDate()) echo '<tr>'.$haulout.$haulin.'</tr>';
           echo '<tr>'.$status.$exemptionFile.'</tr>';
         }

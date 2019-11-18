@@ -6,7 +6,7 @@
       array('class' => 'button tabbutton', 'style' => 'margin: 20px auto;'));
   ?>
 </div>
-<div class="rightside" style="width: 800px;">
+<div class="rightside" style="width: 950px;">
   <h1 class="headicon headicon-part">Work Orders</h1>
   <div id="index-grid"></div>
 </div>
@@ -581,16 +581,19 @@ var grid = new Ext.grid.GridPanel({
     header: "Customer Name",
     dataIndex: 'customer',
     sortable: true,
-    flex: 1
+    width : 90
+    //flex: 1
   },{
     header: "Boat Name",
     dataIndex: 'boat',
-    flex: 1
+    width : 90
+    //flex: 1
   },{
     header: "Boat Type",
     dataIndex: 'boattype',
     sortable: false,
-    flex: 1
+    width : 90
+    //flex: 1
   },{
     header: "Haulout",
     dataIndex: 'haulout',
@@ -608,32 +611,53 @@ var grid = new Ext.grid.GridPanel({
     width: 90
   },
   /* Individual GST and PST columns */
-  //{
-  //  header: "GST",
-  //  dataIndex: 'gst_exempt',
-  //  sortable: true,
-  //  width: 40
-  //},{
-  //  header: "PST",
-  //  dataIndex: 'pst_exempt',
-  //  sortable: true,
-  //  width: 45
-  //},
-  {
-    header: "Tax Exempt",
-    dataIndex: 'tax_exempt',
+ // {
+ //   header: "Tax Exempt",
+ //   dataIndex: 'tax_exempt',
+ //   sortable: true,
+ //   renderer: function(value,metaData,record){
+ //     output = ' '
+ //     if (value == 'Y'){
+ //       img = 'flag_red';
+ //       output = '<img src="/images/silkicon/tick.png" title="Tax Exempt" alt="'+value+'" />';
+ //     }
+ //     return output;
+ //   },
+ //   align: 'center',
+ //   width: 70
+ // },
+ {
+    header: "PST",
+    dataIndex: 'pst_exempt',
     sortable: true,
     renderer: function(value,metaData,record){
       output = ' '
       if (value == 'Y'){
-        img = 'flag_red';
-        output = '<img src="/images/silkicon/tick.png" title="Tax Exempt" alt="'+value+'" />';
+        output = '<img src="/images/silkicon/cross.png" title="PST Exempt" alt="'+value+'" />';
+      } else {
+        output = '<img src="/images/silkicon/tick.png" title="PST Exempt" alt="'+value+'" />';
       }
       return output;
     },
     align: 'center',
-    width: 70
+    width: 75
   },{
+    header: "GST",
+    dataIndex: 'gst_exempt',
+    sortable: true,
+    renderer: function(value,metaData,record){
+      output = ' '
+      if (value == 'Y'){
+        output = '<img src="/images/silkicon/cross.png" title="GST Exempt" alt="'+value+'" />';
+      } else {
+        output = '<img src="/images/silkicon/tick.png" title="GST Exempt" alt="'+value+'" />';
+      }
+      return output;
+    },
+    align: 'center',
+    width: 75
+  },
+  {
     header: "Status",
     dataIndex: 'status',
     sortable: true,

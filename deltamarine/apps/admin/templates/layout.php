@@ -37,9 +37,8 @@
             Page took <?php echo round($time, 3);?>s to generate
           <?php endif; ?>
         <?php endif; ?>
-        <div class="alignright">v1.2.3</div>
+        <div class="alignright">v1.2.4.PST</div>
       </div>
-      
     </div>
     
   <script type="text/javascript">
