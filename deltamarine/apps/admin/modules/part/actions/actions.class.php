@@ -693,6 +693,8 @@ class partActions extends sfActions
 
     $part = $this->loadPart($request);
 
+    sfContext::getInstance()->getLogger()->info($part->getName());
+
     //validate
     $result = true;
     $errors = array();

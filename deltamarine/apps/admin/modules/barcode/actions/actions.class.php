@@ -17,6 +17,11 @@ class barcodeActions extends sfActions
   */
   public function executePart(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START barcodeActions.executePart------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
 
     $include_price = $request->getParameter('price', false);
     $include_name  = $request->getParameter('name', false);
@@ -56,6 +61,8 @@ class barcodeActions extends sfActions
 
     foreach ($vars AS $var)
     {
+      sfContext::getInstance()->getLogger()->info($var->getPart()->getName());
+
       $code = '-'.sprintf('%05d', $var->getId());
       $pdf->generateSingle($code,
                            $codetype,
@@ -67,6 +74,12 @@ class barcodeActions extends sfActions
 
 
     $pdf->Output('barcodes.pdf', 'D');
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE barcodeActions.executePart------------------';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+    
     die();
   }
 }

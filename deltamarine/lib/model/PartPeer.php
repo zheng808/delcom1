@@ -274,6 +274,13 @@ class PartPeer extends BasePartPeer
               ($retail ? '('.PartVariantPeer::UNIT_COST.' IS NOT NULL OR '.PartVariantPeer::UNIT_PRICE.' IS NOT NULL)'
                        : PartVariantPeer::UNIT_COST.' IS NOT NULL');
     $conn = Propel::getConnection();
+
+
+    /*
+    * Define DB charset as UTF8
+    */
+    mysql_set_charset('utf8');
+
     $statement = $conn->prepare($query);
     $statement->execute();
     $row = $statement->fetch(PDO::FETCH_NUM);

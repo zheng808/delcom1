@@ -18,14 +18,18 @@ abstract class BarcodeLabel extends sfTCPDF
 
   public function __construct($offset = 0)
   {
-    parent::__construct($this->orientation, 'mm', $this->paper_size, false);
+    //parent::__construct($this->orientation, 'mm', $this->paper_size, false); 
+    /*
+    *  Set unicode true and use UTF8
+    */
+    parent::__construct($this->orientation, 'mm', $this->paper_size, true, 'UTF-8'); 
 
     require_once(sfConfig::get('sf_root_dir'). '/lib/tcpdf/config/lang/eng.php');
     $this->setLanguageArray($l);
 
     $this->setMargins($this->margin_left, $this->margin_top);
     $this->setAutoPageBreak(false);
-    $this->setFont('Arial');
+    //$this->setFont('Arial');
     $this->setFontSize($this->fontsize);
     $this->setPrintHeader(false);
     $this->setPrintFooter(false);
