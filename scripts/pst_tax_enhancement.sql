@@ -18,6 +18,9 @@ update workorder set summary_color = '0000FF' where pst_exempt = 1 and gst_exemp
 */
 alter table part_instance add column sub_contractor_flg varchar(1) DEFAULT 'N';
 
-alter table part_instance add column enviro_taxable varchar(1) DEFAULT 'Y';
-
 alter table workorder_expense add column sub_contractor_flg varchar(1) DEFAULT 'N';
+
+/*
+* Add enviro_taxable flag column
+*/
+alter table part_instance add column enviro_taxable_flg varchar(1) DEFAULT 'Y';
