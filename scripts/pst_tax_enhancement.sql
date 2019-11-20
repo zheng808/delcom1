@@ -36,8 +36,9 @@ create table system_settings (
   `value` varchar(255) NOT NULL,
   `updated_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_by` varchar(128) DEFAULT 'CURRENT_USER()',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
 );
 
-insert into system_settings (code, name, description, value)
-values ('DB_VERSION','Database Version','Current version number of the Delcom Database','1.2.4 PST');
+insert into system_settings (code, name, description, value, updated_by)
+values ('DB_VERSION','Database Version','Current version number of the Delcom Database','1.2.4 PST','SYSTEM');
