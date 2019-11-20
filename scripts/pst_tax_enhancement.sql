@@ -24,3 +24,20 @@ alter table workorder_expense add column sub_contractor_flg varchar(1) DEFAULT '
 * Add enviro_taxable flag column
 */
 alter table part_instance add column enviro_taxable_flg varchar(1) DEFAULT 'Y';
+
+/*
+* Add system_settings table
+*/
+create table system_settings (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(24) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `description` varchar(255) NULL,
+  `value` varchar(255) NOT NULL,
+  `updated_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` varchar(128) DEFAULT 'CURRENT_USER()',
+  PRIMARY KEY (`id`)
+);
+
+insert into system_settings (code, name, description, value)
+values ('DB_VERSION','Database Version','Current version number of the Delcom Database','1.2.4 PST');
