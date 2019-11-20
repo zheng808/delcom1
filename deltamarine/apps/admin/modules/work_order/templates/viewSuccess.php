@@ -33,7 +33,7 @@
       <tr>
         <td class="label">Work Order Status:</td>
         <td>
-            <div style="float:left; width: 15px; height: 15px; margin-right: 8px; border: 1px solid #000000; background-color: #<?php echo $workorder->getSummaryColor(); ?>;">&nbsp;</div>
+            <!--  <div style="float:left; width: 15px; height: 15px; margin-right: 8px; border: 1px solid #000000; background-color: #<?php echo $workorder->getSummaryColor(); ?>;">&nbsp;</div> -->
             <?php echo $workorder->getStatus(); ?>
         </td>
         <td class="label">Boat Make/Model:</td>
@@ -55,20 +55,33 @@
 
         $blank = '<td class="label"></td><td class="blank"></td>';
 
-        $taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">Unknown</td>';
+        $taxCategory = 'UNKNOWN';
+        $taxColour = 'red-cell';
+        //$taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">UNKNOWN</td>';
         if ($workorder->getPstExempt() && $workorder->getGstExempt())
         {
-          $taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">NO TAX</td>';
+          $taxCategory = 'No Tax';
+          $taxColour = 'red-cell';
+          //$taxStatus = '<td class="label">Tax Status:</td><td class="red-cell">NO TAX</td>';
         } elseif ($workorder->getPstExempt() && !$workorder->getGstExempt())
         {
-          $taxStatus = '<td class="label">Tax Status:</td><td class="orange-cell">GST ONLY</td>';
+          $taxCategory = 'GST Only';
+          $taxColour = 'blue-cell';
+          //$taxStatus = '<td class="label">Tax Status:</td><td class="blue-cell">GST ONLY</td>';
         } elseif (!$workorder->getPstExempt() && $workorder->getGstExempt())
         {
-          $taxStatus = '<td class="label">Tax Status:</td><td class="orange-cell">PST ONLY</td>';
+          $taxCategory = 'PST Only';
+          $taxColour = 'orange-cell';
+          //$taxStatus = '<td class="label">Tax Status:</td><td class="orange-cell">PST ONLY</td>';
         } elseif (!$workorder->getPstExempt() && !$workorder->getGstExempt())
         {
-          $taxStatus = '<td class="label">Tax Status:</td><td class="green-cell">FULL TAX</td>';
+          $taxCategory = 'Full Tax';
+          $taxColour = 'green-cell';
+          //$taxStatus = '<td class="label">Tax Status:</td><td class="green-cell">FULL TAX</td>';
         }
+        //$taxStatus = '<td class="label">Tax Status:</td><td class="'.$taxColour.'">'.$taxCategory.'</td>';
+
+        $taxStatus = '<td class="label">Tax Status:</td><td><div style="float:left; width: 15px; height: 15px; margin-right: 8px; border: 1px solid #000000; background-color: #'.$workorder->getSummaryColor().';">&nbsp;</div>'.$taxCategory.'</td>';
 
         echo '<tr>';
         echo '<td class="label">PST Exempt:</td><td>'.($workorder->getPstExempt() ? '<strong>YES</strong>' : 'No').'</td>';
@@ -78,7 +91,7 @@
 
         if ($workorder->isEstimate())
         {
-          echo '<tr>'.$created.$haulout.'</tr>';
+          echo '<tr>'.$created.$taxStatus.'</tr>';
         }
         else if ($workorder->isInProgress()) 
         { 
@@ -86,12 +99,11 @@
          if ($workorder->getHauloutDate())
          {
             echo '<tr>'.$haulout.$haulin.'</tr>';
-            echo '<tr>'.$status.$exemptionFile.'</tr>';
          }
-         else
-         {
-           echo '<tr>'.$status.$exemptionFile.'</tr>';
-         }
+         
+         
+         echo '<tr>'.$status.$exemptionFile.'</tr>';
+         
         }
         else 
         {
@@ -124,6 +136,7 @@ var includeEstimate = 0;
 var partStatus = 'delivered';
 var partShippingFees = 0;
 var partBrokerFees = 0;
+var subContractorFlg = 'N';
 var partQuantity = 1;
 var partTaskId = 0;
 var minQuantity = 0;
@@ -443,6 +456,7 @@ function showPartEditWindow(inst_id, wo, data){
       gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
       pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
       gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>,
+
     };
 
  
@@ -469,6 +483,7 @@ function showPartEditWindow(inst_id, wo, data){
     minQuantity = data.min_quantity;
     maxQuantity = data.max_quantity;
     partQuantity = 1;
+    subContractorFlg = 'N'; //data.subContractorFlg
 
     partTaskId = woTaskId;
 
@@ -487,6 +502,7 @@ function showPartEditWindow(inst_id, wo, data){
     Ext.getCmp('enviro_levy').setValue(partEnviroLevy);
     Ext.getCmp('battery_levy').setValue(partBatteryLevy);
     Ext.getCmp('part_quantity').setValue(partQuantity);
+    Ext.getCmp('sub_contractor_flg').setValue(subContractorFlg);
 
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
@@ -502,7 +518,7 @@ function showPartEditWindow(inst_id, wo, data){
 
 var PartAddSelectedWin = new Ext.Window({
   width: 550,
-  height: 575,
+  height: 595,
   border: false,
   resizable: false,
   modal: true,
@@ -700,8 +716,38 @@ var PartAddSelectedWin = new Ext.Window({
         layout: 'anchor',
         bodyStyle: 'padding: 5px 5px 5px 5px',
         items: [ 
-          
           {
+          itemId: 'sub_contractor_flg',
+          xtype: 'acbuttongroup',
+          fieldLabel: 'Sub Contractor',
+          anchor: '-100',
+          id: 'sub_contractor_flg',
+          name: 'sub_contractor_flg',
+          value: subContractorFlg,
+          items: [
+            { value: 'Y', flex: 3, text: 'Yes' },
+            { value: 'N', flex: 3, text: 'No' }
+          ],
+          listeners: { 
+            change: function(field){
+              var value = field.getValue();
+              var form = field.up('form');
+
+             if (value === 'N')
+             {
+               defaultPst = <?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>;
+               form.down('#pstField').setValue(defaultPst);
+               //Ext.getCmp('pstField').setValue(0);
+               //partPstTaxed = 0;
+               partPstTaxed = defaultPst;
+             } else {
+              form.down('#pstField').setValue(1);
+              //Ext.getCmp('pstField').setValue(1);
+              partPstTaxed = 1;
+             } 
+            }
+          }
+        },{
           xtype: 'numberfield',
           name: 'shipping_fees',
           id: 'shipping_fees',
@@ -743,14 +789,15 @@ var PartAddSelectedWin = new Ext.Window({
           allowBlank: false
         },{
           itemId: 'pstField',
+          id: 'pstField',
           xtype: 'acbuttongroup',
           name: 'pstField',
           value: '<?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>', 
           anchor: '-100',
           fieldLabel: 'PST Exempt',
           items: [
-                { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST' },
-                { value: '0', flex: 3, text: 'PST Exempt' }],
+                { value: '1', flex: 4, text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST' },
+                { value: '0', flex: 4, text: 'PST Exempt' }],
           listeners: { 
             change: function(field){
               var value = field.getValue();
@@ -765,8 +812,8 @@ var PartAddSelectedWin = new Ext.Window({
           anchor: '-100',
           fieldLabel: 'GST Exempt',
           items: [
-                { value: '1', flex: 5, text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST' },
-                { value: '0', flex: 3, text: 'GST Exempt' }],
+                { value: '1', flex: 4, text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST' },
+                { value: '0', flex: 4, text: 'GST Exempt' }],
           listeners: { 
             change: function(field){
               var value = field.getValue();
@@ -803,7 +850,7 @@ var PartAddSelectedWin = new Ext.Window({
         var woShippingFees = Ext.getCmp('shipping_fees').getValue();
         var woBrokerFees = Ext.getCmp('broker_fees').getValue();
         var woUnitPrice = Ext.getCmp('unit_price').getValue();
-
+        var subContractorFlg = Ext.getCmp('sub_contractor_flg').getValue();
 
         if (partAvailable >= partQuantity || partStatus == 'estimate'){
 
@@ -829,6 +876,7 @@ var PartAddSelectedWin = new Ext.Window({
                 taxable_pst: partPstTaxed,
                 taxable_gst: partGstTaxed,
                 statusaction: partStatus,
+                sub_contractor_flg : subContractorFlg,
               },
               success: function(){
                 Ext.Msg.hide();
@@ -880,6 +928,7 @@ var PartAddSelectedWin = new Ext.Window({
         var woBrokerFees = Ext.getCmp('broker_fees').getValue();
         var woUnitPrice = Ext.getCmp('unit_price').getValue();
         var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
+        var subContractorFlg = Ext.getCmp('sub_contractor_flg').getValue();
 
         var woQuantity = partQuantity;
 
@@ -907,6 +956,7 @@ var PartAddSelectedWin = new Ext.Window({
                 taxable_pst: partPstTaxed,
                 taxable_gst: partGstTaxed,
                 statusaction: partStatus,
+                sub_contractor_flg : subContractorFlg,
               },
               success: function(){
                 Ext.Msg.hide();
@@ -2094,14 +2144,169 @@ Ext.define('Ext.ux.WorkorderEditWin', {
           }
         }
       }
-    },{
+    },
+    
+    
+    
+    {
+      itemId: 'oldtaxstatus',
+      xtype: 'displayfield',
+      fieldLabel: 'Current Tax Status',
+      margin: '15 0 5 0',
+      value: '<?php echo $taxCategory; ?>',
+      name: 'oldstatus'
+    },
+    /* ============================================
+    {
+      itemId: 'taxstatus',
       xtype: 'acbuttongroup',
+      name: 'tax_status',
+      value: '<?php echo $taxCategory; ?>',
+      fieldLabel: 'Tax Status',
+      items: [ 'Full Tax', 'GST Only', 'PST Only', 'No Tax' ],
+      listeners: { 
+        change: function(field){
+          var value = field.getValue();
+          var form = field.up('form');
+
+          var newval = value;
+          var oldval = form.down('#oldtaxstatus').getValue();
+
+             if (newval === 'No Tax')
+             {
+               form.down('#pstfield').setValue(1);
+               form.down('#gstfield').setValue(1);
+               form.down('#colorCode').setValue('FF3333');
+             }  
+             else if (newval === 'Full Tax')
+             {
+              form.down('#pstfield').setValue(0);
+              form.down('#gstfield').setValue(0);
+              form.down('#colorCode').setValue('33DD33');
+             }
+             else if (newval === 'GST Only')
+             {
+              form.down('#pstfield').setValue(1);
+              form.down('#gstfield').setValue(0);
+              form.down('#colorCode').setValue('0000FF');
+
+             } else if (newval === 'PST Only')
+             {
+              form.down('#pstfield').setValue(0);
+              form.down('#gstfield').setValue(1);
+              form.down('#colorCode').setValue('FFA500');
+             }
+        } 
+      }
+    },
+    
+    /* ============================================ */
+    {
+      xtype: 'fieldcontainer',
+      fieldLabel: 'Tax Status',
+      layout: 'hbox',
+      width: 470,
+      items: [{
+        id: 'colorCode',
+        itemId: 'colorCode',
+        xtype: 'hidden',
+        name: 'color_code',
+        value: '<?php echo $workorder->getSummaryColor(); ?>',
+        listeners: { change: function(field, value){
+          selBtn = field.next('button[valueField='+value+']');
+          if (!selBtn.pressed) selBtn.toggle(true);
+          }}
+        }
+      ,{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: <?php  if ($workorder->getSummaryColor() == '33DD33') echo 'true'; else echo 'false'; ?> ,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #33DD33; margin-right: 8px;">&nbsp;</div>Full Tax',
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-first', 
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('pstfield').setValue(0);
+              Ext.getCmp('gstfield').setValue(0);
+            }
+          }},
+          valueField: '33DD33',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: <?php  if ($workorder->getSummaryColor() == '0000FF') echo 'true'; else echo 'false'; ?> ,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #0000FF; margin-right: 8px;">&nbsp;</div>GST Only', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-middle',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('pstfield').setValue(1);
+              Ext.getCmp('gstfield').setValue(0);
+              //field.up('form').down('#pstfield').setValue(0);
+              //field.up('form').down('#gstfield').setValue(1);
+            }
+          }},
+          valueField: '0000FF',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: <?php  if ($workorder->getSummaryColor() == 'FFA500') echo 'true'; else echo 'false'; ?> ,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #FFA500; margin-right: 8px;">&nbsp;</div>PST Only', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-middle',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('pstfield').setValue(0);
+              Ext.getCmp('gstfield').setValue(1);
+              //field.up('form').down('#pstfield').setValue(1);
+              //field.up('form').down('#gstfield').setValue(0);
+            }
+          }},
+          valueField: 'FFA500',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: <?php  if ($workorder->getSummaryColor() == 'FF3333') echo 'true'; else echo 'false'; ?> ,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #FF3333; margin-right: 8px;">&nbsp;</div>No Tax', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-last',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('pstfield').setValue(1);
+              Ext.getCmp('gstfield').setValue(1);
+              //field.up('form').down('#pstfield').setValue(0);
+              //field.up('form').down('#gstfield').setValue(0);
+            }
+          }},
+          valueField: 'FF3333',
+          flex: 1
+        }
+      ]      
+    },
+    /*
+    {
+      itemId: 'colorCode',
+      xtype: 'hidden',
       fieldLabel: 'Color Code',
+      //editable: false,
+      //disabled: true,
       name: 'color_code',
       value: '<?php echo $workorder->getSummaryColor(); ?>',
       width: 350,
       items: color_code_array
     },
+    ==================================== */
     /*
     Removed for_rigging option
     {
@@ -2132,8 +2337,9 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       listConfig: { minWidth: 200 }      
     <?php if ($sf_user->hasCredential('workorder_payment')): ?>
     },{
-      xtype: 'acbuttongroup',
+      xtype: 'hidden',
       itemId: 'pstfield',
+      id: 'pstfield',
       fieldLabel: 'PST',
       width: 350,
       margin: '15 0 5 0',
@@ -2144,9 +2350,10 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         { value: '1', text: 'PST Exempt', flex: 3 }
       ]
     },{
-      xtype: 'acbuttongroup',
+      xtype: 'hidden',
       fieldLabel: 'GST',
       itemId: 'gstfield',
+      id: 'gstfield',
       width: 350,
       name: 'gst_exempt',
       value: '<?php echo ($workorder->getGstExempt() ? '1' : '0'); ?>',
@@ -3306,8 +3513,8 @@ var billing_panel = new Ext.Panel({
             workorder_id: <?php echo $workorder->getId(); ?>,
             pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
             gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
-            pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
-            gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>,
+            pst_exempt: false,
+            gst_exempt: false,
             shop_supplies_pct: <?php echo $workorder->getShopSuppliesSurcharge(); ?>,
             moorage_amt: '<?php echo $workorder->getMoorageSurchargeAmt(); ?>'
           });
@@ -3320,8 +3527,8 @@ var billing_panel = new Ext.Panel({
             workorder_id: <?php echo $workorder->getId(); ?>,
             pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
             gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
-            pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
-            gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>,
+            pst_exempt: false,
+            gst_exempt: false,
             shop_supplies_pct: <?php echo $workorder->getShopSuppliesSurcharge(); ?>,
             moorage_amt: '<?php echo $workorder->getMoorageSurchargeAmt(); ?>'
           });

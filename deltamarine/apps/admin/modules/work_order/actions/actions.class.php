@@ -1228,6 +1228,8 @@ class work_orderActions extends sfActions
         sfContext::getInstance()->getLogger()->info('battery_levy: '.$request->getParameter('battery_levy'));
         sfContext::getInstance()->getLogger()->info('broker_fees: '.$request->getParameter('broker_fees'));
         sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
+        sfContext::getInstance()->getLogger()->info('sub_contractor_flg: '.$request->getParameter('sub_contractor_flg'));
+        //sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
       }
 
       //update values
@@ -1242,6 +1244,7 @@ class work_orderActions extends sfActions
       $instance->setEstimate($request->getParameter('estimate'));
       $instance->setBrokerFees($request->getParameter('broker_fees'));
       $instance->setShippingFees($request->getParameter('shipping_fees'));
+      $instance->setSubContractorFlg($request->getParameter('sub_contractor_flg'));
       
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
@@ -1457,7 +1460,8 @@ class work_orderActions extends sfActions
                   'statusaction'        => $status,
                   'available'           => $var->getQuantity('available', false),
                   'min_quantity'        => $var->getQuantity('minimum', false),
-                  'max_quantity'        => $var->getQuantity('maximum', false)
+                  'max_quantity'        => $var->getQuantity('maximum', false),
+                  'sub_contractor_flg'  => $inst->getSubContractorFlg()
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
@@ -1581,6 +1585,20 @@ class work_orderActions extends sfActions
       sfContext::getInstance()->getLogger()->info($message.$shippingFees);
     }
 
+
+    $subContractorFlg = 'N';
+    if ($request->getParameter('sub_contractor_flg'))
+    {
+      $subContractorFlg = $request->getParameter('sub_contractor_flg');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting sub_contractor_flg - ';
+      sfContext::getInstance()->getLogger()->info($message.$subContractorFlg);
+    }
+
+
     if (!(((float) $request->getParameter('quantity')) > 0))
     {
       $result = false;
@@ -1606,6 +1624,7 @@ class work_orderActions extends sfActions
       $instance->setSerialNumber($request->getParameter('serial_number'));
       $instance->setBrokerFees($brokerFees);
       $instance->setShippingFees($shippingFees);
+      $instance->setSubContractorFlg($subContractorFlg);
       //$instance->setUnitCost($request->getParameter('cost'));
       //$instance->setUnitCost($request->getParameter('unit_cost'));
       $instance->setUnitCost($unitCost);
@@ -1682,7 +1701,8 @@ class work_orderActions extends sfActions
                   'total'               => number_format($inst->getSubtotal(), 2),
                   'serial_number'       => (string) $inst->getSerialNumber(),
                   'internal_notes'      => $inst->getInternalNotes(),
-                  'who'                 => $who
+                  'who'                 => $who,
+                  'sub_contractor_flg'  => $inst->getSubContractorFlg()
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
@@ -1702,6 +1722,12 @@ class work_orderActions extends sfActions
 
   public function executeExpenseedit(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeExpenseedit';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     if ($request->getParameter('expense_id') != 'new')
     {
       $this->forward404Unless($this->getUser()->hasCredential('workorder_edit'));
@@ -1743,6 +1769,9 @@ class work_orderActions extends sfActions
       $expense->setOrigin($request->getParameter('origin'));
       $expense->setPrice($request->getParameter('price'));
 
+      sfContext::getInstance()->getLogger()->info('Sub Contractor Flg: '.$request->getParameter('sub_contractor_flg'));
+      $expense->setSubContractorFlg($request->getParameter('sub_contractor_flg'));
+
       //this keeps existing tax rate in the expense if set
       $expense->setTaxableHst($request->getParameter('taxable_hst') ? ($expense->getTaxableHst() != 0 ? $expense->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
       $expense->setTaxablePst($request->getParameter('taxable_pst') ? ($expense->getTaxablePst() != 0 ? $expense->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
@@ -1773,6 +1802,12 @@ class work_orderActions extends sfActions
       $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeExpenseedit';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
   }//executeExpenseedit()------------------------------------------------------
 
@@ -1799,7 +1834,7 @@ class work_orderActions extends sfActions
     $this->renderText("{success:true}");
 
     return sfView::NONE;
-  }
+  }//executeExpensemove()------------------------------------------------------
 
   public function executeExpensedelete(sfWebRequest $request)
   {
@@ -1816,10 +1851,16 @@ class work_orderActions extends sfActions
     $this->renderText('{success:true}');
 
     return sfView::NONE;
-  }
+  }//executeExpensedelete()----------------------------------------------------
 
   public function executeExpenseload(sfWebRequest $request)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START executeExpenseload';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     //$this->forward404Unless($request->isXmlHttpRequest());
     $workorder = $this->loadWorkorder($request);
     $this->forward404Unless($request->isMethod('post'));
@@ -1838,6 +1879,9 @@ class work_orderActions extends sfActions
     {
       $estimate = '0';
     }
+
+    sfContext::getInstance()->getLogger()->info('Getting Expense SubContractorFlg: '.$expense->getSubContractorFlg());
+
     $data = array('expense_id'          => $expense->getId(),
                   'workorder_item_id'   => $expense->getWorkorderItemId(),
                   'workorder_item_name' => $expense->getWorkorderItem()->getLabel(),
@@ -1850,14 +1894,21 @@ class work_orderActions extends sfActions
                   'internal_notes'      => $expense->getInternalNotes(),
                   'taxable_hst'         => ($expense->getTaxableHst() > 0 ? 1 : 0),
                   'taxable_pst'         => ($expense->getTaxablePst() > 0 ? 1 : 0),
-                  'taxable_gst'         => ($expense->getTaxableGst() > 0 ? 1 : 0)
+                  'taxable_gst'         => ($expense->getTaxableGst() > 0 ? 1 : 0),
+                  'sub_contractor_flg'  => $expense->getSubContractorFlg()
                  );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE executeExpenseload';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
+
     return sfView::NONE;
 
-  }
+  }//executeExpenseload()------------------------------------------------------
 
 
   /**********************************/

@@ -58,7 +58,7 @@ tr.added { background-color: #ccfdd1; }
 tr.empty { background-color: #fdd3cc; }
 td.red-cell { background-color: #FF3333}
 td.green-cell { background-color: #33DD33}
-td.blue-cell { background-color: #0000DD}
+td.blue-cell { background-color: #0000FF}
 td.orange-cell { background-color: #FFA500}
 td.left { text-align: left; padding-left: 8px;}
 td.subheader { background-color: #F4FAFA; }
@@ -79,7 +79,7 @@ table.infotable { border: none; background: transparent; border-collapse: separa
 table.infotable td { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #f4f4f4; }
 table.infotable td.red-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #FF3333; }
 table.infotable td.green-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #33DD33; }
-table.infotable td.blue-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #0000DD; }
+table.infotable td.blue-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #0000FF; }
 table.infotable td.orange-cell { width: 205px; margin: 1px 0; padding: 2px 2px 2px 5px; border: 1px solid #e6e6e6; background-color: #FFA500; }
 table.infotable td.label { text-align: right; padding-right: 5px; font-weight: bold;  width: 110px; border: none; background: transparent; }
 table.infotable td.blank { width: auto; border: none; background-color: transparent; }
@@ -509,7 +509,7 @@ a.buttongroup-bottom, .buttongroup-bottom input {
 }
 
 .blocky.bl-white  { background: #F8F8F8; color: #000; border: 1px solid #DDD; }
-.blocky.bl-blue   { background: #0000DD; box-shadow: 0px 0px 5px rgba(  0,   0, 200, 0.7);  color: #FFFFFF; }
+.blocky.bl-blue   { background: #0000FF; box-shadow: 0px 0px 5px rgba(  0,   0, 200, 0.7);  color: #FFFFFF; }
 .blocky.bl-black  { background: #333333; box-shadow: 0px 0px 5px rgba( 50,  50,  50, 0.7); color: #FFFFFF; }
 .blocky.bl-green  { background: #33DD33; box-shadow: 0px 0px 5px rgba( 50, 200,  50, 0.7); }
 .blocky.bl-red    { background: #FF3333; box-shadow: 0px 0px 5px rgba(200,  50,  50, 0.7); }

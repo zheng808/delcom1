@@ -50,7 +50,13 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	 */
 	protected $quantity;
 
-	  /**
+	/**
+	 * The value for the sub_contractor_flg field.
+	 * @var        string
+	 */
+	protected $sub_contractor_flg;
+
+	/**
 	 * The value for the broker_fees field.
 	 * @var        string
 	 */
@@ -316,6 +322,18 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	{
 		return $this->quantity;
 	}
+
+
+	/**
+	 * Get the [SUB_CONTRACTOR_FLG] column value.
+	 *
+	 * @return     string
+	 */
+	public function getSubContractorFlg()
+	{
+		return $this->sub_contractor_flg;
+	}
+
 
 	/**
 	 * Get the [broker_fees] column value.
@@ -649,25 +667,46 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		return $this;
 	} // setQuantity()
 
-		/**
-	 * Set the value of [broker_fees] column.
+	
+     /**
+	 * Set the value of [sub_contractor_flg] column.
 	 *
 	 * @param      string $v new value
 	 * @return     PartInstance The current object (for fluent API support)
 	 */
-	public function setBrokerFees($v)
+	public function setSubContractorFlg($v)
 	{
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->broker_fees !== $v) {
-			$this->broker_fees = $v;
-			$this->modifiedColumns[] = PartInstancePeer::BROKER_FEES;
+		if ($this->sub_contractor_flg !== $v) {
+			$this->sub_contractor_flg = $v;
+			$this->modifiedColumns[] = PartInstancePeer::SUB_CONTRACTOR_FLG;
 		}
 
 		return $this;
-	} // setBrokerFees()
+	} // setSubContractorFlg()	
+
+	/**
+	* Set the value of [broker_fees] column.
+	*
+	* @param      string $v new value
+	* @return     PartInstance The current object (for fluent API support)
+	*/
+   public function setBrokerFees($v)
+   {
+	   if ($v !== null) {
+		   $v = (string) $v;
+	   }
+
+	   if ($this->broker_fees !== $v) {
+		   $this->broker_fees = $v;
+		   $this->modifiedColumns[] = PartInstancePeer::BROKER_FEES;
+	   }
+
+	   return $this;
+   } // setBrokerFees()
 
   /**
 	 * Set the value of [shipping_fees] column.
@@ -1172,10 +1211,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$this->custom_name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->custom_origin = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->quantity = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-      $this->broker_fees = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-      $this->shipping_fees = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-      $this->unit_price = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-      $this->unit_cost = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+      		$this->broker_fees = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+      		$this->shipping_fees = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+      		$this->unit_price = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+      		$this->unit_cost = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->taxable_hst = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->taxable_gst = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->taxable_pst = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
@@ -1192,6 +1231,7 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$this->date_used = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
 			$this->is_inventory_adjustment = ($row[$startcol + 23] !== null) ? (boolean) $row[$startcol + 23] : null;
 			$this->internal_notes = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
+			$this->sub_contractor_flg = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1717,6 +1757,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 23:
 				return $this->getInternalNotes();
 				break;
+			case 24:
+				return $this->getSubContractorFlg();
+				break;
 			default:
 				return null;
 				break;
@@ -1743,9 +1786,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$keys[2] => $this->getCustomName(),
 			$keys[3] => $this->getCustomOrigin(),
 			$keys[4] => $this->getQuantity(),
-      $keys[5] => $this->getBrokerFees(),
-      $keys[6] => $this->getShippingFees(),
-      $keys[7] => $this->getUnitPrice(),
+      		$keys[5] => $this->getBrokerFees(),
+      		$keys[6] => $this->getShippingFees(),
+      		$keys[7] => $this->getUnitPrice(),
 			$keys[8] => $this->getUnitCost(),
 			$keys[9] => $this->getTaxableHst(),
 			$keys[10] => $this->getTaxableGst(),
@@ -1763,6 +1806,8 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$keys[22] => $this->getDateUsed(),
 			$keys[23] => $this->getIsInventoryAdjustment(),
 			$keys[24] => $this->getInternalNotes(),
+			$keys[25] => $this->getSubContractorFlg(),
+
 		);
 		return $result;
 	}
@@ -1812,12 +1857,12 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 5:
 				$this->setBrokerFees($value);
 				break;
-      case 6:
-  			$this->setShippingFees($value);
-  			break;
-      case 7:
-  			$this->setUnitPrice($value);
-  			break;
+      		case 6:
+  				$this->setShippingFees($value);
+  				break;
+      		case 7:
+  				$this->setUnitPrice($value);
+  				break;
 			case 8:
 				$this->setUnitCost($value);
 				break;
@@ -1869,6 +1914,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 24:
 				$this->setInternalNotes($value);
 				break;
+			case 25:
+				$this->setSubContractorFlg($value);
+				break;
+      		
 		} // switch()
 	}
 
@@ -1898,9 +1947,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[2], $arr)) $this->setCustomName($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setCustomOrigin($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setQuantity($arr[$keys[4]]);
-    if (array_key_exists($keys[5], $arr)) $this->setBrokerFees($arr[$keys[5]]);
-    if (array_key_exists($keys[6], $arr)) $this->setShippingFees($arr[$keys[6]]);
-    if (array_key_exists($keys[7], $arr)) $this->setUnitPrice($arr[$keys[7]]);
+    	if (array_key_exists($keys[5], $arr)) $this->setBrokerFees($arr[$keys[5]]);
+    	if (array_key_exists($keys[6], $arr)) $this->setShippingFees($arr[$keys[6]]);
+    	if (array_key_exists($keys[7], $arr)) $this->setUnitPrice($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setUnitCost($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setTaxableHst($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setTaxableGst($arr[$keys[10]]);
@@ -1918,6 +1967,8 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[22], $arr)) $this->setDateUsed($arr[$keys[22]]);
 		if (array_key_exists($keys[23], $arr)) $this->setIsInventoryAdjustment($arr[$keys[23]]);
 		if (array_key_exists($keys[24], $arr)) $this->setInternalNotes($arr[$keys[24]]);
+		if (array_key_exists($keys[25], $arr)) $this->setSubContractorFlg($arr[$keys[25]]);
+
 	}
 
 	/**
@@ -1934,9 +1985,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartInstancePeer::CUSTOM_NAME)) $criteria->add(PartInstancePeer::CUSTOM_NAME, $this->custom_name);
 		if ($this->isColumnModified(PartInstancePeer::CUSTOM_ORIGIN)) $criteria->add(PartInstancePeer::CUSTOM_ORIGIN, $this->custom_origin);
 		if ($this->isColumnModified(PartInstancePeer::QUANTITY)) $criteria->add(PartInstancePeer::QUANTITY, $this->quantity);
-    if ($this->isColumnModified(PartInstancePeer::BROKER_FEES)) $criteria->add(PartInstancePeer::BROKER_FEES, $this->broker_fees);
-    if ($this->isColumnModified(PartInstancePeer::SHIPPING_FEES)) $criteria->add(PartInstancePeer::SHIPPING_FEES, $this->shipping_fees);
-    if ($this->isColumnModified(PartInstancePeer::UNIT_PRICE)) $criteria->add(PartInstancePeer::UNIT_PRICE, $this->unit_price);
+    	if ($this->isColumnModified(PartInstancePeer::BROKER_FEES)) $criteria->add(PartInstancePeer::BROKER_FEES, $this->broker_fees);
+    	if ($this->isColumnModified(PartInstancePeer::SHIPPING_FEES)) $criteria->add(PartInstancePeer::SHIPPING_FEES, $this->shipping_fees);
+    	if ($this->isColumnModified(PartInstancePeer::UNIT_PRICE)) $criteria->add(PartInstancePeer::UNIT_PRICE, $this->unit_price);
 		if ($this->isColumnModified(PartInstancePeer::UNIT_COST)) $criteria->add(PartInstancePeer::UNIT_COST, $this->unit_cost);
 		if ($this->isColumnModified(PartInstancePeer::TAXABLE_HST)) $criteria->add(PartInstancePeer::TAXABLE_HST, $this->taxable_hst);
 		if ($this->isColumnModified(PartInstancePeer::TAXABLE_GST)) $criteria->add(PartInstancePeer::TAXABLE_GST, $this->taxable_gst);
@@ -1954,6 +2005,7 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartInstancePeer::DATE_USED)) $criteria->add(PartInstancePeer::DATE_USED, $this->date_used);
 		if ($this->isColumnModified(PartInstancePeer::IS_INVENTORY_ADJUSTMENT)) $criteria->add(PartInstancePeer::IS_INVENTORY_ADJUSTMENT, $this->is_inventory_adjustment);
 		if ($this->isColumnModified(PartInstancePeer::INTERNAL_NOTES)) $criteria->add(PartInstancePeer::INTERNAL_NOTES, $this->internal_notes);
+    	if ($this->isColumnModified(PartInstancePeer::SUB_CONTRACTOR_FLG)) $criteria->add(PartInstancePeer::SUB_CONTRACTOR_FLG, $this->sub_contractor_flg);
 
 		return $criteria;
 	}
@@ -2018,9 +2070,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 
 		$copyObj->setBrokerFees($this->broker_fees);
 
-    $copyObj->setShippingFees($this->shipping_fees);
+    	$copyObj->setShippingFees($this->shipping_fees);
 
-   $copyObj->setUnitPrice($this->unit_price);
+   		$copyObj->setUnitPrice($this->unit_price);
 
 		$copyObj->setUnitCost($this->unit_cost);
 
@@ -2055,6 +2107,8 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		$copyObj->setIsInventoryAdjustment($this->is_inventory_adjustment);
 
 		$copyObj->setInternalNotes($this->internal_notes);
+
+		$copyObj->setSubContractorFlg($this->sub_contractor_flg);
 
 
 		if ($deepCopy) {

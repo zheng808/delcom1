@@ -210,8 +210,27 @@ var WorkOrderAddWin = new Ext.Window({
                 }
               });
               r = field.findRecordByValue(field.getValue());
-              Ext.getCmp('addwo_taxable_pst').setValue( (!r || r.data.country == '' || r.data.country == 'CA') ? 1 : 0);
-              Ext.getCmp('addwo_taxable_gst').setValue( (!r || r.data.country == '' || r.data.country == 'CA') ? 1 : 0);
+              
+              if (!r || r.data.country == '' || r.data.country == 'CA') 
+              {
+                Ext.getCmp('addwo_taxable_pst').setValue(1);
+                Ext.getCmp('addwo_taxable_gst').setValue(1);
+                //Ext.getCmp('tax_code').setValue('Full Tax');
+                //field.up('form').down('#taxstatus').setValue('Full Tax');
+                field.up('form').down('#colorCode').setValue('33DD33');
+
+              } else {
+                Ext.getCmp('addwo_taxable_pst').setValue(0);
+                Ext.getCmp('addwo_taxable_gst').setValue(0);
+                //field.up('form').down('#taxstatus').setValue('No Tax');
+                //Ext.getCmp('tax_code').setValue('No Tax');
+                field.up('form').down('#colorCode').setValue('FF3333');
+
+              }
+
+              //Ext.getCmp('addwo_taxable_pst').setValue( (!r || r.data.country == '' || r.data.country == 'CA') ? 1 : 0);
+              //Ext.getCmp('addwo_taxable_gst').setValue( (!r || r.data.country == '' || r.data.country == 'CA') ? 1 : 0);
+
             },
             'blur': function(field){
               if (field.getValue() == '')
@@ -284,22 +303,8 @@ var WorkOrderAddWin = new Ext.Window({
           }
         })
       }]
-    },{
-      xtype: 'combo',
-      id: 'workorderadd_category',
-      fieldLabel: 'Category',
-      name: 'workorder_category_id',
-      width: 300,
-      editable: false,
-      forceSelection: true,
-      queryMode: 'local',
-      displayField: 'name',
-      valueField: 'id',
-      triggerAction: 'all',
-      store: catsStore,
-      value: 0,
-      listConfig: { minWidth: 200 }
     },
+    
     /*
     Removed for_rigging field
     {
@@ -379,47 +384,206 @@ var WorkOrderAddWin = new Ext.Window({
           if (pressed) btn.prev('hidden').setValue(btn.valueField);
         }}
       }]      
-    },{
-      xtype: 'fieldcontainer',
+    },
+    /*
+    {
+      itemId: 'taxstatus',
+      xtype: 'acbuttongroup',
+      name: 'tax_status',
+      value: '<?php echo $taxCategory; ?>',
+      fieldLabel: 'Tax Status',
+      items: [ 'Full Tax', 'GST Only', 'PST Only', 'No Tax' ],
+      listeners: { 
+        change: function(field){
+          //alert('Tax status changed');
+
+          var value = field.getValue();
+          var form = field.up('form');
+
+          var newval = value;
+          var oldval = 'null';
+
+          if (newval === 'No Tax')
+          {
+            Ext.getCmp('addwo_taxable_pst').setValue(0);
+            Ext.getCmp('addwo_taxable_gst').setValue(0);
+            //alert('No Tax - gst = 0');
+            //Ext.getCmp('colorCode').setValue('FF3333');
+            //alert('No Tax - color = FF3333');
+            //form.down('#addwo_taxable_pst').setValue(1);
+            //form.down('#addwo_taxable_gst').setValue(1);
+            form.down('#colorCode').setValue('FF3333');
+          }  
+          else if (newval === 'Full Tax')
+          {
+            //alert('Full Tax');
+            Ext.getCmp('addwo_taxable_pst').setValue(1);
+            //alert('Full Tax - pst = 1');
+            Ext.getCmp('addwo_taxable_gst').setValue(1);
+            //alert('Full Tax - gst = 1');
+            //Ext.getCmp('colorCode').setValue('33DD33');
+            //alert('Full Tax - color = 33DD33');
+            //form.down('#addwo_taxable_pst').setValue(0);
+            //form.down('#addwo_taxable_gst').setValue(0);
+            form.down('#colorCode').setValue('33DD33');
+          }
+          else if (newval === 'GST Only')
+          {
+            //alert('GST Tax');
+            Ext.getCmp('addwo_taxable_pst').setValue(0);
+            //alert('GST Tax - pst = 0');
+            Ext.getCmp('addwo_taxable_gst').setValue(1);
+            //alert('GST Tax - gst = 1');
+            //Ext.getCmp('colorCode').setValue('0000FF');
+            //alert('GST Tax - color = 0000FF');
+            //form.down('#addwo_taxable_pst').setValue(1);
+            //form.down('#addwo_taxable_gst').setValue(0);
+            form.down('#colorCode').setValue('0000FF');
+
+          } else if (newval === 'PST Only')
+          {
+            //alert('PST Tax');
+            Ext.getCmp('addwo_taxable_pst').setValue(1);
+            //alert('PST Tax - pst = 1');
+            Ext.getCmp('addwo_taxable_gst').setValue(0);
+            //alert('PST Tax - gst = 0');
+            //Ext.getCmp('colorCode').setValue('FFA500');
+            //alert('PST Tax - color = FFA500');
+            //form.down('#addwo_taxable_pst').setValue(0);
+            //form.down('#addwo_taxable_gst').setValue(1);
+            form.down('#colorCode').setValue('FFA500');
+          }
+        } 
+      }
+    },
+    */
+    /*
+    {
+      itemId: 'colorCode',
+      xtype: 'acbuttongroup',
+      //xtype: 'hidden',
       fieldLabel: 'Color Code',
+      name: 'color_code',
+      value: '33DD33',
+      width: 350,
+      //items: color_code_array
+      items: ['33DD33','0000FF','FFA500','FF3333']
+    },
+*/
+    {
+      xtype: 'fieldcontainer',
+      fieldLabel: 'Tax Status',
       layout: 'hbox',
-      width: 300,
+      width: 450,
       items: [{
+        id: 'colorCode',
         xtype: 'hidden',
         name: 'color_code',
-        value: 'FFFFFF',
+        value: 'Full Tax',
         listeners: { change: function(field, value){
           selBtn = field.next('button[valueField='+value+']');
           if (!selBtn.pressed) selBtn.toggle(true);
-        }}
-      }
-      <?php $colors = WorkorderPeer::getColorCodesArray(); ?>
-      <?php $i = 0; ?>
-      <?php foreach ($colors AS $colorcode => $colorname): ?>
-        <?php $i++; ?>
-        ,{
+          }}
+        }
+      ,{
           xtype: 'button',
           enableToggle: true,
           allowDepress: false,
-          <?php if ($colorname == 'White'): ?>
           pressed: true,
-          <?php endif; ?>
-          text: '<span style="display: inline-block; height: 15px; width: 16px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;',
-          toggleGroup: 'addwocolor',
-          cls: '<?php 
-              if ($i == 1) echo 'buttongroup-first';
-              else if ($i == count($colors)) echo 'buttongroup-last';
-              else echo 'buttongroup-middle';
-            ?>',
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #33DD33; margin-right: 8px;">&nbsp;</div>Full Tax',
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-first', 
           listeners: { 'toggle' : function(btn, pressed){
-            if (pressed) btn.prev('hidden').setValue(btn.valueField);
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('addwo_taxable_pst').setValue(1);
+              Ext.getCmp('addwo_taxable_gst').setValue(1);
+            }
           }},
-          valueField: '<?php echo $colorcode; ?>',
-          flex: 2
+          valueField: '33DD33',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: false,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #0000FF; margin-right: 8px;">&nbsp;</div>GST Only', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-middle',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('addwo_taxable_pst').setValue(0);
+              Ext.getCmp('addwo_taxable_gst').setValue(1);
+            }
+          }},
+          valueField: '0000FF',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: false,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #FFA500; margin-right: 8px;">&nbsp;</div>PST Only', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-middle',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('addwo_taxable_pst').setValue(1);
+              Ext.getCmp('addwo_taxable_gst').setValue(0);
+            }
+          }},
+          valueField: 'FFA500',
+          flex: 1
+        },{
+          xtype: 'button',
+          enableToggle: true,
+          allowDepress: false,
+          pressed: false,
+          text: '<div style="float: left; width: 15px; height: 15px; border: 1px solid #000; background-color: #FF3333; margin-right: 8px;">&nbsp;</div>No Tax', 
+          toggleGroup: 'addwotax',
+          cls: 'buttongroup-last',
+          listeners: { 'toggle' : function(btn, pressed){
+            if (pressed) {
+              btn.prev('hidden').setValue(btn.valueField);
+              Ext.getCmp('addwo_taxable_pst').setValue(0);
+              Ext.getCmp('addwo_taxable_gst').setValue(0);
+            }
+          }},
+          valueField: 'FF3333',
+          flex: 1
         }
-      <?php endforeach; ?>
       ]      
+    },
+
+    {
+      xtype: 'hidden',
+      id: 'addwo_taxable_pst',
+      fieldLabel: 'PST',
+      width: 350,
+      margin: '15 0 5 0',
+      name: 'taxable_pst',
+      value:  1,
+      items: [
+        { value: '0', text: 'Charge <?php echo sfConfig::get('app_pst_rate'); ?>% PST', flex: 5 },
+        { value: '1', text: 'PST Exempt', flex: 3 }
+      ]
     },{
+      xtype: 'hidden',
+      fieldLabel: 'GST',
+      itemId: 'addwo_taxable_gst',
+      id: 'addwo_taxable_gst',
+      width: 350,
+      name: 'taxable_gst',
+      value: 1,
+      items: [
+        { value: '0', text: 'Charge <?php echo sfConfig::get('app_gst_rate'); ?>% GST', flex: 5 },
+        { value: '1', text: 'GST Exempt', flex: 3 }
+      ]
+    },
+    /*
+    {
       xtype: 'fieldcontainer',
       fieldLabel: 'PST',
       layout: 'hbox',
@@ -496,7 +660,28 @@ var WorkOrderAddWin = new Ext.Window({
           if (pressed) btn.prev('hidden').setValue(btn.valueField);
         }}
       }]        
-    },{
+    },
+    */
+
+
+    {
+      xtype: 'combo',
+      id: 'workorderadd_category',
+      fieldLabel: 'Category',
+      name: 'workorder_category_id',
+      width: 300,
+      editable: false,
+      forceSelection: true,
+      queryMode: 'local',
+      displayField: 'name',
+      valueField: 'id',
+      triggerAction: 'all',
+      store: catsStore,
+      value: 0,
+      listConfig: { minWidth: 200 }
+    },
+
+    {
       xtype: 'numberfield',
       fieldLabel: 'Shop Supplies %',
       name: 'shop_supplies_surcharge',
@@ -913,7 +1098,7 @@ var filter = new Ext.Panel({
           xtype: 'button',
           enableToggle: true,
           allowDepress: false,
-          text: '<span style="display: inline-block; height: 15px; width: 13px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;',
+          text: '<span style="display: inline-block; height: 15px; width: 13px; margin-left: 10px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;',
           toggleGroup: 'color',
           cls: '<?php 
               if ($i == count($colors)) echo 'buttongroup-last';

@@ -76,6 +76,8 @@ class PartInstanceMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('BROKER_FEES', 'BrokerFees', 'DECIMAL', true, 8);
 
+		$tMap->addColumn('SUB_CONTRACTOR_FLG', 'SubContractorFlg', 'VARCHAR', true, 1);
+
 		$tMap->addColumn('UNIT_PRICE', 'UnitPrice', 'DECIMAL', true, 8);
 
 		$tMap->addColumn('UNIT_COST', 'UnitCost', 'DECIMAL', false, 8);

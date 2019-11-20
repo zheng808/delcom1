@@ -92,6 +92,9 @@ class WorkorderExpenseMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null);
 
+		$tMap->addColumn('SUB_CONTRACTOR_FLG', 'SubContractorFlg', 'VARCHAR', true, 1);
+
+
 	} // doBuild()
 
 } // WorkorderExpenseMapBuilder

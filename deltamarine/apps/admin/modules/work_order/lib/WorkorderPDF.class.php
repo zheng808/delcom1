@@ -442,7 +442,7 @@ class WorkorderPDF extends sfTCPDF
           ($idx == 'total' ? $this->SetFillColor(206, 220, 255) : $this->SetFillColor(221, 235, 255));
           $this->Cell(0, $this->default_fontsize/1.5, number_format($totals[$idx],2), 1, 1, 'R', 1);
       }
-    }
+    }//drawTableFooter()-------------------------------------------------------
 
 
 
@@ -486,7 +486,7 @@ class WorkorderPDF extends sfTCPDF
           $this->drawRow(array('Parts Total', $totals['subtotal']), $colwidths);
         }
       }
-    }
+    }//drawPartsTable()--------------------------------------------------------
 
 
     function drawLabourTable($labours, $totals, $nodetail)
@@ -523,7 +523,7 @@ class WorkorderPDF extends sfTCPDF
           $this->drawRow(array('Labour Total', $totals['subtotal']), $colwidths);
         }
       }
-    }
+    }//drawLabourTable()-------------------------------------------------------
 
 
 
@@ -552,7 +552,7 @@ class WorkorderPDF extends sfTCPDF
           $this->drawRow(array('Expenses Total', $totals['subtotal']), $colwidths);
         }
       }
-    }
+    }//drawExpensesTable()-----------------------------------------------------
   
     function drawSubtotals($number, $totals, $progress_totals, $paid = 0)
     {
@@ -750,7 +750,7 @@ class WorkorderPDF extends sfTCPDF
         $this->Cell(0, $this->section_font/1.8, ' '.$this->current_section_title.($continued ? ' (Cont\'d)' : ''), 1, 1, 'L', 1);
         $this->SetFillColor(255);
         $this->SetFont("Arial", "", $this->default_fontsize);
-    }
+    }//drawSectionHeader()-----------------------------------------------------
 
     //OUTPUTS the various bits for a particular section (workorder item)
     function generateSection($number, $title, $section, $totals, $billable, $invoice_dates)
@@ -889,6 +889,16 @@ class WorkorderPDF extends sfTCPDF
           $gst  = $part_factor * ($this->settings['taxable_gst'] ? $part->getGstTotal(false) : 0);
           $batt = round($part_factor * $part->getBatteryLevyTotal(false), 2);
           $env  = round($part_factor * $part->getEnviroLevyTotal(false), 2);
+
+          sfContext::getInstance()->getLogger()->info('Sub: '.$sub);
+          sfContext::getInstance()->getLogger()->info('PST: '.$pst);
+          sfContext::getInstance()->getLogger()->info('GST: '.$gst);
+          sfContext::getInstance()->getLogger()->info('Enviro: '.$env);
+          sfContext::getInstance()->getLogger()->info('Batt: '.$batt);
+
+          sfContext::getInstance()->getLogger()->info('pst total: '.$part->getPstTotal(false));
+        
+
           $totals['sections'][$title]['parts']['subtotal']     += $sub; 
           $totals['sections'][$title]['parts']['hst']          += $hst;
           $totals['sections'][$title]['parts']['pst']          += $pst;
@@ -1218,7 +1228,7 @@ class WorkorderPDF extends sfTCPDF
         $this->drawSubtotals($number, $totals['sections'][$title], $new_subtotals, $section->getAmountPaid());
 
         return $totals;
-    }
+    }//generateSection()-------------------------------------------------------
 
     private function _recurse_sections($parent, $task_prefix)
     {
@@ -1247,7 +1257,7 @@ class WorkorderPDF extends sfTCPDF
       }
 
       return $sections;
-    }
+    }//_recurse_sections()-----------------------------------------------------
 
     private function _recurse_billables($parent, $billables, $active_billable = null)
     {
@@ -1294,7 +1304,7 @@ class WorkorderPDF extends sfTCPDF
         }
       }
       return $out_billables;
-    }
+    }//_recurse_billables()----------------------------------------------------
 
     private function _recurse_other_billables($parent, $billables, $task_prefix, $active_billable = null)
     {
@@ -1351,7 +1361,7 @@ class WorkorderPDF extends sfTCPDF
       }
 
       return array($out_sections, $out_billables);
-    }
+    }//_recurse_other_billables()----------------------------------------------
 
 
     //generates an ordered, flat array of sections that need to be displayed, indexed by title
@@ -1383,7 +1393,7 @@ class WorkorderPDF extends sfTCPDF
       }
 
       return array($sections, $section_billables);
-    }
+    }//loadSections()----------------------------------------------------------
 
     public function generateSections($sections, $section_billables)
     {
@@ -1404,7 +1414,7 @@ class WorkorderPDF extends sfTCPDF
       }
 
       return $totals;
-    }
+    }//generateSections()------------------------------------------------------
 
     public function generateSummary($sections, $totals)
     {
@@ -1759,7 +1769,7 @@ class WorkorderPDF extends sfTCPDF
       $this->Cell($totals_width, $this->totals_font, number_format($total_total,2), 1, 1, 'R', 1);
 
       return $total_total;
-    }
+    }//generateSummary()-------------------------------------------------------
 
     public function generatePayments($total)
     {
@@ -1817,7 +1827,7 @@ class WorkorderPDF extends sfTCPDF
           $this->Cell($totals_width, $this->totals_font, number_format($owing,2), 1, 1, 'R', 1);
         }
       }
-    }
+    }//generatePayments()------------------------------------------------------
 
     public function autoSizeTable($items, $cols)
     {
@@ -1869,7 +1879,7 @@ class WorkorderPDF extends sfTCPDF
 
       //perform font scaling
       return $this->calculateFontSizes($max_info);
-    }
+    }//autoSizeTable()---------------------------------------------------------
 
     function _is_new($obj, $invoice_dates)
     {
@@ -1898,7 +1908,7 @@ class WorkorderPDF extends sfTCPDF
       }
 
       return array($skip, $is_new);
-    }
+    }//_is_new()---------------------------------------------------------------
 
     function calculateFontSizes($columns)
     {

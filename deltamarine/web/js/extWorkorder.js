@@ -388,8 +388,13 @@ Ext.define('Ext.ux.WorkorderPrintWin', {
 
     me.form.params.id = me.workorder_id;
 
-    if (me.pst_exempt) me.down('#pstfield').setValue('0');
-    if (me.gst_exempt) me.down('#gstfield').setValue('0');
+    if (me.pst_exempt) {
+      me.down('#pstfield').setValue('0');
+    } else {
+      me.down('#pstfield').setValue('1');
+    }
+
+    if (me.gst_exempt) me.down('#gstfield').setValue('0'); else me.down('#gstfield').setValue('1'); 
 
     if (me.pst_rate)   me.down('#pstfield button').setText('Charge ' + me.pst_rate + '% PST');
     if (me.gst_rate)   me.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
@@ -432,12 +437,13 @@ Ext.define('Ext.ux.WorkorderPrintWin', {
     var r = f.findRecordByValue(newval);
 
     if (f.getValue() && r){
-      me.form.down('#pstfield').setValue(r.data.taxable_pst);
-      me.form.down('#gstfield').setValue(r.data.taxable_gst);
+      //me.form.down('#pstfield').setValue(r.data.taxable_pst);
+      //me.form.down('#gstfield').setValue(r.data.taxable_gst);
       me.form.down('#shopfield').setValue(newval == 'cust');
       me.form.down('#mooragefield').setValue(newval == 'cust');
       me.form.down('#discountsfield').setValue(newval == 'cust');
     }
+
   },
 
   progressChange: function(f,newval,oldval){
@@ -1171,6 +1177,7 @@ Ext.define('Ext.ux.PartCustomEditWin', {
   gst_exempt: false,
   workorder_id: null,
   workorder_estimate: false,
+  subContractorFlg: 'N',
 
   doneSetup: function(){
     var me = this;
@@ -1192,6 +1199,8 @@ Ext.define('Ext.ux.PartCustomEditWin', {
         }
       }         
     }
+
+    me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
 
     if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
     if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
@@ -1303,6 +1312,29 @@ Ext.define('Ext.ux.PartCustomEditWin', {
       name: 'custom_origin',
       fieldLabel: 'Country of Origin',
       anchor: '-25'
+    },{
+      itemId: 'sub_contractor_flg',
+      xtype: 'acbuttongroup',
+      fieldLabel: 'Sub Contractor',
+      anchor: '-25',
+      id: 'sub_contractor_flg',
+      name: 'sub_contractor_flg', 
+      value: subContractorFlg,
+      items: [
+        { value: 'Y', text: 'Yes', flex: 4 },
+        { value: 'N', text: 'No', flex: 4 }
+      ],
+      listeners: { 
+        change: function(field){
+          var value = field.getValue();
+          var form = field.up('form');
+
+         if (value == 'Y')
+         {
+          form.down('#pstfield').setValue(1);              
+        } 
+        }
+      }
     },{      
       itemId: 'pstfield',
       xtype: 'acbuttongroup',
@@ -1311,8 +1343,8 @@ Ext.define('Ext.ux.PartCustomEditWin', {
       name: 'taxable_pst',
       value: '1',
       items: [
-          { value: '1', text: 'Charge PST', flex: 5 },
-          { value: '0', text: 'PST Exempt', flex: 3 }
+          { value: '1', text: 'Charge PST', flex: 4 },
+          { value: '0', text: 'PST Exempt', flex: 4 }
       ]
     },{
       itemId: 'gstfield',
@@ -1322,8 +1354,8 @@ Ext.define('Ext.ux.PartCustomEditWin', {
       name: 'taxable_gst',
       value: '1',
       items: [
-          { value: '1', text: 'Charge GST', flex: 5 },
-          { value: '0', text: 'GST Exempt', flex: 3 }
+          { value: '1', text: 'Charge GST', flex: 4 },
+          { value: '0', text: 'GST Exempt', flex: 4 }
       ]
     },{
       fieldLabel: 'Internal Notes',
@@ -1579,7 +1611,7 @@ Ext.define('Ext.ux.PartEditWin', {
 
   title: 'Edit Part',
   width: 525,
-  //height: 800,
+  //height: 820,
   autoShow: true,
   autoHeight: true,
   closeAction: 'destroy',
@@ -1590,6 +1622,7 @@ Ext.define('Ext.ux.PartEditWin', {
   gst_exempt: false,
   workorder_id: null,
   workorder_estimate: false,
+  subContractorFlg: 'N',
 
   doneSetup: function(){
     var me = this;
@@ -1601,6 +1634,8 @@ Ext.define('Ext.ux.PartEditWin', {
 
     if (me.pst_rate)   me.form.down('#pstfield button').setText('Charge ' + me.pst_rate + '% PST');
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
+
+    me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
 
     me.form.down('#estimate').setValue(me.workorder_estimate ? '1' : '0');
     me.form.down('#statusaction').setValue(me.workorder_estimate ? 'estimate' : 'delivered');
@@ -1735,6 +1770,7 @@ Ext.define('Ext.ux.PartEditWin', {
     formLoad: function(r){
       var me = this;
           
+
       me.params.units = r.units;
       me.params.instance_id = (r.instance_id ? r.instance_id : 'new');
       me.params.part_variant_id = (r.part_variant_id ? r.part_variant_id : null);
@@ -1799,6 +1835,7 @@ Ext.define('Ext.ux.PartEditWin', {
       }
 
       me.down('#info_location').setValue((r.location != '') ? '<strong>'+r.location+'</strong>' : '<em><span style="color: #777;">Not Set</span></em>');
+
   
     },
 
@@ -2171,26 +2208,50 @@ Ext.define('Ext.ux.PartEditWin', {
           margin: '0 0 0 25',
           flex: 4,
           items: [{
+            itemId: 'sub_contractor_flg',
+            xtype: 'acbuttongroup',
+            fieldLabel: 'Sub Contractor',
+            labelWidth: 60,
+            id: 'sub_contractor_flg',
+            name: 'sub_contractor_flg', 
+            value: subContractorFlg,
+            items: [
+              { value: 'Y', text: 'Yes', flex: 4 },
+              { value: 'N', text: 'No', flex: 4 }
+            ],
+            listeners: { 
+              change: function(field){
+                var value = field.getValue();
+                var form = field.up('form');
+  
+               if (value == 'Y')
+               {
+                form.down('#pstfield').setValue(1);              
+              } 
+              }
+            }
+          },{
             xtype: 'acbuttongroup',
             itemId: 'pstfield',
+            id: 'pstfield',
             fieldLabel: 'PST',
             name: 'taxable_pst',
-            labelWidth: 40,
+            labelWidth: 60,
             value: '1',
             items: [
-              { value: '1', text: 'Charge PST', flex: 5 },
-              { value: '0', text: 'PST Exempt', flex: 3 }
+              { value: '1', text: 'Charge PST', flex: 4 },
+              { value: '0', text: 'PST Exempt', flex: 4 }
             ]
           },{
             xtype: 'acbuttongroup',
             fieldLabel: 'GST',
             itemId: 'gstfield',
             name: 'taxable_gst',
-            labelWidth: 40,
+            labelWidth: 60,
             value: '1',
             items: [
-              { value: '1', text: 'Charge GST', flex: 5 },
-              { value: '0', text: 'GST Exempt', flex: 3 }
+              { value: '1', text: 'Charge GST', flex: 4 },
+              { value: '0', text: 'GST Exempt', flex: 4 }
             ]
           }]
         }]
@@ -2218,6 +2279,7 @@ Ext.define('Ext.ux.ExpenseEditWin', {
   gst_exempt: false,
   pst_rate: null,
   gst_rate: null,
+  subContractorFlg: 'N',
 
   doneSetup: function(){
     var me = this;
@@ -2238,6 +2300,8 @@ Ext.define('Ext.ux.ExpenseEditWin', {
         }
       }         
     }
+
+    me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
 
     if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
     if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
@@ -2335,6 +2399,29 @@ Ext.define('Ext.ux.ExpenseEditWin', {
           { value: '0', text: 'Invoice Only', flex: 4 },
           { value: '2', text: 'Estimate & Invoice', flex: 6 },
       ]
+    },{
+      itemId: 'sub_contractor_flg',
+      xtype: 'acbuttongroup',
+      fieldLabel: 'Sub Contractor',
+      width: 300,
+      id: 'sub_contractor_flg',
+      name: 'sub_contractor_flg', 
+      value: subContractorFlg,
+      items: [
+        { value: 'Y', text: 'Yes'},
+        { value: 'N', text: 'No'}
+      ],
+      listeners: { 
+        change: function(field){
+          var value = field.getValue();
+          var form = field.up('form');
+
+         if (value == 'Y')
+         {
+          form.down('#pstfield').setValue(1);              
+        } 
+        }
+      }
     },{
       itemId: 'pstfield',
       xtype: 'acbuttongroup',

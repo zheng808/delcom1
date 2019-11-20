@@ -89,6 +89,12 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	protected $origin;
 
 	/**
+	 * The value for the sub_contractor_flg field.
+	 * @var        string
+	 */
+	protected $sub_contractor_flg;
+
+	/**
 	 * The value for the taxable_hst field.
 	 * Note: this column has a database default value of: '0'
 	 * @var        string
@@ -272,6 +278,17 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	public function getOrigin()
 	{
 		return $this->origin;
+	}
+
+	
+	/**
+	 * Get the [sub_contractor_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getSubContractorFlg()
+	{
+		return $this->sub_contractor_flg;
 	}
 
 	/**
@@ -571,6 +588,28 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	} // setOrigin()
 
 	/**
+	 * Set the value of [sub_contractor_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     WorkorderExpense The current object (for fluent API support)
+	 */
+	public function setSubContractorFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->sub_contractor_flg !== $v) {
+			$this->sub_contractor_flg = $v;
+			$this->modifiedColumns[] = WorkorderExpensePeer::SUB_CONTRACTOR_FLG;
+		}
+
+		return $this;
+	} // setSubContractorFlg()
+
+	
+
+	/**
 	 * Set the value of [taxable_hst] column.
 	 * 
 	 * @param      string $v new value
@@ -690,7 +729,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(WorkorderExpensePeer::ESTIMATE,WorkorderExpensePeer::INVOICE,WorkorderExpensePeer::TAXABLE_HST,WorkorderExpensePeer::TAXABLE_GST,WorkorderExpensePeer::TAXABLE_PST))) {
+			if (array_diff($this->modifiedColumns, array(WorkorderExpensePeer::ESTIMATE,WorkorderExpensePeer::INVOICE,WorkorderExpensePeer::TAXABLE_HST,WorkorderExpensePeer::TAXABLE_GST,WorkorderExpensePeer::TAXABLE_PST,WorkorderExpensePeer::SUB_CONTRACTOR_FLG))) {
 				return false;
 			}
 
@@ -711,6 +750,10 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			}
 
 			if ($this->taxable_pst !== '0') {
+				return false;
+			}
+
+			if ($this->sub_contractor_flg !== 'N') {
 				return false;
 			}
 
@@ -751,6 +794,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			$this->taxable_gst = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->taxable_pst = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+			$this->sub_contractor_flg = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -760,7 +804,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 15; // 15 = WorkorderExpensePeer::NUM_COLUMNS - WorkorderExpensePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + WorkorderExpensePeer::NUM_COLUMNS - WorkorderExpensePeer::NUM_LAZY_LOAD_COLUMNS;
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating WorkorderExpense object", $e);
@@ -1161,6 +1205,9 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			case 14:
 				return $this->getCreatedAt();
 				break;
+			case 15:
+				return $this->getSubContractorFlg();
+				break;
 			default:
 				return null;
 				break;
@@ -1197,6 +1244,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			$keys[12] => $this->getTaxableGst(),
 			$keys[13] => $this->getTaxablePst(),
 			$keys[14] => $this->getCreatedAt(),
+			$keys[15] => $this->getSubContractorFlg(),
 		);
 		return $result;
 	}
@@ -1273,6 +1321,9 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			case 14:
 				$this->setCreatedAt($value);
 				break;
+			case 15:
+				$this->setSubContractorFlg($value);
+				break;
 		} // switch()
 	}
 
@@ -1312,6 +1363,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setTaxableGst($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setTaxablePst($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setSubContractorFlg($arr[$keys[15]]);
 	}
 
 	/**
@@ -1338,6 +1390,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderExpensePeer::TAXABLE_GST)) $criteria->add(WorkorderExpensePeer::TAXABLE_GST, $this->taxable_gst);
 		if ($this->isColumnModified(WorkorderExpensePeer::TAXABLE_PST)) $criteria->add(WorkorderExpensePeer::TAXABLE_PST, $this->taxable_pst);
 		if ($this->isColumnModified(WorkorderExpensePeer::CREATED_AT)) $criteria->add(WorkorderExpensePeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(WorkorderExpensePeer::SUB_CONTRACTOR_FLG)) $criteria->add(WorkorderExpensePeer::SUB_CONTRACTOR_FLG, $this->sub_contractor_flg);
 
 		return $criteria;
 	}
@@ -1420,6 +1473,7 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 
 		$copyObj->setCreatedAt($this->created_at);
 
+		$copyObj->setSubContractorFlg($this->sub_contractor_flg);
 
 		$copyObj->setNew(true);
 

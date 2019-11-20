@@ -448,11 +448,19 @@ class WorkorderPeer extends BaseWorkorderPeer
   public static function getColorCodesJSArray($include_any = false)
   {
     //taken from HTML color codes
-    return "[".($include_any ? "['','All']," : '')."['FFFFFF', 'White'],['0000FF','Blue'],['000000','Black'],['33DD33','Green'],['FF3333','Red'],['FFFF00','Yellow'],['FFA500','Orange'],['A52A2A','Brown']]";
+    return "[".($include_any ? "['','All']," : '')."[['33DD33','Green'],'0000FF','Blue'],['FFA500','Orange'],['FF3333','Red']]";
+    //return "[".($include_any ? "['','All']," : '')."['FFFFFF', 'White'],['0000FF','Blue'],['000000','Black'],['33DD33','Green'],['FF3333','Red'],['FFFF00','Yellow'],['FFA500','Orange'],['A52A2A','Brown']]";
   }
 
   public static function getColorCodesArray(){
 
+    return array(
+      '33DD33' => 'Green',
+      '0000FF' => 'Blue',
+      'FFA500' => 'Orange',
+      'FF3333' => 'Red'
+    );
+    /*
     return array(
       'FFFFFF' => 'White',
       '0000FF' => 'Blue',
@@ -463,6 +471,7 @@ class WorkorderPeer extends BaseWorkorderPeer
       'FFA500' => 'Orange',
       'A52A2A' => 'Brown'
     );
+    */
   }
 
 }
