@@ -137,6 +137,7 @@ var partStatus = 'delivered';
 var partShippingFees = 0;
 var partBrokerFees = 0;
 var subContractorFlg = 'N';
+var enviroTaxableFlg = 'N';
 var partQuantity = 1;
 var partTaskId = 0;
 var minQuantity = 0;
@@ -484,6 +485,9 @@ function showPartEditWindow(inst_id, wo, data){
     maxQuantity = data.max_quantity;
     partQuantity = 1;
     subContractorFlg = 'N'; //data.subContractorFlg
+    enviroTaxableFlg = 'N';
+
+    /* TODO: load value for flags from data */
 
     partTaskId = woTaskId;
 
@@ -503,13 +507,13 @@ function showPartEditWindow(inst_id, wo, data){
     Ext.getCmp('battery_levy').setValue(partBatteryLevy);
     Ext.getCmp('part_quantity').setValue(partQuantity);
     Ext.getCmp('sub_contractor_flg').setValue(subContractorFlg);
+    Ext.getCmp('enviro_taxable_flg').setValue(enviroTaxableFlg);
 
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
 
   }
    
-  
 };//showPartEditWindow()-------------------------------------------------------
 
 
@@ -518,7 +522,7 @@ function showPartEditWindow(inst_id, wo, data){
 
 var PartAddSelectedWin = new Ext.Window({
   width: 550,
-  height: 595,
+  height: 610,
   border: false,
   resizable: false,
   modal: true,
@@ -748,6 +752,21 @@ var PartAddSelectedWin = new Ext.Window({
             }
           }
         },{
+            temId: 'enviro_taxable_flg',
+            xtype: 'acbuttongroup',
+            fieldLabel: 'Enviro PST',
+            anchor: '-100',
+            id: 'enviro_taxable_flg',
+            name: 'enviro_taxable_flg',
+            value: enviroTaxableFlg,
+            items: [
+              { value: 'Y', text: 'Yes' },
+              { value: 'N', text: 'No' }
+            ]
+          },
+          
+          
+          {
           xtype: 'numberfield',
           name: 'shipping_fees',
           id: 'shipping_fees',
@@ -765,7 +784,9 @@ var PartAddSelectedWin = new Ext.Window({
           minValue: 0,
           forcePrecision: true,
           anchor: '-250'
-        },{
+        },
+        
+        {
           xtype: 'numberfield',
           name: 'enviro_levy',
           id: 'enviro_levy',
@@ -776,7 +797,42 @@ var PartAddSelectedWin = new Ext.Window({
           anchor: '-250',
           forcePrecision: true,
           allowBlank: false
-        },{
+        },
+        
+       /*
+        {
+          xtype: 'fieldcontainer',
+          //fieldLabel: 'Relaunch Date & Time',
+          layout: 'hbox',
+          items: [{
+            xtype: 'numberfield',
+            name: 'enviro_levy',
+            id: 'enviro_levy',
+            minValue: 0,
+            maxValue: 99999,
+            fieldLabel: 'Environment Levy',
+            value: partEnviroLevy,
+            anchor: '-250',
+            forcePrecision: true,
+            allowBlank: false
+          },{
+            temId: 'sub_contractor_flg',
+            xtype: 'acbuttongroup',
+            fieldLabel: 'Sub Contractor',
+            anchor: '-100',
+            id: 'sub_contractor_flg',
+            name: 'sub_contractor_flg',
+            value: subContractorFlg,
+            items: [
+              { value: 'Y', text: 'Yes' },
+              { value: 'N', text: 'No' }
+            ]
+          }]
+        },
+        */
+        
+        
+        {
           xtype: 'numberfield',
           name: 'battery_levy',
           id: 'battery_levy',
@@ -851,6 +907,7 @@ var PartAddSelectedWin = new Ext.Window({
         var woBrokerFees = Ext.getCmp('broker_fees').getValue();
         var woUnitPrice = Ext.getCmp('unit_price').getValue();
         var subContractorFlg = Ext.getCmp('sub_contractor_flg').getValue();
+        var enviroTaxableFlg = Ext.getCmp('enviro_taxable_flg').getValue();
 
         if (partAvailable >= partQuantity || partStatus == 'estimate'){
 
@@ -877,6 +934,7 @@ var PartAddSelectedWin = new Ext.Window({
                 taxable_gst: partGstTaxed,
                 statusaction: partStatus,
                 sub_contractor_flg : subContractorFlg,
+                enviro_taxable_flg : enviroTaxableFlg,
               },
               success: function(){
                 Ext.Msg.hide();
@@ -929,6 +987,7 @@ var PartAddSelectedWin = new Ext.Window({
         var woUnitPrice = Ext.getCmp('unit_price').getValue();
         var woEnviroLevy = Ext.getCmp('enviro_levy').getValue();
         var subContractorFlg = Ext.getCmp('sub_contractor_flg').getValue();
+        var enviroTaxableFlg = Ext.getCmp('enviro_taxable_flg').getValue();
 
         var woQuantity = partQuantity;
 
@@ -957,6 +1016,7 @@ var PartAddSelectedWin = new Ext.Window({
                 taxable_gst: partGstTaxed,
                 statusaction: partStatus,
                 sub_contractor_flg : subContractorFlg,
+                enviro_taxable_flg : enviroTaxableFlg,
               },
               success: function(){
                 Ext.Msg.hide();

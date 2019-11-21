@@ -1229,6 +1229,8 @@ class work_orderActions extends sfActions
         sfContext::getInstance()->getLogger()->info('broker_fees: '.$request->getParameter('broker_fees'));
         sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
         sfContext::getInstance()->getLogger()->info('sub_contractor_flg: '.$request->getParameter('sub_contractor_flg'));
+        sfContext::getInstance()->getLogger()->info('enviro_taxable_flg: '.$request->getParameter('enviro_taxable_flg'));
+        
         //sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
       }
 
@@ -1245,6 +1247,7 @@ class work_orderActions extends sfActions
       $instance->setBrokerFees($request->getParameter('broker_fees'));
       $instance->setShippingFees($request->getParameter('shipping_fees'));
       $instance->setSubContractorFlg($request->getParameter('sub_contractor_flg'));
+      $instance->setEnviroTaxableFlg($request->getParameter('enviro_taxable_flg'));
       
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
@@ -1461,7 +1464,8 @@ class work_orderActions extends sfActions
                   'available'           => $var->getQuantity('available', false),
                   'min_quantity'        => $var->getQuantity('minimum', false),
                   'max_quantity'        => $var->getQuantity('maximum', false),
-                  'sub_contractor_flg'  => $inst->getSubContractorFlg()
+                  'sub_contractor_flg'  => $inst->getSubContractorFlg(),
+                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg()
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
@@ -1598,6 +1602,18 @@ class work_orderActions extends sfActions
       sfContext::getInstance()->getLogger()->info($message.$subContractorFlg);
     }
 
+    $enviroTaxableFlg = 'N';
+    if ($request->getParameter('enviro_taxable_flg'))
+    {
+      $enviroTaxableFlg = $request->getParameter('enviro_taxable_flg');
+    }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'Done getting enviro_taxable_flg - ';
+      sfContext::getInstance()->getLogger()->info($message.$enviroTaxableFlg);
+    }
+
 
     if (!(((float) $request->getParameter('quantity')) > 0))
     {
@@ -1625,6 +1641,7 @@ class work_orderActions extends sfActions
       $instance->setBrokerFees($brokerFees);
       $instance->setShippingFees($shippingFees);
       $instance->setSubContractorFlg($subContractorFlg);
+      $instance->setEnviroTaxableFlg($enviroTaxableFlg);
       //$instance->setUnitCost($request->getParameter('cost'));
       //$instance->setUnitCost($request->getParameter('unit_cost'));
       $instance->setUnitCost($unitCost);
@@ -1702,7 +1719,9 @@ class work_orderActions extends sfActions
                   'serial_number'       => (string) $inst->getSerialNumber(),
                   'internal_notes'      => $inst->getInternalNotes(),
                   'who'                 => $who,
-                  'sub_contractor_flg'  => $inst->getSubContractorFlg()
+                  'sub_contractor_flg'  => $inst->getSubContractorFlg(),
+                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg()
+                  
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");

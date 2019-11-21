@@ -1178,6 +1178,7 @@ Ext.define('Ext.ux.PartCustomEditWin', {
   workorder_id: null,
   workorder_estimate: false,
   subContractorFlg: 'N',
+  enviroTaxableFlg: 'N',
 
   doneSetup: function(){
     var me = this;
@@ -1201,6 +1202,7 @@ Ext.define('Ext.ux.PartCustomEditWin', {
     }
 
     me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
+    me.form.down('#enviro_taxable_flg').setValue(me.enviroTaxableFlg);
 
     if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
     if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
@@ -1335,6 +1337,18 @@ Ext.define('Ext.ux.PartCustomEditWin', {
         } 
         }
       }
+    },{
+      itemId: 'enviro_taxable_flg',
+      xtype: 'acbuttongroup',
+      fieldLabel: 'Enviro PST',
+      anchor: '-25',
+      id: 'enviro_taxable_flg',
+      name: 'enviro_taxable_flg', 
+      value: enviroTaxableFlg,
+      items: [
+        { value: 'Y', text: 'Yes', flex: 4 },
+        { value: 'N', text: 'No', flex: 4 }
+      ]
     },{      
       itemId: 'pstfield',
       xtype: 'acbuttongroup',
@@ -1623,6 +1637,7 @@ Ext.define('Ext.ux.PartEditWin', {
   workorder_id: null,
   workorder_estimate: false,
   subContractorFlg: 'N',
+  enviroTaxableFlg: 'N',
 
   doneSetup: function(){
     var me = this;
@@ -1636,6 +1651,7 @@ Ext.define('Ext.ux.PartEditWin', {
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
 
     me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
+    me.form.down('#enviro_taxable_flg').setValue(me.enviroTaxableFlg);
 
     me.form.down('#estimate').setValue(me.workorder_estimate ? '1' : '0');
     me.form.down('#statusaction').setValue(me.workorder_estimate ? 'estimate' : 'delivered');
@@ -2230,6 +2246,18 @@ Ext.define('Ext.ux.PartEditWin', {
               } 
               }
             }
+          },{
+            itemId: 'enviro_taxable_flg',
+            xtype: 'acbuttongroup',
+            fieldLabel: 'Enviro PST',
+            labelWidth: 60,
+            id: 'enviro_taxable_flg',
+            name: 'enviro_taxable_flg', 
+            value: enviroTaxableFlg,
+            items: [
+              { value: 'Y', text: 'Yes', flex: 4 },
+              { value: 'N', text: 'No', flex: 4 }
+            ]
           },{
             xtype: 'acbuttongroup',
             itemId: 'pstfield',

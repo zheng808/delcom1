@@ -889,6 +889,13 @@ class WorkorderPDF extends sfTCPDF
           $gst  = $part_factor * ($this->settings['taxable_gst'] ? $part->getGstTotal(false) : 0);
           $batt = round($part_factor * $part->getBatteryLevyTotal(false), 2);
           $env  = round($part_factor * $part->getEnviroLevyTotal(false), 2);
+          $envpst = 0.00;
+
+          if ($part->getEnviroTaxableFlg() == 'Y')
+          {
+            $envpst = $env * 7/100;
+            $pst = $pst + $envpst;
+          }
 
           sfContext::getInstance()->getLogger()->info('Sub: '.$sub);
           sfContext::getInstance()->getLogger()->info('PST: '.$pst);
@@ -897,6 +904,11 @@ class WorkorderPDF extends sfTCPDF
           sfContext::getInstance()->getLogger()->info('Batt: '.$batt);
 
           sfContext::getInstance()->getLogger()->info('pst total: '.$part->getPstTotal(false));
+
+          sfContext::getInstance()->getLogger()->info('Enviro Taxable Flg: '.$part->getEnviroTaxableFlg());
+          sfContext::getInstance()->getLogger()->info('Enviro PST: '.$envpst);
+          sfContext::getInstance()->getLogger()->info('PST: '.$pst);
+
         
 
           $totals['sections'][$title]['parts']['subtotal']     += $sub; 

@@ -78,6 +78,8 @@ class PartInstanceMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('SUB_CONTRACTOR_FLG', 'SubContractorFlg', 'VARCHAR', true, 1);
 
+		$tMap->addColumn('ENVIRO_TAXABLE_FLG', 'EnviroTaxableFlg', 'VARCHAR', true, 1);
+
 		$tMap->addColumn('UNIT_PRICE', 'UnitPrice', 'DECIMAL', true, 8);
 
 		$tMap->addColumn('UNIT_COST', 'UnitCost', 'DECIMAL', false, 8);

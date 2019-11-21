@@ -19,7 +19,7 @@ abstract class BasePartInstancePeer {
 	const CLASS_DEFAULT = 'lib.model.PartInstance';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 26;
+	const NUM_COLUMNS = 27;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -42,6 +42,9 @@ abstract class BasePartInstancePeer {
 	/** the column name for the SUB_CONTRACTOR_FLG field */
 	const SUB_CONTRACTOR_FLG = 'part_instance.SUB_CONTRACTOR_FLG';
 
+	/** the column name for the ENVIRO_TAXABLE_FLG field */
+	const ENVIRO_TAXABLE_FLG = 'part_instance.ENVIRO_TAXABLE_FLG';
+	
 	/** the column name for the BROKER_FEES field */
 	const BROKER_FEES = 'part_instance.BROKER_FEES';
 
@@ -123,10 +126,10 @@ abstract class BasePartInstancePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PartVariantId', 'CustomName', 'CustomOrigin', 'Quantity', 'BrokerFees', 'ShippingFees', 'UnitPrice', 'UnitCost', 'TaxableHst', 'TaxableGst', 'TaxablePst', 'EnviroLevy', 'BatteryLevy', 'SupplierOrderItemId', 'WorkorderItemId', 'WorkorderInvoiceId', 'AddedBy', 'Estimate', 'Allocated', 'Delivered', 'SerialNumber', 'DateUsed', 'IsInventoryAdjustment', 'InternalNotes', 'SubContractorFlg', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partVariantId', 'customName', 'customOrigin', 'quantity', 'BrokerFees', 'ShippingFees', 'unitPrice', 'unitCost', 'taxableHst', 'taxableGst', 'taxablePst', 'enviroLevy', 'batteryLevy', 'supplierOrderItemId', 'workorderItemId', 'workorderInvoiceId', 'addedBy', 'estimate', 'allocated', 'delivered', 'serialNumber', 'dateUsed', 'isInventoryAdjustment', 'internalNotes', 'subContractorFlg', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PART_VARIANT_ID, self::CUSTOM_NAME, self::CUSTOM_ORIGIN, self::QUANTITY, self::BROKER_FEES, self::SHIPPING_FEES, self::UNIT_PRICE, self::UNIT_COST, self::TAXABLE_HST, self::TAXABLE_GST, self::TAXABLE_PST, self::ENVIRO_LEVY, self::BATTERY_LEVY, self::SUPPLIER_ORDER_ITEM_ID, self::WORKORDER_ITEM_ID, self::WORKORDER_INVOICE_ID, self::ADDED_BY, self::ESTIMATE, self::ALLOCATED, self::DELIVERED, self::SERIAL_NUMBER, self::DATE_USED, self::IS_INVENTORY_ADJUSTMENT, self::INTERNAL_NOTES, self::SUB_CONTRACTOR_FLG, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'part_variant_id', 'custom_name', 'custom_origin', 'quantity', 'broker_fees', 'shipping_fees', 'unit_price', 'unit_cost', 'taxable_hst', 'taxable_gst', 'taxable_pst', 'enviro_levy', 'battery_levy', 'supplier_order_item_id', 'workorder_item_id', 'workorder_invoice_id', 'added_by', 'estimate', 'allocated', 'delivered', 'serial_number', 'date_used', 'is_inventory_adjustment', 'internal_notes', 'sub_contractor_flg', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'PartVariantId', 'CustomName', 'CustomOrigin', 'Quantity', 'BrokerFees', 'ShippingFees', 'UnitPrice', 'UnitCost', 'TaxableHst', 'TaxableGst', 'TaxablePst', 'EnviroLevy', 'BatteryLevy', 'SupplierOrderItemId', 'WorkorderItemId', 'WorkorderInvoiceId', 'AddedBy', 'Estimate', 'Allocated', 'Delivered', 'SerialNumber', 'DateUsed', 'IsInventoryAdjustment', 'InternalNotes', 'SubContractorFlg', 'EnviroTaxableFlg', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partVariantId', 'customName', 'customOrigin', 'quantity', 'BrokerFees', 'ShippingFees', 'unitPrice', 'unitCost', 'taxableHst', 'taxableGst', 'taxablePst', 'enviroLevy', 'batteryLevy', 'supplierOrderItemId', 'workorderItemId', 'workorderInvoiceId', 'addedBy', 'estimate', 'allocated', 'delivered', 'serialNumber', 'dateUsed', 'isInventoryAdjustment', 'internalNotes', 'subContractorFlg', 'enviroTaxableFlg', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PART_VARIANT_ID, self::CUSTOM_NAME, self::CUSTOM_ORIGIN, self::QUANTITY, self::BROKER_FEES, self::SHIPPING_FEES, self::UNIT_PRICE, self::UNIT_COST, self::TAXABLE_HST, self::TAXABLE_GST, self::TAXABLE_PST, self::ENVIRO_LEVY, self::BATTERY_LEVY, self::SUPPLIER_ORDER_ITEM_ID, self::WORKORDER_ITEM_ID, self::WORKORDER_INVOICE_ID, self::ADDED_BY, self::ESTIMATE, self::ALLOCATED, self::DELIVERED, self::SERIAL_NUMBER, self::DATE_USED, self::IS_INVENTORY_ADJUSTMENT, self::INTERNAL_NOTES, self::SUB_CONTRACTOR_FLG, self::ENVIRO_TAXABLE_FLG, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'part_variant_id', 'custom_name', 'custom_origin', 'quantity', 'broker_fees', 'shipping_fees', 'unit_price', 'unit_cost', 'taxable_hst', 'taxable_gst', 'taxable_pst', 'enviro_levy', 'battery_levy', 'supplier_order_item_id', 'workorder_item_id', 'workorder_invoice_id', 'added_by', 'estimate', 'allocated', 'delivered', 'serial_number', 'date_used', 'is_inventory_adjustment', 'internal_notes', 'sub_contractor_flg', 'enviro_taxable_flg', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
 	);
 
@@ -137,10 +140,10 @@ abstract class BasePartInstancePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartVariantId' => 1, 'CustomName' => 2, 'CustomOrigin' => 3, 'Quantity' => 4, 'BrokerFees' => 5, 'ShippingFees' => 6, 'UnitPrice' => 7, 'UnitCost' => 8, 'TaxableHst' => 9, 'TaxableGst' => 10, 'TaxablePst' => 11, 'EnviroLevy' => 12, 'BatteryLevy' => 13, 'SupplierOrderItemId' => 14, 'WorkorderItemId' => 15, 'WorkorderInvoiceId' => 16, 'AddedBy' => 17, 'Estimate' => 18, 'Allocated' => 19, 'Delivered' => 20, 'SerialNumber' => 21, 'DateUsed' => 22, 'IsInventoryAdjustment' => 23, 'InternalNotes' => 24, 'SubContractorFlg' => 25, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partVariantId' => 1, 'customName' => 2, 'customOrigin' => 3, 'quantity' => 4, 'brokerFees' => 5, 'shippingFees' => 6, 'unitPrice' => 7, 'unitCost' => 8, 'taxableHst' => 9, 'taxableGst' => 10, 'taxablePst' => 11, 'enviroLevy' => 12, 'batteryLevy' => 13, 'supplierOrderItemId' => 14, 'workorderItemId' => 15, 'workorderInvoiceId' => 16, 'addedBy' => 17, 'estimate' => 18, 'allocated' => 19, 'delivered' => 20, 'serialNumber' => 21, 'dateUsed' => 22, 'isInventoryAdjustment' => 23, 'internalNotes' => 24, 'subContractorFlg' => 25, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PART_VARIANT_ID => 1, self::CUSTOM_NAME => 2, self::CUSTOM_ORIGIN => 3, self::QUANTITY => 4, self::BROKER_FEES => 5, self::SHIPPING_FEES => 6, self::UNIT_PRICE => 7, self::UNIT_COST => 8, self::TAXABLE_HST => 9, self::TAXABLE_GST => 10, self::TAXABLE_PST => 11, self::ENVIRO_LEVY => 12, self::BATTERY_LEVY => 13, self::SUPPLIER_ORDER_ITEM_ID => 14, self::WORKORDER_ITEM_ID => 15, self::WORKORDER_INVOICE_ID => 16, self::ADDED_BY => 17, self::ESTIMATE => 18, self::ALLOCATED => 19, self::DELIVERED => 20, self::SERIAL_NUMBER => 21, self::DATE_USED => 22, self::IS_INVENTORY_ADJUSTMENT => 23, self::INTERNAL_NOTES => 24, self::SUB_CONTRACTOR_FLG => 25, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'part_variant_id' => 1, 'custom_name' => 2, 'custom_origin' => 3, 'quantity' => 4, 'broker_fees' => 5, 'shipping_fees' => 6, 'unit_price' => 7, 'unit_cost' => 8, 'taxable_hst' => 9, 'taxable_gst' => 10, 'taxable_pst' => 11, 'enviro_levy' => 12, 'battery_levy' => 13, 'supplier_order_item_id' => 14, 'workorder_item_id' => 15, 'workorder_invoice_id' => 16, 'added_by' => 17, 'estimate' => 18, 'allocated' => 19, 'delivered' => 20, 'serial_number' => 21, 'date_used' => 22, 'is_inventory_adjustment' => 23, 'internal_notes' => 24, 'sub_contractor_flg' => 25, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartVariantId' => 1, 'CustomName' => 2, 'CustomOrigin' => 3, 'Quantity' => 4, 'BrokerFees' => 5, 'ShippingFees' => 6, 'UnitPrice' => 7, 'UnitCost' => 8, 'TaxableHst' => 9, 'TaxableGst' => 10, 'TaxablePst' => 11, 'EnviroLevy' => 12, 'BatteryLevy' => 13, 'SupplierOrderItemId' => 14, 'WorkorderItemId' => 15, 'WorkorderInvoiceId' => 16, 'AddedBy' => 17, 'Estimate' => 18, 'Allocated' => 19, 'Delivered' => 20, 'SerialNumber' => 21, 'DateUsed' => 22, 'IsInventoryAdjustment' => 23, 'InternalNotes' => 24, 'SubContractorFlg' => 25, 'EnviroTaxableFlg' => 26, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partVariantId' => 1, 'customName' => 2, 'customOrigin' => 3, 'quantity' => 4, 'brokerFees' => 5, 'shippingFees' => 6, 'unitPrice' => 7, 'unitCost' => 8, 'taxableHst' => 9, 'taxableGst' => 10, 'taxablePst' => 11, 'enviroLevy' => 12, 'batteryLevy' => 13, 'supplierOrderItemId' => 14, 'workorderItemId' => 15, 'workorderInvoiceId' => 16, 'addedBy' => 17, 'estimate' => 18, 'allocated' => 19, 'delivered' => 20, 'serialNumber' => 21, 'dateUsed' => 22, 'isInventoryAdjustment' => 23, 'internalNotes' => 24, 'subContractorFlg' => 25, 'enviroTaxableFlg' => 26, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PART_VARIANT_ID => 1, self::CUSTOM_NAME => 2, self::CUSTOM_ORIGIN => 3, self::QUANTITY => 4, self::BROKER_FEES => 5, self::SHIPPING_FEES => 6, self::UNIT_PRICE => 7, self::UNIT_COST => 8, self::TAXABLE_HST => 9, self::TAXABLE_GST => 10, self::TAXABLE_PST => 11, self::ENVIRO_LEVY => 12, self::BATTERY_LEVY => 13, self::SUPPLIER_ORDER_ITEM_ID => 14, self::WORKORDER_ITEM_ID => 15, self::WORKORDER_INVOICE_ID => 16, self::ADDED_BY => 17, self::ESTIMATE => 18, self::ALLOCATED => 19, self::DELIVERED => 20, self::SERIAL_NUMBER => 21, self::DATE_USED => 22, self::IS_INVENTORY_ADJUSTMENT => 23, self::INTERNAL_NOTES => 24, self::SUB_CONTRACTOR_FLG => 25, self::ENVIRO_TAXABLE_FLG => 26, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'part_variant_id' => 1, 'custom_name' => 2, 'custom_origin' => 3, 'quantity' => 4, 'broker_fees' => 5, 'shipping_fees' => 6, 'unit_price' => 7, 'unit_cost' => 8, 'taxable_hst' => 9, 'taxable_gst' => 10, 'taxable_pst' => 11, 'enviro_levy' => 12, 'battery_levy' => 13, 'supplier_order_item_id' => 14, 'workorder_item_id' => 15, 'workorder_invoice_id' => 16, 'added_by' => 17, 'estimate' => 18, 'allocated' => 19, 'delivered' => 20, 'serial_number' => 21, 'date_used' => 22, 'is_inventory_adjustment' => 23, 'internal_notes' => 24, 'sub_contractor_flg' => 25, 'enviro_taxable_flg' => 26, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
 	);
 
@@ -275,6 +278,7 @@ abstract class BasePartInstancePeer {
 
 		$criteria->addSelectColumn(PartInstancePeer::SUB_CONTRACTOR_FLG);
 
+		$criteria->addSelectColumn(PartInstancePeer::ENVIRO_TAXABLE_FLG);
 	}
 
 	/**

@@ -57,6 +57,12 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	protected $sub_contractor_flg;
 
 	/**
+	 * The value for the enviro_taxable_flg field.
+	 * @var        string
+	 */
+	protected $enviro_taxable_flg;
+
+	/**
 	 * The value for the broker_fees field.
 	 * @var        string
 	 */
@@ -334,7 +340,16 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		return $this->sub_contractor_flg;
 	}
 
-
+	/**
+	 * Get the [ENVIRO_TAXABLE_FLG] column value.
+	 *
+	 * @return     string
+	 */
+	public function getEnviroTaxableFlg()
+	{
+		return $this->enviro_taxable_flg;
+	}
+	
 	/**
 	 * Get the [broker_fees] column value.
 	 *
@@ -686,8 +701,30 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		}
 
 		return $this;
-	} // setSubContractorFlg()	
+	} //setSubContractorFlg()	
 
+	
+    /**
+	 * Set the value of [enviro_taxable_flg] column.
+	 *
+	 * @param      string $v new value
+	 * @return     PartInstance The current object (for fluent API support)
+	 */
+	public function setEnviroTaxableFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->enviro_taxable_flg !== $v) {
+			$this->enviro_taxable_flg = $v;
+			$this->modifiedColumns[] = PartInstancePeer::ENVIRO_TAXABLE_FLG;
+		}
+
+		return $this;
+	} //setEnviroTaxableFlg()	
+	
+	
 	/**
 	* Set the value of [broker_fees] column.
 	*
@@ -1232,8 +1269,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$this->is_inventory_adjustment = ($row[$startcol + 23] !== null) ? (boolean) $row[$startcol + 23] : null;
 			$this->internal_notes = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
 			$this->sub_contractor_flg = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
+			$this->enviro_taxable_flg = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
 			$this->resetModified();
 
+			
 			$this->setNew(false);
 
 			if ($rehydrate) {
@@ -1917,7 +1956,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 25:
 				$this->setSubContractorFlg($value);
 				break;
-      		
+			case 26:
+				$this->setEnviroTaxableFlg($value);
+				break;
+				
 		} // switch()
 	}
 
@@ -1968,7 +2010,8 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[23], $arr)) $this->setIsInventoryAdjustment($arr[$keys[23]]);
 		if (array_key_exists($keys[24], $arr)) $this->setInternalNotes($arr[$keys[24]]);
 		if (array_key_exists($keys[25], $arr)) $this->setSubContractorFlg($arr[$keys[25]]);
-
+		if (array_key_exists($keys[26], $arr)) $this->setEnviroTaxableFlg($arr[$keys[26]]);
+		
 	}
 
 	/**
@@ -2006,9 +2049,11 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartInstancePeer::IS_INVENTORY_ADJUSTMENT)) $criteria->add(PartInstancePeer::IS_INVENTORY_ADJUSTMENT, $this->is_inventory_adjustment);
 		if ($this->isColumnModified(PartInstancePeer::INTERNAL_NOTES)) $criteria->add(PartInstancePeer::INTERNAL_NOTES, $this->internal_notes);
     	if ($this->isColumnModified(PartInstancePeer::SUB_CONTRACTOR_FLG)) $criteria->add(PartInstancePeer::SUB_CONTRACTOR_FLG, $this->sub_contractor_flg);
+    	if ($this->isColumnModified(PartInstancePeer::ENVIRO_TAXABLE_FLG)) $criteria->add(PartInstancePeer::ENVIRO_TAXABLE_FLG, $this->enviro_taxable_flg);
 
 		return $criteria;
 	}
+
 
 	/**
 	 * Builds a Criteria object containing the primary key for this object.
@@ -2110,7 +2155,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 
 		$copyObj->setSubContractorFlg($this->sub_contractor_flg);
 
+		$copyObj->setEnviroTaxableFlg($this->enviro_taxable_flg);
 
+		
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
