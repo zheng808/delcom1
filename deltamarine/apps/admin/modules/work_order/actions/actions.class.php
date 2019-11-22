@@ -274,6 +274,8 @@ class work_orderActions extends sfActions
       //update tax exempted status
       if ($workorder->getPstExempt() != $old_pst) $workorder->removeAllPst($workorder->getPstExempt());
       if ($workorder->getGstExempt() != $old_gst) $workorder->removeAllGst($workorder->getGstExempt());
+/* TODO: Add new Tax status management for PST overrides */
+
 
       $invalid_suppliers = false;
       //put items on hold, or remove from hold if moving from one status to another

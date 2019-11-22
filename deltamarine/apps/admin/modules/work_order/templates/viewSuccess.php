@@ -485,7 +485,7 @@ function showPartEditWindow(inst_id, wo, data){
     maxQuantity = data.max_quantity;
     partQuantity = 1;
     subContractorFlg = 'N'; //data.subContractorFlg
-    enviroTaxableFlg = 'N';
+    enviroTaxableFlg = '<?php echo ($workorder->getPstExempt() ? 'N' : 'Y') ?>';
 
     /* TODO: load value for flags from data */
 

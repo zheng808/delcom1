@@ -891,9 +891,11 @@ class WorkorderPDF extends sfTCPDF
           $env  = round($part_factor * $part->getEnviroLevyTotal(false), 2);
           $envpst = 0.00;
 
-          if ($part->getEnviroTaxableFlg() == 'Y')
+          //Add PST for the enviro levy if the Workorder default is set to charge PST, 
+          //or if the Part is overriden to charge PST
+          if (!$this->workorder->getPstExempt() || $part->getEnviroTaxableFlg() == 'Y')
           {
-            $envpst = $env * 7/100;
+            $envpst = $env * ($this->settings['taxable_gst'] ? 7/100 : 0);
             $pst = $pst + $envpst;
           }
 
@@ -1465,8 +1467,8 @@ class WorkorderPDF extends sfTCPDF
       if ($total_shopsupplies > 0)
       {
         if (!$this->workorder->getHstExempt()) $total_hst += $total_shopsupplies * (sfconfig::get('app_hst_rate')/100);
-        if ($this->settings['taxable_pst']) $total_pst += $total_shopsupplies * (sfconfig::get('app_pst_rate')/100);
-        if ($this->settings['taxable_gst']) $total_gst += $total_shopsupplies * (sfconfig::get('app_gst_rate')/100);
+        if (!$this->workorder->getPstExempt() && $this->settings['taxable_pst']) $total_pst += $total_shopsupplies * (sfconfig::get('app_pst_rate')/100);
+        if (!$this->workorder->getGstExempt() && $this->settings['taxable_gst']) $total_gst += $total_shopsupplies * (sfconfig::get('app_gst_rate')/100);
       }
 
       //add power & moorage
@@ -1474,8 +1476,8 @@ class WorkorderPDF extends sfTCPDF
       if ($total_moorage > 0)
       {
         if (!$this->workorder->getHstExempt()) $total_hst += $total_moorage * (sfconfig::get('app_hst_rate')/100);
-        if ($this->settings['taxable_pst']) $total_pst += $total_moorage * (sfconfig::get('app_pst_rate')/100);
-        if ($this->settings['taxable_gst']) $total_gst += $total_moorage * (sfconfig::get('app_gst_rate')/100);
+        if (!$this->workorder->getPstExempt() && $this->settings['taxable_pst']) $total_pst += $total_moorage * (sfconfig::get('app_pst_rate')/100);
+        if (!$this->workorder->getGstExempt() && $this->settings['taxable_gst']) $total_gst += $total_moorage * (sfconfig::get('app_gst_rate')/100);
       }
 
       //tally final totals
