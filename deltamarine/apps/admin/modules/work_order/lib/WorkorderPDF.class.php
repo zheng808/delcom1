@@ -895,7 +895,7 @@ class WorkorderPDF extends sfTCPDF
           //or if the Part is overriden to charge PST
           if (!$this->workorder->getPstExempt() || $part->getEnviroTaxableFlg() == 'Y')
           {
-            $envpst = $env * ($this->settings['taxable_gst'] ? 7/100 : 0);
+            $envpst = $env * ($this->settings['taxable_gst'] ? sfConfig::get('app_pst_rate')/100 : 0);
             $pst = $pst + $envpst;
           }
 

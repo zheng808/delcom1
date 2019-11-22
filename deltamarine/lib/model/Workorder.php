@@ -258,10 +258,16 @@ class Workorder extends BaseWorkorder
   public function chargeAllPst()
   {
     $this->removeAllPst(false);
-  }
+  }//chargeAllPST()------------------------------------------------------------
 
   public function removeAllPst($remove = true)
   {
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'START removeAllPst======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }  
+
     //add/remove all pst from workorder expenses
     $sql = 'UPDATE '.WorkorderExpensePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
            ' SET '.WorkorderExpensePeer::TAXABLE_PST.' = '.
@@ -271,6 +277,18 @@ class Workorder extends BaseWorkorder
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();
+
+    //ensure pst rates are still set for subctractor workorder expenses
+    if ($remove) {
+      $sql = 'UPDATE '.WorkorderExpensePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
+            ' SET '.WorkorderExpensePeer::TAXABLE_PST.' = '.sfConfig::get('app_pst_rate').
+            ' WHERE '.WorkorderExpensePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
+            ' AND '.WorkorderExpensePeer::SUB_CONTRACTOR_FLG.' = \'Y\' '.
+            ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
+      $con = Propel::getConnection();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();   
+    } 
 
     //add/remove all pst from workorder parts
     $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
@@ -282,6 +300,18 @@ class Workorder extends BaseWorkorder
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
+    //ensure pst rates are still set for subctractor workorder parts
+    if ($remove) {
+      $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
+             ' SET '.PartInstancePeer::TAXABLE_PST.' = '.sfConfig::get('app_pst_rate').
+             ' WHERE '.PartInstancePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
+             ' AND '.PartInstancePeer::SUB_CONTRACTOR_FLG.' = \'Y\' '.
+             ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
+      $con = Propel::getConnection();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+    }
+
     //add/remove all pst from workorder timelogs
     $sql = 'UPDATE '.TimelogPeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
            ' SET '.TimelogPeer::TAXABLE_PST.' = '.
@@ -291,7 +321,14 @@ class Workorder extends BaseWorkorder
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute(); 
-  }
+
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE removeAllPst======================';
+      sfContext::getInstance()->getLogger()->info($message);
+    } 
+
+  }//removeAllPst()--------------------------------------------------
 
   public function chargeAllGst()
   {
