@@ -51,3 +51,7 @@ update system_settings set value = '1.2.5 PST' where code = 'DB_VERSION';
 update system_settings set value = '1.2.5 PST' where code = 'SW_VERSION';
 
 update system_settings set value = '1.2.6 PST' where code = 'SW_VERSION';
+
+update system_settings set value = '2019.11.0007' where code = 'SW_VERSION';
+
+update system_settings set value = '2019.11.0007' where code = 'DB_VERSION';

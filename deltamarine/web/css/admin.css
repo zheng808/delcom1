@@ -26,6 +26,7 @@ h3 { font-size: 1.3em; font-weight: 700;}
 body, td, button, .x-body   { font-family: Lato, Arial, Helvetica, sans-serif; font-weight: 400 }
 .x-body { font-size: 14px; }
 button { font-size: 12px; display: block; cursor: hand; }
+div.pre {white-space: pre-wrap;}
 
 a { color: #F28157; }
 a.redlink { color: #FF0000; text-decoration: none; }

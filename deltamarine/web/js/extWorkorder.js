@@ -2521,8 +2521,8 @@ Ext.define('Ext.ux.NotesEditWin', {
     url:  '/work_order/notesedit',
 
     formSuccess: function(form,action,obj){
-      Ext.getCmp('notes_panel_customer').update(obj.data.customer_notes);
-      Ext.getCmp('notes_panel_internal').update(obj.data.internal_notes);
+      Ext.getCmp('notes_panel_customer').update("<div class='pre'>"+obj.data.customer_notes.replace('\n','')+"</div>");
+      Ext.getCmp('notes_panel_internal').update("<div class='pre'>"+obj.data.internal_notes.replace('\n','')+"</div>");
       if (obj.data.empty){
         Ext.getCmp('notes_panel').setTitle('Notes');
       } else {

@@ -2603,7 +2603,7 @@ var notes_panel = new Ext.Panel({
       id: 'notes_panel_customer',
       border: false,
       padding: 10,
-      html: <?php echo (trim($workorder->getCustomerNotes()) ? json_encode(nl2br($workorder->getCustomerNotes())) : "'<span class=\"inactive_text\">No Customer Notes Specified.</span>'"); ?>
+      html: "<div class='pre'>"+<?php echo (trim($workorder->getCustomerNotes()) ? str_replace('\n','',json_encode(nl2br($workorder->getCustomerNotes()))) : "'<span class=\"inactive_text\">No Customer Notes Specified.</span>'"); ?>+"</div>"
     }]
   },{
     xtype: 'fieldset',
@@ -2613,7 +2613,7 @@ var notes_panel = new Ext.Panel({
       id: 'notes_panel_internal',
       border: false,
       padding: 10,
-      html: <?php echo (trim($workorder->getInternalNotes()) ? json_encode(nl2br($workorder->getInternalNotes())) : "'<span class=\"inactive_text\">No Internal Notes Specified.</span>'"); ?>
+      html: "<div class='pre'>"+<?php echo (trim($workorder->getInternalNotes()) ? str_replace('\n','',json_encode(nl2br($workorder->getInternalNotes()))) : "'<span class=\"inactive_text\">No Internal Notes Specified.</span>'"); ?>+"</div>"
     }]
   }],
   tbar: new Ext.Toolbar({
