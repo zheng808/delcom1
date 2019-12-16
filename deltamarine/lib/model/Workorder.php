@@ -278,12 +278,12 @@ class Workorder extends BaseWorkorder
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
-    //ensure pst rates are still set for subctractor workorder expenses
+    //ensure pst rates are still set for pst override workorder expenses
     if ($remove) {
       $sql = 'UPDATE '.WorkorderExpensePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
             ' SET '.WorkorderExpensePeer::TAXABLE_PST.' = '.sfConfig::get('app_pst_rate').
             ' WHERE '.WorkorderExpensePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
-            ' AND '.WorkorderExpensePeer::SUB_CONTRACTOR_FLG.' = \'Y\' '.
+            ' AND '.WorkorderExpensePeer::PST_OVERRIDE_FLG.' = \'Y\' '.
             ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
       $con = Propel::getConnection();
       $stmt = $con->prepare($sql);
@@ -300,13 +300,25 @@ class Workorder extends BaseWorkorder
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
-    //ensure pst rates are still set for subctractor workorder parts
+    //ensure pst rates are still set for pst override workorder parts
     if ($remove) {
       $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
              ' SET '.PartInstancePeer::TAXABLE_PST.' = '.sfConfig::get('app_pst_rate').
              ' WHERE '.PartInstancePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
-             ' AND '.PartInstancePeer::SUB_CONTRACTOR_FLG.' = \'Y\' '.
+             ' AND '.PartInstancePeer::PST_OVERRIDE_FLG.' = \'Y\' '.
              ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
+      $con = Propel::getConnection();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+    }
+
+    //ensure pst rates are still set for enviro override workorder parts
+    if ($remove) {
+      $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
+              ' SET '.PartInstancePeer::ENVIRO_TAXABLE_FLG.' = \'Y\' '.
+              ' WHERE '.PartInstancePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
+              ' AND '.PartInstancePeer::ENVIRO_OVERRIDE_FLG.' = \'Y\' '.
+              ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
       $con = Propel::getConnection();
       $stmt = $con->prepare($sql);
       $stmt->execute();
@@ -347,6 +359,18 @@ class Workorder extends BaseWorkorder
     $stmt = $con->prepare($sql);
     $stmt->execute();
 
+    //ensure gst rates are still set for pst override workorder expenses
+    if ($remove) {
+      $sql = 'UPDATE '.WorkorderExpensePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
+            ' SET '.WorkorderExpensePeer::TAXABLE_GST.' = '.sfConfig::get('app_gst_rate').
+            ' WHERE '.WorkorderExpensePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
+            ' AND '.WorkorderExpensePeer::GST_OVERRIDE_FLG.' = \'Y\' '.
+            ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
+      $con = Propel::getConnection();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();   
+    } 
+
     //add/remove all gst from workorder parts
     $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
            ' SET '.PartInstancePeer::TAXABLE_GST.' = '.
@@ -356,6 +380,18 @@ class Workorder extends BaseWorkorder
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();
+
+    //ensure gst rates are still set for pst override workorder parts
+    if ($remove) {
+      $sql = 'UPDATE '.PartInstancePeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.
+              ' SET '.PartInstancePeer::TAXABLE_GST.' = '.sfConfig::get('app_gst_rate').
+              ' WHERE '.PartInstancePeer::WORKORDER_ITEM_ID.' = '.WorkorderItemPeer::ID.
+              ' AND '.PartInstancePeer::GST_OVERRIDE_FLG.' = \'Y\' '.
+              ' AND '.WorkorderItemPeer::WORKORDER_ID.' = '. $this->getId();
+      $con = Propel::getConnection();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+    }
 
     //add/remove all gst from workorder timelogs
     $sql = 'UPDATE '.TimelogPeer::TABLE_NAME.', '.WorkorderItemPeer::TABLE_NAME.

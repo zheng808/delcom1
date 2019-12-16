@@ -191,7 +191,6 @@ class PartInstance extends BasePartInstance
       $amt = round($amt, 2) * $this->getTaxablePst()/100; //round base amount before calculating to reduce rounding errors
 
 
-      /* TODO: Add check for part instance enviro_taxable_flg */
       return ($round ? round($amt,2) : $amt);
     }
     else return 0;

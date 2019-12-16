@@ -116,6 +116,12 @@ class PartInstanceMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('INTERNAL_NOTES', 'InternalNotes', 'LONGVARCHAR', false, null);
 
+		$tMap->addColumn('PST_OVERRIDE_FLG', 'pstOverrideFlg', 'VARCHAR', true, 1);
+
+		$tMap->addColumn('GST_OVERRIDE_FLG', 'gstOverrideFlg', 'VARCHAR', true, 1);
+
+		$tMap->addColumn('ENVIRO_OVERRIDE_FLG', 'enviroOverrideFlg', 'VARCHAR', true, 1);
+
 	} // doBuild()
 
 } // PartInstanceMapBuilder

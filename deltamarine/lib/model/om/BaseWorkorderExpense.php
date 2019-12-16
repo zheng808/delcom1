@@ -95,6 +95,19 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	protected $sub_contractor_flg;
 
 	/**
+	 * The value for the pst_override_flg field.
+	 * @var        string
+	 */
+	protected $pst_override_flg;
+
+	/**
+	 * The value for the gst_override_flg field.
+	 * @var        string
+	 */
+	protected $gst_override_flg;
+
+
+	/**
 	 * The value for the taxable_hst field.
 	 * Note: this column has a database default value of: '0'
 	 * @var        string
@@ -289,6 +302,26 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 	public function getSubContractorFlg()
 	{
 		return $this->sub_contractor_flg;
+	}
+
+     /**
+	 * Get the [pst_override_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getPstOverrideFlg()
+	{
+		return $this->pst_override_flg;
+	}
+
+     /**
+	 * Get the [gst_override_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getGstOverrideFlg()
+	{
+		return $this->gst_override_flg;
 	}
 
 	/**
@@ -607,6 +640,45 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		return $this;
 	} // setSubContractorFlg()
 
+	/**
+	 * Set the value of [pst_override_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     WorkorderExpense The current object (for fluent API support)
+	 */
+	public function setPstOverrideFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->pst_override_flg !== $v) {
+			$this->pst_override_flg = $v;
+			$this->modifiedColumns[] = WorkorderExpensePeer::PST_OVERRIDE_FLG;
+		}
+
+		return $this;
+	} // setPstOverrideFlg()
+
+	/**
+	 * Set the value of [gst_override_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     WorkorderExpense The current object (for fluent API support)
+	 */
+	public function setGstOverrideFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->gst_override_flg !== $v) {
+			$this->gst_override_flg = $v;
+			$this->modifiedColumns[] = WorkorderExpensePeer::GST_OVERRIDE_FLG;
+		}
+
+		return $this;
+	} // setGstOverrideFlg()
 	
 
 	/**
@@ -795,6 +867,8 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			$this->taxable_pst = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->created_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->sub_contractor_flg = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->pst_override_flg = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+			$this->gst_override_flg = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1208,6 +1282,12 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			case 15:
 				return $this->getSubContractorFlg();
 				break;
+			case 16:
+				return $this->getPstOverrideFlg();
+				break;
+			case 17:
+				return $this->getGstOverrideFlg();
+				break;
 			default:
 				return null;
 				break;
@@ -1245,6 +1325,8 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			$keys[13] => $this->getTaxablePst(),
 			$keys[14] => $this->getCreatedAt(),
 			$keys[15] => $this->getSubContractorFlg(),
+			$keys[16] => $this->getPstOverrideFlg(),
+			$keys[17] => $this->getGstOverrideFlg(),
 		);
 		return $result;
 	}
@@ -1324,6 +1406,13 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 			case 15:
 				$this->setSubContractorFlg($value);
 				break;
+			case 16:
+				$this->setPstOverrideFlg($value);
+				break;
+			case 17:
+				$this->setGstOverrideFlg($value);
+				break;
+						
 		} // switch()
 	}
 
@@ -1364,6 +1453,8 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[13], $arr)) $this->setTaxablePst($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setCreatedAt($arr[$keys[14]]);
 		if (array_key_exists($keys[15], $arr)) $this->setSubContractorFlg($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setPstOverrideFlg($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setGstOverrideFlg($arr[$keys[17]]);
 	}
 
 	/**
@@ -1391,6 +1482,8 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderExpensePeer::TAXABLE_PST)) $criteria->add(WorkorderExpensePeer::TAXABLE_PST, $this->taxable_pst);
 		if ($this->isColumnModified(WorkorderExpensePeer::CREATED_AT)) $criteria->add(WorkorderExpensePeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(WorkorderExpensePeer::SUB_CONTRACTOR_FLG)) $criteria->add(WorkorderExpensePeer::SUB_CONTRACTOR_FLG, $this->sub_contractor_flg);
+		if ($this->isColumnModified(WorkorderExpensePeer::PST_OVERRIDE_FLG)) $criteria->add(WorkorderExpensePeer::PST_OVERRIDE_FLG, $this->pst_override_flg);
+		if ($this->isColumnModified(WorkorderExpensePeer::GST_OVERRIDE_FLG)) $criteria->add(WorkorderExpensePeer::GST_OVERRIDE_FLG, $this->gst_override_flg);
 
 		return $criteria;
 	}
@@ -1474,6 +1567,10 @@ abstract class BaseWorkorderExpense extends BaseObject  implements Persistent {
 		$copyObj->setCreatedAt($this->created_at);
 
 		$copyObj->setSubContractorFlg($this->sub_contractor_flg);
+
+		$copyObj->setPstOverrideFlg($this->pst_override_flg);
+
+		$copyObj->setGstOverrideFlg($this->gst_override_flg);
 
 		$copyObj->setNew(true);
 

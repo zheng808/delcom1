@@ -94,6 +94,10 @@ class WorkorderExpenseMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('SUB_CONTRACTOR_FLG', 'SubContractorFlg', 'VARCHAR', true, 1);
 
+		$tMap->addColumn('PST_OVERRIDE_FLG', 'pstOverrideFlg', 'VARCHAR', true, 1);
+
+		$tMap->addColumn('GST_OVERRIDE_FLG', 'gstOverrideFlg', 'VARCHAR', true, 1);
+
 
 	} // doBuild()
 

@@ -1204,8 +1204,15 @@ Ext.define('Ext.ux.PartCustomEditWin', {
     me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
     me.form.down('#enviro_taxable_flg').setValue(me.enviroTaxableFlg);
 
-    if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
-    if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
+    if (me.pst_exempt) {
+      me.form.down('#pst_exempt_flg').setValue('Y');
+      me.form.down('#pstfield').setValue('0');
+    } 
+
+    if (me.gst_exempt) {
+      me.form.down('#gst_exempt_flg').setValue('Y');
+      me.form.down('#gstfield').setValue('0');
+    } 
 
     if (me.pst_rate)   me.form.down('#pstfield button').setText('Charge ' + me.pst_rate + '% PST');
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
@@ -1232,6 +1239,16 @@ Ext.define('Ext.ux.PartCustomEditWin', {
     fieldDefaults: { labelWidth: 120 },
 
     items: [{
+      itemId: 'pst_exempt_flg',
+      xtype: 'hidden',
+      name: 'pst_exempt_flg',
+      value: 'N',
+    },{
+      itemId: 'gst_exempt_flg',
+      xtype: 'hidden',
+      name: 'gst_exempt_flg',
+      value: 'N',
+    },{
       fieldLabel: 'Part Label',
       xtype: 'textfield',
       allowBlank: false,
@@ -1639,13 +1656,21 @@ Ext.define('Ext.ux.PartEditWin', {
   subContractorFlg: 'N',
   enviroTaxableFlg: 'N',
 
+
   doneSetup: function(){
     var me = this;
 
     me.form.params.id = me.workorder_id;
 
-    if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
-    if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
+    if (me.pst_exempt) {
+      me.form.down('#pst_exempt_flg').setValue('Y');
+      me.form.down('#pstfield').setValue('0');
+    } 
+
+    if (me.gst_exempt) {
+      me.form.down('#gst_exempt_flg').setValue('Y');
+      me.form.down('#gstfield').setValue('0');
+    } 
 
     if (me.pst_rate)   me.form.down('#pstfield button').setText('Charge ' + me.pst_rate + '% PST');
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
@@ -1892,7 +1917,19 @@ Ext.define('Ext.ux.PartEditWin', {
 
     fieldDefaults: { labelAlign: 'left' },
 
-    items: [{
+    items: [
+      {
+      itemId: 'pst_exempt_flg',
+      xtype: 'hidden',
+      name: 'pst_exempt_flg',
+      value: 'N',
+    },{
+      itemId: 'gst_exempt_flg',
+      xtype: 'hidden',
+      name: 'gst_exempt_flg',
+      value: 'N',
+    },
+    {
       itemId: 'info_name',
       xtype: 'displayfield',
       name: 'name',
@@ -2331,8 +2368,16 @@ Ext.define('Ext.ux.ExpenseEditWin', {
 
     me.form.down('#sub_contractor_flg').setValue(me.subContractorFlg);
 
-    if (me.pst_exempt) me.form.down('#pstfield').setValue('0');
-    if (me.gst_exempt) me.form.down('#gstfield').setValue('0');
+    if (me.pst_exempt) {
+      me.form.down('#pst_exempt_flg').setValue('Y');
+      me.form.down('#pstfield').setValue('0');
+    } 
+
+    if (me.gst_exempt) {
+      me.form.down('#gst_exempt_flg').setValue('Y');
+      me.form.down('#gstfield').setValue('0');
+    } 
+
 
     if (me.pst_rate)   me.form.down('#pstfield button').setText('Charge ' + me.pst_rate + '% PST');
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
@@ -2358,6 +2403,16 @@ Ext.define('Ext.ux.ExpenseEditWin', {
     fieldDefaults: { labelWidth: 120, labelAlign: 'right' },
 
     items: [{
+      itemId: 'pst_exempt_flg',
+      xtype: 'hidden',
+      name: 'pst_exempt_flg',
+      value: 'N',
+    },{
+      itemId: 'gst_exempt_flg',
+      xtype: 'hidden',
+      name: 'gst_exempt_flg',
+      value: 'N',
+    },{
       name: 'label',
       fieldLabel: 'Expense Label',
       xtype: 'textfield',

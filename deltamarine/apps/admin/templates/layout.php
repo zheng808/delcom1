@@ -1,3 +1,36 @@
+<?php include_once 'util/dbconfig.php'; 
+$version = 'v';
+
+$query = 'select value from system_settings where code = :code';
+$code = 'APP_VERSION';
+$values = array(':code' => $code);
+$res = $pdo->prepare($query);
+$res->execute($values);
+
+while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+  $version = $version.'.'.$row['value'];
+}
+
+$code = 'DB_VERSION';
+$values = array(':code' => $code);
+$res = $pdo->prepare($query);
+$res->execute($values);
+
+while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+  $version = $version.'.'.$row['value'];
+}
+$code = 'EXT_VERSION';
+$values = array(':code' => $code);
+$res = $pdo->prepare($query);
+$res->execute($values);
+
+while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+  $version = $version.'.'.$row['value'];
+}
+
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -37,7 +70,7 @@
             Page took <?php echo round($time, 3);?>s to generate
           <?php endif; ?>
         <?php endif; ?>
-        <div class="alignright">v2019.11.0007</div>
+        <div class="alignright"><?php   echo $version; ?></div>
       </div>
     </div>
     
@@ -55,5 +88,6 @@
       Ext.tip.QuickTipManager.init();
     });
   </script>
+
   </body>
 </html>

@@ -450,6 +450,7 @@ var showPartEditWin = function(inst_id, data){
 function showPartEditWindow(inst_id, wo, data){
 
   if (inst_id){
+
     var config = {
       workorder_id: <?php echo $workorder->getId(); ?>,
       workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
@@ -457,7 +458,8 @@ function showPartEditWindow(inst_id, wo, data){
       gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
       pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
       gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>,
-
+      pstOverrideFlg: 'N', //data.pst_override_flg,
+      gstOverrideFlg: 'N', //data.gst_override_flg,
     };
 
  
@@ -465,8 +467,7 @@ function showPartEditWindow(inst_id, wo, data){
     config.formConfig = { autoLoadUrl: '<?php echo url_for('work_order/partload?id='.$workorder->getId()); ?>?instance_id=' + inst_id }
     new Ext.ux.PartEditWin(config);
 
-  } else {
-  
+  } else {  
     partId = data.part_id;
     partVariantId = data.part_variant_id;
     partName = data.name;
@@ -487,7 +488,8 @@ function showPartEditWindow(inst_id, wo, data){
     subContractorFlg = 'N'; //data.subContractorFlg
     enviroTaxableFlg = '<?php echo ($workorder->getPstExempt() ? 'N' : 'Y') ?>';
 
-    /* TODO: load value for flags from data */
+    pstExemptFlg = '<?php echo ($workorder->getPstExempt() ? 'Y' : 'N'); ?>';
+    gstExemptFlg = '<?php echo ($workorder->getGstExempt() ? 'Y' : 'N'); ?>';
 
     partTaskId = woTaskId;
 
@@ -495,7 +497,6 @@ function showPartEditWindow(inst_id, wo, data){
     workorderItemsStore.load();
 
     PartAddSelectedWin.show();
-
 
     Ext.getCmp('name').setValue('<a href="/part/view/id/'+partId+'"><strong>'+partName+'</strong></a>');//(partName);
     Ext.getCmp('part_sku').setValue(partSku);
@@ -511,7 +512,6 @@ function showPartEditWindow(inst_id, wo, data){
 
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
-
   }
    
 };//showPartEditWindow()-------------------------------------------------------
@@ -544,8 +544,7 @@ var PartAddSelectedWin = new Ext.Window({
         columnWidth: 1,
         layout: 'anchor',
         bodyStyle: 'padding: 5px 5px 5px 5px',
-        items: [
-      {
+        items: [{
             xtype: 'displayfield',
             fieldLabel: 'Part Name',
             name: 'name',
@@ -935,6 +934,8 @@ var PartAddSelectedWin = new Ext.Window({
                 statusaction: partStatus,
                 sub_contractor_flg : subContractorFlg,
                 enviro_taxable_flg : enviroTaxableFlg,
+                pst_exempt_flg : pstExemptFlg,
+                gst_exempt_flg : gstExemptFlg, 
               },
               success: function(){
                 Ext.Msg.hide();
@@ -978,6 +979,7 @@ var PartAddSelectedWin = new Ext.Window({
       text: 'OK',
       formBind: true,
       handler: function(btn){
+alert('1 - clicked');
 
         var workorderItemId = Ext.getCmp('itemField').getValue();
 
@@ -990,8 +992,10 @@ var PartAddSelectedWin = new Ext.Window({
         var enviroTaxableFlg = Ext.getCmp('enviro_taxable_flg').getValue();
 
         var woQuantity = partQuantity;
+alert('2 - vars');
 
         if (partAvailable >= partQuantity || partStatus == 'estimate'){
+alert('3 - adding');
 
           Ext.Msg.wait("Adding Part "+ partName+" to Workorder " + this_workorder_id);
 
@@ -1017,6 +1021,8 @@ var PartAddSelectedWin = new Ext.Window({
                 statusaction: partStatus,
                 sub_contractor_flg : subContractorFlg,
                 enviro_taxable_flg : enviroTaxableFlg,
+                pst_exempt_flg : pstExemptFlg,
+                gst_exempt_flg : gstExemptFlg, 
               },
               success: function(){
                 Ext.Msg.hide();

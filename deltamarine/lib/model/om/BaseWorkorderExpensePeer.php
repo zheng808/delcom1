@@ -19,7 +19,7 @@ abstract class BaseWorkorderExpensePeer {
 	const CLASS_DEFAULT = 'lib.model.WorkorderExpense';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 16;
+	const NUM_COLUMNS = 18;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -72,6 +72,14 @@ abstract class BaseWorkorderExpensePeer {
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'workorder_expense.CREATED_AT';
 
+	/** the column name for the PST_OVERRIDE_FLG field */
+	const PST_OVERRIDE_FLG = 'workorder_expense.PST_OVERRIDE_FLG';
+
+	/** the column name for the GST_OVERRIDE_FLG field */
+	const GST_OVERRIDE_FLG = 'workorder_expense.GST_OVERRIDE_FLG';
+
+	
+
 	/**
 	 * An identiy map to hold any loaded instances of WorkorderExpense objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -93,11 +101,11 @@ abstract class BaseWorkorderExpensePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'WorkorderItemId', 'WorkorderInvoiceId', 'Label', 'CustomerNotes', 'InternalNotes', 'Cost', 'Estimate', 'Invoice', 'Price', 'Origin', 'TaxableHst', 'TaxableGst', 'TaxablePst', 'CreatedAt', 'SubContractorFlg', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'workorderItemId', 'workorderInvoiceId', 'label', 'customerNotes', 'internalNotes', 'cost', 'estimate', 'invoice', 'price', 'origin', 'taxableHst', 'taxableGst', 'taxablePst', 'createdAt', 'subContractorFlg', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::WORKORDER_ITEM_ID, self::WORKORDER_INVOICE_ID, self::LABEL, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::COST, self::ESTIMATE, self::INVOICE, self::PRICE, self::ORIGIN, self::TAXABLE_HST, self::TAXABLE_GST, self::TAXABLE_PST, self::CREATED_AT, self::SUB_CONTRACTOR_FLG, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'workorder_item_id', 'workorder_invoice_id', 'label', 'customer_notes', 'internal_notes', 'cost', 'estimate', 'invoice', 'price', 'origin', 'taxable_hst', 'taxable_gst', 'taxable_pst', 'created_at', 'sub_contractor_flg', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'WorkorderItemId', 'WorkorderInvoiceId', 'Label', 'CustomerNotes', 'InternalNotes', 'Cost', 'Estimate', 'Invoice', 'Price', 'Origin', 'TaxableHst', 'TaxableGst', 'TaxablePst', 'CreatedAt', 'SubContractorFlg', 'PstOverrideFlg', 'GstOverrideFlg', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'workorderItemId', 'workorderInvoiceId', 'label', 'customerNotes', 'internalNotes', 'cost', 'estimate', 'invoice', 'price', 'origin', 'taxableHst', 'taxableGst', 'taxablePst', 'createdAt', 'subContractorFlg', 'pstOverrideFlg', 'gstOverrideFlg', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::WORKORDER_ITEM_ID, self::WORKORDER_INVOICE_ID, self::LABEL, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::COST, self::ESTIMATE, self::INVOICE, self::PRICE, self::ORIGIN, self::TAXABLE_HST, self::TAXABLE_GST, self::TAXABLE_PST, self::CREATED_AT, self::SUB_CONTRACTOR_FLG, self::PST_OVERRIDE_FLG, self::GST_OVERRIDE_FLG, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'workorder_item_id', 'workorder_invoice_id', 'label', 'customer_notes', 'internal_notes', 'cost', 'estimate', 'invoice', 'price', 'origin', 'taxable_hst', 'taxable_gst', 'taxable_pst', 'created_at', 'sub_contractor_flg', 'pst_override_flg', 'gst_override_flg', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
 	);
 
 	/**
@@ -107,11 +115,11 @@ abstract class BaseWorkorderExpensePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'WorkorderItemId' => 1, 'WorkorderInvoiceId' => 2, 'Label' => 3, 'CustomerNotes' => 4, 'InternalNotes' => 5, 'Cost' => 6, 'Estimate' => 7, 'Invoice' => 8, 'Price' => 9, 'Origin' => 10, 'TaxableHst' => 11, 'TaxableGst' => 12, 'TaxablePst' => 13, 'CreatedAt' => 14, 'SubContractorFlg' => 15, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'workorderItemId' => 1, 'workorderInvoiceId' => 2, 'label' => 3, 'customerNotes' => 4, 'internalNotes' => 5, 'cost' => 6, 'estimate' => 7, 'invoice' => 8, 'price' => 9, 'origin' => 10, 'taxableHst' => 11, 'taxableGst' => 12, 'taxablePst' => 13, 'createdAt' => 14, 'subContractorFlg' => 15, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::WORKORDER_ITEM_ID => 1, self::WORKORDER_INVOICE_ID => 2, self::LABEL => 3, self::CUSTOMER_NOTES => 4, self::INTERNAL_NOTES => 5, self::COST => 6, self::ESTIMATE => 7, self::INVOICE => 8, self::PRICE => 9, self::ORIGIN => 10, self::TAXABLE_HST => 11, self::TAXABLE_GST => 12, self::TAXABLE_PST => 13, self::CREATED_AT => 14, self::SUB_CONTRACTOR_FLG => 15 ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'workorder_item_id' => 1, 'workorder_invoice_id' => 2, 'label' => 3, 'customer_notes' => 4, 'internal_notes' => 5, 'cost' => 6, 'estimate' => 7, 'invoice' => 8, 'price' => 9, 'origin' => 10, 'taxable_hst' => 11, 'taxable_gst' => 12, 'taxable_pst' => 13, 'created_at' => 14, 'sub_contractor_flg' => 15, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'WorkorderItemId' => 1, 'WorkorderInvoiceId' => 2, 'Label' => 3, 'CustomerNotes' => 4, 'InternalNotes' => 5, 'Cost' => 6, 'Estimate' => 7, 'Invoice' => 8, 'Price' => 9, 'Origin' => 10, 'TaxableHst' => 11, 'TaxableGst' => 12, 'TaxablePst' => 13, 'CreatedAt' => 14, 'SubContractorFlg' => 15, 'PstOverrideFlg' => 16, 'GstOverrideFlg' => 17, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'workorderItemId' => 1, 'workorderInvoiceId' => 2, 'label' => 3, 'customerNotes' => 4, 'internalNotes' => 5, 'cost' => 6, 'estimate' => 7, 'invoice' => 8, 'price' => 9, 'origin' => 10, 'taxableHst' => 11, 'taxableGst' => 12, 'taxablePst' => 13, 'createdAt' => 14, 'subContractorFlg' => 15, 'pstOverrideFlg' => 16, 'gstOverrideFlg' => 17, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::WORKORDER_ITEM_ID => 1, self::WORKORDER_INVOICE_ID => 2, self::LABEL => 3, self::CUSTOMER_NOTES => 4, self::INTERNAL_NOTES => 5, self::COST => 6, self::ESTIMATE => 7, self::INVOICE => 8, self::PRICE => 9, self::ORIGIN => 10, self::TAXABLE_HST => 11, self::TAXABLE_GST => 12, self::TAXABLE_PST => 13, self::CREATED_AT => 14, self::SUB_CONTRACTOR_FLG => 15, self::PST_OVERRIDE_FLG => 16, self::GST_OVERRIDE_FLG => 17, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'workorder_item_id' => 1, 'workorder_invoice_id' => 2, 'label' => 3, 'customer_notes' => 4, 'internal_notes' => 5, 'cost' => 6, 'estimate' => 7, 'invoice' => 8, 'price' => 9, 'origin' => 10, 'taxable_hst' => 11, 'taxable_gst' => 12, 'taxable_pst' => 13, 'created_at' => 14, 'sub_contractor_flg' => 15, 'pst_override_flg' => 16, 'gst_override_flg' => 17, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
 	);
 
 	/**
@@ -225,6 +233,9 @@ abstract class BaseWorkorderExpensePeer {
 
 		$criteria->addSelectColumn(WorkorderExpensePeer::SUB_CONTRACTOR_FLG);
 
+		$criteria->addSelectColumn(WorkorderExpensePeer::PST_OVERRIDE_FLG);
+
+		$criteria->addSelectColumn(WorkorderExpensePeer::GST_OVERRIDE_FLG);
 	}
 
 	/**

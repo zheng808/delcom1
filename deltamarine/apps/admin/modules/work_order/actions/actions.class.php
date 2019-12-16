@@ -1230,8 +1230,10 @@ class work_orderActions extends sfActions
         sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
         sfContext::getInstance()->getLogger()->info('sub_contractor_flg: '.$request->getParameter('sub_contractor_flg'));
         sfContext::getInstance()->getLogger()->info('enviro_taxable_flg: '.$request->getParameter('enviro_taxable_flg'));
+        sfContext::getInstance()->getLogger()->info('pst_exempt_flg: '.$request->getParameter('pst_exempt_flg'));
+        sfContext::getInstance()->getLogger()->info('gst_exempt_flg: '.$request->getParameter('gst_exempt_flg'));
         
-        //sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
+        sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
       }
 
       //update values
@@ -1249,6 +1251,28 @@ class work_orderActions extends sfActions
       $instance->setSubContractorFlg($request->getParameter('sub_contractor_flg'));
       $instance->setEnviroTaxableFlg($request->getParameter('enviro_taxable_flg'));
       
+      //check for default tax settings override and set flg if needed.
+      $pstOverrideFlg = 'N';
+      if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('taxable_pst') > 0) {
+        $pstOverrideFlg = 'Y';
+      }
+      $instance->setPstOverrideFlg($pstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setPstOverrideFlg: '.$pstOverrideFlg);
+
+      $gstOverrideFlg = 'N';
+      if ($request->getParameter('gst_exempt_flg') == 'Y' && $request->getParameter('taxable_gst') > 0) {
+        $gstOverrideFlg = 'Y';
+      }
+      $instance->setGstOverrideFlg($gstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setGstOverrideFlg: '.$gstOverrideFlg);
+
+      $enviroOverrideFlg = 'N';
+      if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('enviro_taxable_flg') == 'Y') {
+        $enviroOverrideFlg = 'Y';
+      }
+      $instance->setEnviroOverrideFlg($enviroOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setPEnviroOverrideFlg: '.$enviroOverrideFlg);
+
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
       $instance->setTaxablePst($request->getParameter('taxable_pst') ? ($instance->getTaxablePst() != 0 ? $instance->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
@@ -1465,7 +1489,10 @@ class work_orderActions extends sfActions
                   'min_quantity'        => $var->getQuantity('minimum', false),
                   'max_quantity'        => $var->getQuantity('maximum', false),
                   'sub_contractor_flg'  => $inst->getSubContractorFlg(),
-                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg()
+                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg(),
+                  'pst_override_flg'     => $inst->getPstOverrideFlg(),
+                  'gst_override_flg'     => $inst->getGstOverrideFlg(),
+                  'enviro_override_flg' => $inst->getEnviroOverrideFlg()
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
@@ -1648,6 +1675,28 @@ class work_orderActions extends sfActions
       $instance->setUnitPrice($request->getParameter('unit_price'));
       $instance->setInternalNotes($request->getParameter('internal_notes'));
 
+      //check for default tax settings override and set flg if needed.
+      $pstOverrideFlg = 'N';
+      if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('taxable_pst') > 0) {
+        $pstOverrideFlg = 'Y';
+      }
+      $instance->setPstOverrideFlg($pstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setPstOverrideFlg: '.$pstOverrideFlg);
+
+      $gstOverrideFlg = 'N';
+      if ($request->getParameter('gst_exempt_flg') == 'Y' && $request->getParameter('taxable_gst') > 0) {
+        $gstOverrideFlg = 'Y';
+      }
+      $instance->setGstOverrideFlg($gstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setGstOverrideFlg: '.$gstOverrideFlg);
+
+      $enviroOverrideFlg = 'N';
+      if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('enviro_taxable_flg') == 'Y') {
+        $enviroOverrideFlg = 'Y';
+      }
+      $instance->setEnviroOverrideFlg($enviroOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setPEnviroOverrideFlg: '.$enviroOverrideFlg);
+
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
       $instance->setTaxablePst($request->getParameter('taxable_pst') ? ($instance->getTaxablePst() != 0 ? $instance->getTaxablePst() : sfConfig::get('app_pst_rate')) : 0);
@@ -1720,8 +1769,10 @@ class work_orderActions extends sfActions
                   'internal_notes'      => $inst->getInternalNotes(),
                   'who'                 => $who,
                   'sub_contractor_flg'  => $inst->getSubContractorFlg(),
-                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg()
-                  
+                  'enviro_taxable_flg'  => $inst->getEnviroTaxableFlg(),
+                  'pst_override_flg'    => $inst->getPstOverrideFlg(),
+                  'gst_override_flg'    => $inst->getGstOverrideFlg(),
+                  'enviro_override_flg' => $inst->getEnviroOverrideFlg()
                 );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");
@@ -1790,6 +1841,21 @@ class work_orderActions extends sfActions
 
       sfContext::getInstance()->getLogger()->info('Sub Contractor Flg: '.$request->getParameter('sub_contractor_flg'));
       $expense->setSubContractorFlg($request->getParameter('sub_contractor_flg'));
+
+      //check for default tax settings override and set flg if needed.
+      $pstOverrideFlg = 'N';
+      if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('taxable_pst') > 0) {
+        $pstOverrideFlg = 'Y';
+      }
+      $expense->setPstOverrideFlg($pstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setPstOverrideFlg: '.$pstOverrideFlg);
+
+      $gstOverrideFlg = 'N';
+      if ($request->getParameter('gst_exempt_flg') == 'Y' && $request->getParameter('taxable_gst') > 0) {
+        $gstOverrideFlg = 'Y';
+      }
+      $expense->setGstOverrideFlg($gstOverrideFlg);
+      sfContext::getInstance()->getLogger()->info('setGstOverrideFlg: '.$gstOverrideFlg);
 
       //this keeps existing tax rate in the expense if set
       $expense->setTaxableHst($request->getParameter('taxable_hst') ? ($expense->getTaxableHst() != 0 ? $expense->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);
@@ -1914,7 +1980,9 @@ class work_orderActions extends sfActions
                   'taxable_hst'         => ($expense->getTaxableHst() > 0 ? 1 : 0),
                   'taxable_pst'         => ($expense->getTaxablePst() > 0 ? 1 : 0),
                   'taxable_gst'         => ($expense->getTaxableGst() > 0 ? 1 : 0),
-                  'sub_contractor_flg'  => $expense->getSubContractorFlg()
+                  'sub_contractor_flg'  => $expense->getSubContractorFlg(),
+                  'pst_override_flg'    => $expense->getPstOverrideFlg(),
+                  'gst_override_flg'    => $expense->getGstOverrideFlg()
                  );
 
     $this->renderText("{success:true, data:".json_encode($data)."}");

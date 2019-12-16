@@ -63,6 +63,24 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 	protected $enviro_taxable_flg;
 
 	/**
+	 * The value for the pst_override_flg field.
+	 * @var        string
+	 */
+	protected $pst_override_flg;
+
+	/**
+	 * The value for the gst_override_flg field.
+	 * @var        string
+	 */
+	protected $gst_override_flg;
+
+	/**
+	 * The value for the enviro_override_flg field.
+	 * @var        string
+	 */
+	protected $enviro_override_flg;
+
+	/**
 	 * The value for the broker_fees field.
 	 * @var        string
 	 */
@@ -340,6 +358,35 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		return $this->sub_contractor_flg;
 	}
 
+     /**
+	 * Get the [pst_override_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getPstOverrideFlg()
+	{
+		return $this->pst_override_flg;
+	}
+
+     /**
+	 * Get the [gst_override_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getGstOverrideFlg()
+	{
+		return $this->gst_override_flg;
+	}
+
+     /**
+	 * Get the [enviro_override_flg] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getEnviroOverrideFlg()
+	{
+		return $this->enviro_override_flg;
+	}
 	/**
 	 * Get the [ENVIRO_TAXABLE_FLG] column value.
 	 *
@@ -703,7 +750,68 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		return $this;
 	} //setSubContractorFlg()	
 
-	
+
+	/**
+	 * Set the value of [pst_override_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     PartInstancePeer The current object (for fluent API support)
+	 */
+	public function setPstOverrideFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->pst_override_flg !== $v) {
+			$this->pst_override_flg = $v;
+			$this->modifiedColumns[] = PartInstancePeer::PST_OVERRIDE_FLG;
+		}
+
+		return $this;
+	} // setPstOverrideFlg()
+
+	/**
+	 * Set the value of [gst_override_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     PartInstancePeer The current object (for fluent API support)
+	 */
+	public function setGstOverrideFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->gst_override_flg !== $v) {
+			$this->gst_override_flg = $v;
+			$this->modifiedColumns[] = PartInstancePeer::GST_OVERRIDE_FLG;
+		}
+
+		return $this;
+	} // setGstOverrideFlg()
+
+	/**
+	 * Set the value of [enviro_override_flg] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     PartInstancePeer The current object (for fluent API support)
+	 */
+	public function setEnviroOverrideFlg($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->enviro_override_flg !== $v) {
+			$this->enviro_override_flg = $v;
+			$this->modifiedColumns[] = PartInstancePeer::ENVIRO_OVERRIDE_FLG;
+		}
+
+		return $this;
+	} // setEnviroOverrideFlg()
+
+		
     /**
 	 * Set the value of [enviro_taxable_flg] column.
 	 *
@@ -1270,6 +1378,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$this->internal_notes = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
 			$this->sub_contractor_flg = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
 			$this->enviro_taxable_flg = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
+			$this->pst_override_flg = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
+			$this->gst_override_flg = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
+			$this->enviro_override_flg = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
 			$this->resetModified();
 
 			
@@ -1739,10 +1850,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 5:
 				return $this->getBrokerFees();
 				break;
-      case 6:
-  			return $this->getShippingFees();
-  			break;
-      case 7:
+			case 6:
+				return $this->getShippingFees();
+				break;
+			case 7:
 				return $this->getUnitPrice();
 				break;
 			case 8:
@@ -1787,17 +1898,29 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 21:
 				return $this->getSerialNumber();
 				break;
-			case 21:
+			case 22:
 				return $this->getDateUsed();
 				break;
-			case 22:
+			case 23:
 				return $this->getIsInventoryAdjustment();
 				break;
-			case 23:
+			case 24:
 				return $this->getInternalNotes();
 				break;
-			case 24:
+			case 25:
 				return $this->getSubContractorFlg();
+				break;
+			case 26:
+				return $this->getEnviroTaxableFlg();
+				break;
+			case 27:
+				return $this->getPstOverrideFlg();
+				break;	
+			case 28:
+				return $this->getGstOverrideFlg();
+				break;
+			case 29:
+				return $this->getEnviroOverrideFlg();
 				break;
 			default:
 				return null;
@@ -1846,7 +1969,10 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			$keys[23] => $this->getIsInventoryAdjustment(),
 			$keys[24] => $this->getInternalNotes(),
 			$keys[25] => $this->getSubContractorFlg(),
-
+			$keys[26] => $this->getEnviroTaxableFlg(),
+			$keys[27] => $this->getPstOverrideFlg(),
+			$keys[28] => $this->getGstOverrideFlg(),
+			$keys[29] => $this->getEnviroOverrideFlg(),
 		);
 		return $result;
 	}
@@ -1959,7 +2085,15 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 			case 26:
 				$this->setEnviroTaxableFlg($value);
 				break;
-				
+			case 27:
+				$this->setPstOverrideFlg($value);
+				break;
+			case 28:
+				$this->setGstOverrideFlg($value);
+				break;
+			case 29:
+				$this->setEnviroOverrideFlg($value);
+				break;		
 		} // switch()
 	}
 
@@ -2011,6 +2145,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[24], $arr)) $this->setInternalNotes($arr[$keys[24]]);
 		if (array_key_exists($keys[25], $arr)) $this->setSubContractorFlg($arr[$keys[25]]);
 		if (array_key_exists($keys[26], $arr)) $this->setEnviroTaxableFlg($arr[$keys[26]]);
+		if (array_key_exists($keys[27], $arr)) $this->setPstOverrideFlg($arr[$keys[27]]);
+		if (array_key_exists($keys[28], $arr)) $this->setGstOverrideFlg($arr[$keys[28]]);
+		if (array_key_exists($keys[29], $arr)) $this->setEnviroOverrideFlg($arr[$keys[29]]);
 		
 	}
 
@@ -2050,6 +2187,9 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartInstancePeer::INTERNAL_NOTES)) $criteria->add(PartInstancePeer::INTERNAL_NOTES, $this->internal_notes);
     	if ($this->isColumnModified(PartInstancePeer::SUB_CONTRACTOR_FLG)) $criteria->add(PartInstancePeer::SUB_CONTRACTOR_FLG, $this->sub_contractor_flg);
     	if ($this->isColumnModified(PartInstancePeer::ENVIRO_TAXABLE_FLG)) $criteria->add(PartInstancePeer::ENVIRO_TAXABLE_FLG, $this->enviro_taxable_flg);
+		if ($this->isColumnModified(PartInstancePeer::PST_OVERRIDE_FLG)) $criteria->add(PartInstancePeer::PST_OVERRIDE_FLG, $this->pst_override_flg);
+		if ($this->isColumnModified(PartInstancePeer::GST_OVERRIDE_FLG)) $criteria->add(PartInstancePeer::GST_OVERRIDE_FLG, $this->gst_override_flg);
+		if ($this->isColumnModified(PartInstancePeer::ENVIRO_OVERRIDE_FLG)) $criteria->add(PartInstancePeer::ENVIRO_OVERRIDE_FLG, $this->enviro_override_flg);
 
 		return $criteria;
 	}
@@ -2156,6 +2296,12 @@ abstract class BasePartInstance extends BaseObject  implements Persistent {
 		$copyObj->setSubContractorFlg($this->sub_contractor_flg);
 
 		$copyObj->setEnviroTaxableFlg($this->enviro_taxable_flg);
+
+		$copyObj->setPstOverrideFlg($this->pst_override_flg);
+
+		$copyObj->setGstOverrideFlg($this->gst_override_flg);
+
+		$copyObj->setEnviroOverrideFlg($this->enviro_override_flg);
 
 		
 		if ($deepCopy) {

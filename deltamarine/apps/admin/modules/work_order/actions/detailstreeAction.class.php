@@ -65,6 +65,16 @@ class detailstreeAction extends sfAction
           $name = $sku.$part->getPartVariant()->__toString();
         }
         $name .= '<div style="display:inline-block;border: 1px solid #c9dac9;float: right; font-size: 0.9em; padding: 1px 2px;background-color: #f7f7f7;">Qty: '.$part->outputQuantity(!($part->getCustomName())).'</div>';
+        
+        $override = 'N';
+        if (($part->getPstOverrideFlg() && $part->getPstOverrideFlg() == 'Y') ||
+            ($part->getGstOverrideFlg() && $part->getGstOverrideFlg() == 'Y') ||
+            ($part->getEnviroOverrideFlg() && $part->getEnviroOverrideFlg() == 'Y'))
+        {
+          $override = 'Y';
+          $name .= '<div style="display:inline-block;border: 1px solid #ff3333;float: right; font-size: 0.9em; padding: 1px 2px;background-color: #f7f7f7;">Tax</div>';
+        }
+
         $output[] = array('id' => 'part-'.$node->getId().'-'.$part->getId(),
                           'text' => $name,
                           'iconCls' => 'part',
@@ -74,7 +84,8 @@ class detailstreeAction extends sfAction
                           'actual' => ($part->getAllocated() ? $part->getSubtotal() : null ),
                           'leaf' => true,
                           'info' => $info,
-                          'custom' => ($part->getCustomName() ? true : false)
+                          'custom' => ($part->getCustomName() ? true : false),
+                          'override' => $override
                           );
       }
     }
@@ -260,13 +271,23 @@ class detailstreeAction extends sfAction
           $status .= 'Estimate Only';
         }
 
+        $name = $expense->getLabel();
+        $override = 'N';
+        if (($expense->getPstOverrideFlg() && $expense->getPstOverrideFlg() == 'Y') ||
+            ($expense->getGstOverrideFlg() && $expense->getGstOverrideFlg() == 'Y'))
+        {
+          $override = 'Y';
+          $name .= '<div style="display:inline-block;border: 1px solid #ff3333;float: right; font-size: 0.9em; padding: 1px 2px;background-color: #f7f7f7;">Tax</div>';
+        }
+
         $output[] = array('id' => 'expense-'.$node->getId().'-'.$expense->getId(),
-                          'text' => $expense->getLabel(),
+                          'text' => $name, //$expense->getLabel(),
                           'iconCls' => 'expense',
                           'estimate' => $expense->getEstimate() ? $expense->getPrice() : null,
                           'info' => $status,
                           'actual' => $expense->getInvoice() ? $expense->getPrice() : null,
-                          'leaf' => true
+                          'leaf' => true,
+                          'override' => $override
                          );
       }
     }

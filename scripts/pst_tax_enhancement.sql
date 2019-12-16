@@ -21,11 +21,6 @@ alter table part_instance add column sub_contractor_flg varchar(1) DEFAULT 'N';
 alter table workorder_expense add column sub_contractor_flg varchar(1) DEFAULT 'N';
 
 /*
-* Add enviro_taxable flag column
-*/
-alter table part_instance add column enviro_taxable_flg varchar(1) DEFAULT 'N';
-
-/*
 * Add system_settings table
 */
 create table system_settings (
@@ -41,17 +36,45 @@ create table system_settings (
 );
 
 insert into system_settings (code, name, description, value, updated_by)
-values ('DB_VERSION','Database Version','Current version number of the Delcom Database','1.2.4 PST','SYSTEM');
+values ('DB_VERSION','Database Version','Current version number of the Delcom Database','5','SYSTEM');
 
 insert into system_settings (code, name, description, value, updated_by)
-values ('SW_VERSION','Database Version','Current version number of the Delcom Database','1.2.4 PST','SYSTEM');
+values ('APP_VERSION','Application Version','Current version number of the Delcom Application','1.2.6','SYSTEM');
 
-update system_settings set value = '1.2.5 PST' where code = 'DB_VERSION';
+insert into system_settings (code, name, description, value, updated_by)
+values ('EXT_VERSION','Extension Version','Current extension version number of the Delcom Application','PST','SYSTEM');
 
-update system_settings set value = '1.2.5 PST' where code = 'SW_VERSION';
 
-update system_settings set value = '1.2.6 PST' where code = 'SW_VERSION';
 
-update system_settings set value = '2019.11.0007' where code = 'SW_VERSION';
 
-update system_settings set value = '2019.11.0007' where code = 'DB_VERSION';
+/*
+* Add enviro_taxable flag column
+*/
+alter table part_instance add column enviro_taxable_flg varchar(1) DEFAULT 'N';
+
+update system_settings set value = '1.2.7' where code = 'APP_VERSION';
+
+update system_settings set value = '06' where code = 'DB_VERSION';
+
+
+
+/*
+* Add tax_override flag columns
+*/
+alter table part_instance add column pst_override_flg varchar(1) DEFAULT 'N';
+alter table part_instance add column gst_override_flg varchar(1) DEFAULT 'N';
+alter table part_instance add column enviro_override_flg varchar(1) DEFAULT 'N';
+
+alter table workorder_expense add column pst_override_flg varchar(1) DEFAULT 'N';
+alter table workorder_expense add column gst_override_flg varchar(1) DEFAULT 'N';
+-- alter table workorder_expense add column enviro_override_flg varchar(1) DEFAULT 'N';
+
+
+
+update system_settings set value = '1.2.8' where code = 'APP_VERSION';
+
+update system_settings set value = '07' where code = 'DB_VERSION';
+
+-- alter table workorder_expense drop column gst_override_flg;
+update system_settings set value = '08' where code = 'DB_VERSION';
+
