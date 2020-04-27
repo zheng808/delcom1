@@ -979,7 +979,6 @@ var PartAddSelectedWin = new Ext.Window({
       text: 'OK',
       formBind: true,
       handler: function(btn){
-alert('1 - clicked');
 
         var workorderItemId = Ext.getCmp('itemField').getValue();
 
@@ -992,10 +991,8 @@ alert('1 - clicked');
         var enviroTaxableFlg = Ext.getCmp('enviro_taxable_flg').getValue();
 
         var woQuantity = partQuantity;
-alert('2 - vars');
 
         if (partAvailable >= partQuantity || partStatus == 'estimate'){
-alert('3 - adding');
 
           Ext.Msg.wait("Adding Part "+ partName+" to Workorder " + this_workorder_id);
 
