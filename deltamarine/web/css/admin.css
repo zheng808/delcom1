@@ -509,7 +509,8 @@ a.buttongroup-bottom, .buttongroup-bottom input {
   margin: -1px 4px -1px 0; 
 }
 
-.blocky.bl-white  { background: #F8F8F8; color: #000; border: 1px solid #DDD; }
+.blocky.bl-white1 { background: #F8F8F8; color: #000; border: 1px solid #DDD; }
+.blocky.bl-white  { background: #F8F8F8; color: #000; }
 .blocky.bl-blue   { background: #0000FF; box-shadow: 0px 0px 5px rgba(  0,   0, 200, 0.7);  color: #FFFFFF; }
 .blocky.bl-black  { background: #333333; box-shadow: 0px 0px 5px rgba( 50,  50,  50, 0.7); color: #FFFFFF; }
 .blocky.bl-green  { background: #33DD33; box-shadow: 0px 0px 5px rgba( 50, 200,  50, 0.7); }

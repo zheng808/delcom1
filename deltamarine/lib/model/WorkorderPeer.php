@@ -452,6 +452,13 @@ class WorkorderPeer extends BaseWorkorderPeer
     //return "[".($include_any ? "['','All']," : '')."['FFFFFF', 'White'],['0000FF','Blue'],['000000','Black'],['33DD33','Green'],['FF3333','Red'],['FFFF00','Yellow'],['FFA500','Orange'],['A52A2A','Brown']]";
   }
 
+  public static function getItemColorCodesJSArray($include_any = false)
+  {
+    //taken from HTML color codes
+    return "[".($include_any ? "['','All']," : '')."['FFFFFF', 'White'],['0000FF','Blue'],['000000','Black'],['33DD33','Green'],['FF3333','Red'],['FFFF00','Yellow'],['FFA500','Orange'],['A52A2A','Brown']]";
+  }
+
+
   public static function getColorCodesArray(){
 
     return array(
@@ -472,6 +479,21 @@ class WorkorderPeer extends BaseWorkorderPeer
       'A52A2A' => 'Brown'
     );
     */
+  }
+
+  public static function getItemColorCodesArray(){
+
+    return array(
+      'FFFFFF' => 'White',
+      '0000FF' => 'Blue',
+      '000000' => 'Black',
+      '33DD33' => 'Green',
+      'FF3333' => 'Red',
+      'FFFF00' => 'Yellow',
+      'FFA500' => 'Orange',
+      'A52A2A' => 'Brown'
+    );
+    
   }
 
 }

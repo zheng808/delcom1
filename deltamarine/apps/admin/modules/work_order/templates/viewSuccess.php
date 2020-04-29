@@ -173,6 +173,15 @@ var color_code_array = [
         { value: '<?php echo $colorcode; ?>', text: '<span style="display: inline-block; height: 15px; width: 16px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;' }
       <?php endforeach; ?>
 ];
+
+
+var item_color_code_array = [
+      <?php $colors = WorkorderPeer::getItemColorCodesArray(); ?>
+      <?php $first = current($colors); ?>
+      <?php foreach ($colors AS $colorcode => $colorname): ?><?php if ($first != $colorname) echo ','; ?>
+        { value: '<?php echo $colorcode; ?>', text: '<span style="display: inline-block; height: 15px; width: 16px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;' }
+      <?php endforeach; ?>
+];
  
 var tree_root_node = { 
   text: '-- Top Level Item--',
@@ -2676,7 +2685,7 @@ var workorder_bbar = new Ext.Toolbar({
           var win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
-            color_codes: color_code_array,
+            color_codes: item_color_code_array,  //color_code_array,
             formConfig: {
               params: { item_id: sel_id },
               autoLoadUrl: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id
@@ -2895,7 +2904,7 @@ var workorder_tbar = new Ext.Toolbar({
       <?php if ($sf_user->hasCredential('workorder_add')): ?>
         new Ext.ux.ItemEditWin({ 
           workorder_id: this_workorder_id,
-          color_codes: color_code_array
+          color_codes: item_color_code_array,  //color_code_array
         });
       <?php else: ?>    
         Ext.Msg.alert('Permission Denied','You do not have permission to edit work orders');
@@ -3112,7 +3121,7 @@ var workorder_tree = new Ext.tree.TreePanel({
           win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
-            color_codes: color_code_array,
+            color_codes: item_color_code_array,  //color_code_array,
             formConfig: {
               params: { item_id: sel_id },
               autoLoadUrl: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id
@@ -3124,7 +3133,7 @@ var workorder_tree = new Ext.tree.TreePanel({
           var win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
-            color_codes: color_code_array,
+            color_codes: item_color_code_array,  //color_code_array,
             formConfig: {
               params: { item_id: sel_id },
               autoLoadUrl: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id
