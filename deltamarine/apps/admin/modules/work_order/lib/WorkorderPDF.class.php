@@ -883,9 +883,15 @@ class WorkorderPDF extends sfTCPDF
           list($skip, $is_new) = $this->_is_new($part, $invoice_dates);
           if ($skip) continue;
 
+          sfContext::getInstance()->getLogger()->info('start: ');
+
           $sub  = round($part_factor * $part->getSubtotal(false), 2);
           $hst  = $part_factor * (!$this->workorder->getHstExempt() ? $part->getHstTotal(false) : 0);
+
+          sfContext::getInstance()->getLogger()->info('start: 1');
           $pst  = $part_factor * ($this->settings['taxable_pst'] ? $part->getPstTotal(false) : 0);
+          sfContext::getInstance()->getLogger()->info('start: 2');
+
           $gst  = $part_factor * ($this->settings['taxable_gst'] ? $part->getGstTotal(false) : 0);
           $batt = round($part_factor * $part->getBatteryLevyTotal(false), 2);
           $env  = round($part_factor * $part->getEnviroLevyTotal(false), 2);
@@ -896,7 +902,7 @@ class WorkorderPDF extends sfTCPDF
           if (!$this->workorder->getPstExempt() || $part->getEnviroTaxableFlg() == 'Y')
           {
             $envpst = $env * ($this->settings['taxable_gst'] ? sfConfig::get('app_pst_rate')/100 : 0);
-            $pst = $pst + $envpst;
+            //$pst = $pst + $envpst;
           }
 
           sfContext::getInstance()->getLogger()->info('Sub: '.$sub);
@@ -1062,8 +1068,8 @@ class WorkorderPDF extends sfTCPDF
           $sub = round($labour_factor * $labour->getSubtotal(), 2);
           $hst = $labour_factor * (!$this->workorder->getHstExempt() ? $labour->getHstTotal() : 0);
           //NO PST on labour
-          //$pst = $labour_factor * ($this->settings['taxable_pst'] ? $labour->getPstTotal() : 0);
-          $pst = 0;
+          $pst = $labour_factor * ($this->settings['taxable_pst'] ? $labour->getPstTotal() : 0);
+          //$pst = 0;
           $gst = $labour_factor * ($this->settings['taxable_gst'] ? $labour->getGstTotal() : 0);
           
           $totals['sections'][$title]['labour']['subtotal'] += $sub; 

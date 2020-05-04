@@ -72,10 +72,10 @@ class WorkorderSummaryPDF extends sfTCPDF
       $this->Cell(0, $this->title_font/2.5, $title, 0, 2, 'R');
 
       //insert workorder status box
-      $color = $this->workorder->getSummaryColor();
-      $this->SetFillColor(hexdec(substr($color,0,2)), hexdec(substr($color,2,2)), hexdec(substr($color,4,2)));
-      $this->SetDrawColor(0,0,0);
-      $this->Rect($this->page_width - 32, 18, 32, 18,'FD');
+//      $color = $this->workorder->getSummaryColor();
+//      $this->SetFillColor(hexdec(substr($color,0,2)), hexdec(substr($color,2,2)), hexdec(substr($color,4,2)));
+//      $this->SetDrawColor(0,0,0);
+//      $this->Rect($this->page_width - 32, 18, 32, 18,'FD');
 
       //haulout date
       if ($this->workorder->getHauloutDate())

@@ -185,14 +185,25 @@ class PartInstance extends BasePartInstance
 
   public function getPstTotal($net = true, $round = false)
   {
+    $amt = 0;
+
     if ($this->getTaxablePst() > 0)
     {
-      $amt = $this->getSubtotal($net) + $this->getEnviroLevyTotal($net) + $this->getBatteryLevyTotal($net);
-      $amt = round($amt, 2) * $this->getTaxablePst()/100; //round base amount before calculating to reduce rounding errors
+      $amt = $amt + $this->getSubtotal($net) + $this->getBatteryLevyTotal($net);
+    }
 
+    if ($this->getTaxablePst() > 0 || $this->getEnviroTaxableFlg() == 'Y')
+    {
+        $amt = $amt + $this->getEnviroLevyTotal($net);
+    }
+
+    if ($amt > 0)
+    {
+      $amt = round($amt, 2) * $this->getTaxablePst()/100; //round base amount before calculating to reduce rounding errors
 
       return ($round ? round($amt,2) : $amt);
     }
+    
     else return 0;
   }
 
@@ -213,6 +224,7 @@ class PartInstance extends BasePartInstance
   {
     return ($this->getSubtotal($net) + $this->getEnviroLevyTotal($net) + $this->GetBatteryLevyTotal($net) + $this->getHstTotal($net) + $this->getPstTotal($net) + $this->getGstTotal($net));
   }
+
 
   //override to allow using NetQuantity instead
   public function getQuantity($net = false)
