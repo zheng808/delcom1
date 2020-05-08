@@ -308,7 +308,6 @@ class partActions extends sfActions
       sfContext::getInstance()->getLogger()->info($message);
     }
 
-
     //validate
     $result = true;
     $errors = array();
