@@ -11,7 +11,7 @@ class workorderItemsAction extends sfAction
     $message = $workorder_id;
     if (sfConfig::get('sf_logging_enabled'))
     {
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }
 
 
@@ -23,14 +23,14 @@ class workorderItemsAction extends sfAction
     $count_all = count($items);
     if (sfConfig::get('sf_logging_enabled'))
     {
-      sfContext::getInstance()->getLogger()->info($count_all);
+      //sfContext::getInstance()->getLogger()->info($count_all);
     }
 
     $woItems = WorkorderItemPeer::getItemsByWorkordeId($workorder_id);
     $message = count($woItems);
     if (sfConfig::get('sf_logging_enabled'))
     {
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }  
     
     //generate JSON output
@@ -41,7 +41,7 @@ class workorderItemsAction extends sfAction
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = $item->getLabel();
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }
 
       $text = '';

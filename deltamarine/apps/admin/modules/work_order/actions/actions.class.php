@@ -234,21 +234,21 @@ class work_orderActions extends sfActions
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Setting Canada Entry Num';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }  
       $workorder->setCanadaEntryNum($request->getParameter('canada_entry_num') ? $request->getParameter('canada_entry_num') : null);
       $workorder->setUsaEntryNum($request->getParameter('usa_entry_num') ? $request->getParameter('usa_entry_num') : null);
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Setting Canada Entry Date';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }  
       $workorder->setCanadaEntryDate($request->getParameter('canada_entry_date') ? strtotime($request->getParameter('canada_entry_date')) : null);
       $workorder->setUsaEntryDate($request->getParameter('usa_entry_date') ? strtotime($request->getParameter('usa_entry_date')) : null);
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Finished Setting Canada Entry Num and Date';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }  
 
 
@@ -1082,12 +1082,12 @@ class work_orderActions extends sfActions
       $errors['reason'] = 'Invalid Price specified. Price must not be negative!';
     }
 
-    if ($valid && sfConfig::get('sf_logging_enabled'))
-    {
-      sfContext::getInstance()->getLogger()->info('Unit Price is valid ');
-    } else {
-      sfContext::getInstance()->getLogger()->info('Unit Price is NOT valid ');
-    }
+    //if ($valid && sfConfig::get('sf_logging_enabled'))
+    //{
+      //sfContext::getInstance()->getLogger()->info('Unit Price is valid ');
+    //} else {
+      //sfContext::getInstance()->getLogger()->info('Unit Price is NOT valid ');
+    //}
 
 
     //check for valid parent
@@ -1095,22 +1095,22 @@ class work_orderActions extends sfActions
     {
       $valid = false;
       $errors['parent_id'] = 'Invalid Parent task was specified!';
-      sfContext::getInstance()->getLogger()->info('Task is valid: Invalid Parent task was specified! ');
+      //sfContext::getInstance()->getLogger()->info('Task is valid: Invalid Parent task was specified! ');
 
     }
     else if ($parent_item->isRoot())
     {
       $valid = false;
       $errors['parent_id'] = 'Cannot select root item for a part; each part must be assigned to a specific task.';
-      sfContext::getInstance()->getLogger()->info('Task is valid: Cannot select root item for a part; each part must be assigned to a specific task. ');
+      //sfContext::getInstance()->getLogger()->info('Task is valid: Cannot select root item for a part; each part must be assigned to a specific task. ');
 
     }
 
     if ($valid && sfConfig::get('sf_logging_enabled'))
     {
-      sfContext::getInstance()->getLogger()->info('Task is valid ');
+      //sfContext::getInstance()->getLogger()->info('Task is valid ');
     } else {
-      sfContext::getInstance()->getLogger()->info('Task  is NOT valid ');
+      //sfContext::getInstance()->getLogger()->info('Task  is NOT valid ');
     }
 
     //check for valid part
@@ -1126,7 +1126,7 @@ class work_orderActions extends sfActions
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = '++ Checkpoint 1 ++ VALID';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }
 
       $new_status = $request->getParameter('statusaction');
@@ -1196,7 +1196,7 @@ class work_orderActions extends sfActions
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = '-- Checkpoint 1 -- NOT VALID';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }
     }
 
@@ -1206,7 +1206,7 @@ class work_orderActions extends sfActions
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = '++ Checkpoint 2 ++ VALID';
-        sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info($message);
       }
 
       //its possible that the part instance was previously set as delivered. because of this,
@@ -1221,19 +1221,19 @@ class work_orderActions extends sfActions
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'setting values';
-        sfContext::getInstance()->getLogger()->info($message);
-        sfContext::getInstance()->getLogger()->info('unit Cost: '.$request->getParameter('unit_cost'));
-        sfContext::getInstance()->getLogger()->info('unit Price: '.$request->getParameter('unit_price'));
-        sfContext::getInstance()->getLogger()->info('enviro_levy: '.$request->getParameter('enviro_levy'));
-        sfContext::getInstance()->getLogger()->info('battery_levy: '.$request->getParameter('battery_levy'));
-        sfContext::getInstance()->getLogger()->info('broker_fees: '.$request->getParameter('broker_fees'));
-        sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
-        sfContext::getInstance()->getLogger()->info('sub_contractor_flg: '.$request->getParameter('sub_contractor_flg'));
-        sfContext::getInstance()->getLogger()->info('enviro_taxable_flg: '.$request->getParameter('enviro_taxable_flg'));
-        sfContext::getInstance()->getLogger()->info('pst_exempt_flg: '.$request->getParameter('pst_exempt_flg'));
-        sfContext::getInstance()->getLogger()->info('gst_exempt_flg: '.$request->getParameter('gst_exempt_flg'));
+        //sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info('unit Cost: '.$request->getParameter('unit_cost'));
+        //sfContext::getInstance()->getLogger()->info('unit Price: '.$request->getParameter('unit_price'));
+        //sfContext::getInstance()->getLogger()->info('enviro_levy: '.$request->getParameter('enviro_levy'));
+        //sfContext::getInstance()->getLogger()->info('battery_levy: '.$request->getParameter('battery_levy'));
+        //sfContext::getInstance()->getLogger()->info('broker_fees: '.$request->getParameter('broker_fees'));
+        //sfContext::getInstance()->getLogger()->info('shipping_fees: '.$request->getParameter('shipping_fees'));
+        //sfContext::getInstance()->getLogger()->info('sub_contractor_flg: '.$request->getParameter('sub_contractor_flg'));
+        //sfContext::getInstance()->getLogger()->info('enviro_taxable_flg: '.$request->getParameter('enviro_taxable_flg'));
+        //sfContext::getInstance()->getLogger()->info('pst_exempt_flg: '.$request->getParameter('pst_exempt_flg'));
+        //sfContext::getInstance()->getLogger()->info('gst_exempt_flg: '.$request->getParameter('gst_exempt_flg'));
         
-        sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
+        //sfContext::getInstance()->getLogger()->info('taxable_pst: '.$request->getParameter('taxable_pst'));
       }
 
       //update values
@@ -1257,21 +1257,21 @@ class work_orderActions extends sfActions
         $pstOverrideFlg = 'Y';
       }
       $instance->setPstOverrideFlg($pstOverrideFlg);
-      sfContext::getInstance()->getLogger()->info('setPstOverrideFlg: '.$pstOverrideFlg);
+      //sfContext::getInstance()->getLogger()->info('setPstOverrideFlg: '.$pstOverrideFlg);
 
       $gstOverrideFlg = 'N';
       if ($request->getParameter('gst_exempt_flg') == 'Y' && $request->getParameter('taxable_gst') > 0) {
         $gstOverrideFlg = 'Y';
       }
       $instance->setGstOverrideFlg($gstOverrideFlg);
-      sfContext::getInstance()->getLogger()->info('setGstOverrideFlg: '.$gstOverrideFlg);
+      //sfContext::getInstance()->getLogger()->info('setGstOverrideFlg: '.$gstOverrideFlg);
 
       $enviroOverrideFlg = 'N';
       if ($request->getParameter('pst_exempt_flg') == 'Y' && $request->getParameter('enviro_taxable_flg') == 'Y') {
         $enviroOverrideFlg = 'Y';
       }
       $instance->setEnviroOverrideFlg($enviroOverrideFlg);
-      sfContext::getInstance()->getLogger()->info('setPEnviroOverrideFlg: '.$enviroOverrideFlg);
+      //sfContext::getInstance()->getLogger()->info('setPEnviroOverrideFlg: '.$enviroOverrideFlg);
 
       //this keeps existing tax rate in the instance if set
       $instance->setTaxableHst($request->getParameter('taxable_hst') ? ($instance->getTaxableHst() != 0 ? $instance->getTaxableHst() : sfConfig::get('app_hst_rate')) : 0);

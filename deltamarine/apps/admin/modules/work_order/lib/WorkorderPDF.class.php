@@ -883,14 +883,14 @@ class WorkorderPDF extends sfTCPDF
           list($skip, $is_new) = $this->_is_new($part, $invoice_dates);
           if ($skip) continue;
 
-          sfContext::getInstance()->getLogger()->info('start: ');
+          //sfContext::getInstance()->getLogger()->info('start: ');
 
           $sub  = round($part_factor * $part->getSubtotal(false), 2);
           $hst  = $part_factor * (!$this->workorder->getHstExempt() ? $part->getHstTotal(false) : 0);
 
-          sfContext::getInstance()->getLogger()->info('start: 1');
+          //sfContext::getInstance()->getLogger()->info('start: 1');
           $pst  = $part_factor * ($this->settings['taxable_pst'] ? $part->getPstTotal(false) : 0);
-          sfContext::getInstance()->getLogger()->info('start: 2');
+          //sfContext::getInstance()->getLogger()->info('start: 2');
 
           $gst  = $part_factor * ($this->settings['taxable_gst'] ? $part->getGstTotal(false) : 0);
           $batt = round($part_factor * $part->getBatteryLevyTotal(false), 2);
@@ -902,20 +902,21 @@ class WorkorderPDF extends sfTCPDF
           if (!$this->workorder->getPstExempt() || $part->getEnviroTaxableFlg() == 'Y')
           {
             $envpst = $env * ($this->settings['taxable_gst'] ? sfConfig::get('app_pst_rate')/100 : 0);
+            //PST for enviro levy is already included the parts taxes if required.
             //$pst = $pst + $envpst;
           }
 
-          sfContext::getInstance()->getLogger()->info('Sub: '.$sub);
-          sfContext::getInstance()->getLogger()->info('PST: '.$pst);
-          sfContext::getInstance()->getLogger()->info('GST: '.$gst);
-          sfContext::getInstance()->getLogger()->info('Enviro: '.$env);
-          sfContext::getInstance()->getLogger()->info('Batt: '.$batt);
+          //sfContext::getInstance()->getLogger()->info('Sub: '.$sub);
+          //sfContext::getInstance()->getLogger()->info('PST: '.$pst);
+          //sfContext::getInstance()->getLogger()->info('GST: '.$gst);
+          //sfContext::getInstance()->getLogger()->info('Enviro: '.$env);
+          //sfContext::getInstance()->getLogger()->info('Batt: '.$batt);
 
-          sfContext::getInstance()->getLogger()->info('pst total: '.$part->getPstTotal(false));
+          //sfContext::getInstance()->getLogger()->info('pst total: '.$part->getPstTotal(false));
 
-          sfContext::getInstance()->getLogger()->info('Enviro Taxable Flg: '.$part->getEnviroTaxableFlg());
-          sfContext::getInstance()->getLogger()->info('Enviro PST: '.$envpst);
-          sfContext::getInstance()->getLogger()->info('PST: '.$pst);
+          //sfContext::getInstance()->getLogger()->info('Enviro Taxable Flg: '.$part->getEnviroTaxableFlg());
+          //sfContext::getInstance()->getLogger()->info('Enviro PST: '.$envpst);
+          //sfContext::getInstance()->getLogger()->info('PST: '.$pst);
 
         
 

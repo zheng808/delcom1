@@ -8,7 +8,7 @@ class detailstreeAction extends sfAction
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'START detailstreeAction.execute()=============';
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }
 
     //$this->forward404Unless($request->isXmlHttpRequest());
@@ -314,7 +314,7 @@ class detailstreeAction extends sfAction
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'DONE detailstreeAction.execute()=============';
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }
 
     return sfView::NONE;

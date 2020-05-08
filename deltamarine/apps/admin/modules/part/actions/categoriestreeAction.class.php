@@ -8,7 +8,7 @@ class categoriestreeAction extends sfAction
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'START categoriestreeAction.execute====================';
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }
     //$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -19,8 +19,8 @@ class categoriestreeAction extends sfAction
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'node is not numeric';
-        sfContext::getInstance()->getLogger()->info($message);
-        sfContext::getInstance()->getLogger()->info('node: '.$node);
+        //sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info('node: '.$node);
       }
 
       $this->forward404Unless($node = PartCategoryPeer::retrieveRoot());
@@ -31,7 +31,7 @@ class categoriestreeAction extends sfAction
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'selected_node: ';
-          sfContext::getInstance()->getLogger()->info($message.$selected);
+          //sfContext::getInstance()->getLogger()->info($message.$selected);
         }
         
         $this->forward404Unless($selected = PartCategoryPeer::retrieveByPk($selected));
@@ -45,7 +45,7 @@ class categoriestreeAction extends sfAction
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'else selected_node...';
-          sfContext::getInstance()->getLogger()->info($message);
+          //sfContext::getInstance()->getLogger()->info($message);
         }
         $selected_tree = array($node->getId());
       }
@@ -55,8 +55,8 @@ class categoriestreeAction extends sfAction
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'node is numeric';
-        sfContext::getInstance()->getLogger()->info($message);
-        sfContext::getInstance()->getLogger()->info('node: '.$node);
+        //sfContext::getInstance()->getLogger()->info($message);
+        //sfContext::getInstance()->getLogger()->info('node: '.$node);
       }
 
       $this->forward404Unless($node = PartCategoryPeer::retrieveByPk($node));
@@ -69,7 +69,7 @@ class categoriestreeAction extends sfAction
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'DONE categoriestreeAction.execute====================';
-      sfContext::getInstance()->getLogger()->info($message);
+      //sfContext::getInstance()->getLogger()->info($message);
     }
     
     return sfView::NONE;

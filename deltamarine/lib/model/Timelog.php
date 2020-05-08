@@ -34,7 +34,7 @@ class Timelog extends BaseTimelog
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'START Timelog.getHoursAndMinutes';
-      sfContext::getInstance()->getLogger()->info($message);
+  //    sfContext::getInstance()->getLogger()->info($message);
     }
 
     $amt = ($payroll ? $this->getPayrollHours() : $this->getBillableHours());
@@ -61,7 +61,7 @@ class Timelog extends BaseTimelog
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'DONE Timelog.getHoursAndMinutes';
-      sfContext::getInstance()->getLogger()->info($message);
+  //    sfContext::getInstance()->getLogger()->info($message);
     }
 
     return $output;

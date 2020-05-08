@@ -467,7 +467,7 @@ class EstimatePDF extends sfTCPDF
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'Add Parts';
-          sfContext::getInstance()->getLogger()->info($message);
+          //sfContext::getInstance()->getLogger()->info($message);
         } 
 
         $parts_c = new Criteria();
@@ -566,7 +566,7 @@ class EstimatePDF extends sfTCPDF
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'Add Labour';
-          sfContext::getInstance()->getLogger()->info($message);
+          //sfContext::getInstance()->getLogger()->info($message);
         } 
 
         $labour_c = new Criteria();
@@ -667,7 +667,7 @@ class EstimatePDF extends sfTCPDF
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'Add Expenses';
-          sfContext::getInstance()->getLogger()->info($message);
+          //sfContext::getInstance()->getLogger()->info($message);
         } 
 
         $expense_c = new Criteria();
@@ -739,7 +739,7 @@ class EstimatePDF extends sfTCPDF
         if (sfConfig::get('sf_logging_enabled'))
         {
           $message = 'Add Pagebreak';
-          sfContext::getInstance()->getLogger()->info($message);
+          //sfContext::getInstance()->getLogger()->info($message);
         } 
 
         if ($this->settings['subtasks'] && ($this->settings['show_blank'] || count($section_items) > 0))
@@ -776,7 +776,7 @@ class EstimatePDF extends sfTCPDF
           if (sfConfig::get('sf_logging_enabled'))
           {
             $message = 'Draw Section Header';
-            sfContext::getInstance()->getLogger()->info($message);
+            //sfContext::getInstance()->getLogger()->info($message);
           } 
           $this->drawSectionHeader();
 
@@ -786,7 +786,7 @@ class EstimatePDF extends sfTCPDF
           if (sfConfig::get('sf_logging_enabled'))
           {
             $message = 'Draw Notes Section';
-            sfContext::getInstance()->getLogger()->info($message);
+            //sfContext::getInstance()->getLogger()->info($message);
           } 
           if (trim($section->getCustomerNotes()))
           {
