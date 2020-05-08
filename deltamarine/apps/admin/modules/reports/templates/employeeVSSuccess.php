@@ -27,7 +27,7 @@ if(!a)
                 'update' => 'notification_datagrid',
                 'url' => '/report/employeeVS'
               ))."</p>";
-        }
+ // }        
         ?>
     </div>
     <div id="notification_datagrid">
