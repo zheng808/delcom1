@@ -49,7 +49,7 @@ class timelogStatAction extends restInterfaceAction
       'nonbill_type' => array()
     );
 
-    $daystats = 
+    $daystats;
     for ($i = $starttime; $i <= $endtime; $i += 86400)
     {
       $daystats[date($i, 'Ymd')] = array('date' => date($i, 'M j, Y'), 'billable' => 0, 'nonbillable' => 0);

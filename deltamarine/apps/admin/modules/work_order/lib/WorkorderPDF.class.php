@@ -1068,9 +1068,10 @@ class WorkorderPDF extends sfTCPDF
 
           $sub = round($labour_factor * $labour->getSubtotal(), 2);
           $hst = $labour_factor * (!$this->workorder->getHstExempt() ? $labour->getHstTotal() : 0);
-          //NO PST on labour
-          $pst = $labour_factor * ($this->settings['taxable_pst'] ? $labour->getPstTotal() : 0);
-          //$pst = 0;
+          
+          //PST on labour when full TAX is chagred - i.e. both PST and GST are charged
+          $pst = $labour_factor * (($this->settings['taxable_pst'] && !$this->workorder->getPstExempt() && !$this->workorder->getGstExempt() ) ? $labour->getPstTotal() : 0);
+
           $gst = $labour_factor * ($this->settings['taxable_gst'] ? $labour->getGstTotal() : 0);
           
           $totals['sections'][$title]['labour']['subtotal'] += $sub; 
