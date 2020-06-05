@@ -52,13 +52,9 @@ try {
     function removeTreeProperties(&$list) {
         unset($list['lft']);
         unset($list['rgt']);
-        if(isset($list['children'])) {
-            foreach($list['children'] as &$child) {
-                removeTreeProperties(&$child);
-            }
-        }
+       
     }
-    removeTreeProperties(&$root);
+    //removeTreeProperties(&$root);
 
     $jsonResult = array(
         'success' => true,
