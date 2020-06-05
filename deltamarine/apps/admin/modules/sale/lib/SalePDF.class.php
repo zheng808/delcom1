@@ -357,10 +357,13 @@ class SalePDF extends sfTCPDF
           {
             $this->SetFillColor(245);
             $this->SetFont("Arial", '', $this->default_fontsize);
-            $this->SetX($this->GetX() + 20);
+            $this->SetX($this->GetX() + 20); 
             $this->Cell(80, $this->default_fontsize/1.5, 'BC PST Exempted / PST Number: '.$this->sale->getCustomer()->getPstNumber(), 0, 0, 'C', 1);
+            //$this->SetX($this->GetX() + 100); 
+            //$this->Cell(80, $this->default_fontsize/1.5, 'BC PST Exempted / PST Number: '.$this->sale->getCustomer()->getPstNumber(), 0, 0, 'L', 1);
             $this->SetFont("Arial", 'B', $this->default_fontsize);
             $this->Cell($labels_width - 100, $this->default_fontsize/1.5, 'PST (7%): ', 0, 0, 'R', 1);
+            //$this->Cell($labels_width - 180, $this->default_fontsize/1.5, 'PST (7%): ', 0, 0, 'R', 1);
             $this->SetFont("Arial", '', $this->default_fontsize);
             $this->SetFillColor(231,239,239);
             $this->Cell(0, $this->default_fontsize/1.5, 'N/A', 1, 1, 'R', 1);
@@ -580,7 +583,14 @@ class SalePDF extends sfTCPDF
       if ($this->payments)
       {
         $indent = $this->margin_width;
-        $start_y = $this->paymentsstart + 5;
+        sfContext::getInstance()->getLogger()->info('Payments Start Y: '.$this->paymentsstart);
+        sfContext::getInstance()->getLogger()->info('Current Y Position: '.$this->GetY());
+        $this->paymentsstart = $this->GetY();
+
+        $start_y = $this->paymentsstart + 0.5;
+
+        sfContext::getInstance()->getLogger()->info('New Start Y Position: '.$start_y);
+
         $newpage_boundary = 260;
         $height = max(50, (count($this->payments) * ($this->default_fontsize/1.5)) + 8);
         if ($start_y + $height > $newpage_boundary)
