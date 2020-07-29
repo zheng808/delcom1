@@ -128,7 +128,7 @@ class inventorySheetAction extends sfAction
     }
     else
     {
-      $sql .= ' ORDER BY '.PartVariantPeer::LOCATION.' ASC';
+      $sql .= ' ORDER BY UPPER('.PartVariantPeer::LOCATION.') ASC';
     }
 
     $con = Propel::getConnection();
@@ -143,6 +143,7 @@ class inventorySheetAction extends sfAction
           $locations[] = $row[0];
         }
     }
+
     if (!$this->getRequestParameter('location') && !$this->getRequestParameter('cycle'))
     {
       $locations[] = '';
@@ -151,6 +152,7 @@ class inventorySheetAction extends sfAction
     $cycle_limit = $limit = (is_numeric($this->getRequestParameter('limit')) ? $this->getRequestParameter('limit') : 0);
     $total_count = 0;
     $row = 0;
+
     foreach ($locations as $location)
     {
         $row++;
@@ -162,7 +164,7 @@ class inventorySheetAction extends sfAction
 
         //get products
         $offset = 0;
-        $limit = $cycle_limit ? $cycle_limit : 200;
+        $limit = $cycle_limit ? $cycle_limit : 200;        
         do
         {
           $c = new Criteria();
@@ -206,7 +208,8 @@ class inventorySheetAction extends sfAction
           }
           else
           {
-              $c->addAscendingOrderByColumn(PartCategoryPeer::LEFT_COL);
+            //JUL2020 Removed Left column fro order - not part of select
+              //$c->addAscendingOrderByColumn(PartCategoryPeer::LEFT_COL);
               $c->addAscendingOrderByColumn(PartPeer::NAME);
           }
           if ($offset > 0)
@@ -301,6 +304,11 @@ class inventorySheetAction extends sfAction
       sfContext::getInstance()->getLogger()->info($message);
     }
 
+    if (sfConfig::get('sf_logging_enabled'))
+    {
+      $message = 'DONE inventorySheetAction.execute====================';
+      sfContext::getInstance()->getLogger()->info($message);
+    }
     return sfView::NONE;
   }//execute()-----------------------------------------------------------------
 
