@@ -222,7 +222,7 @@ Ext.define('Ext.ux.EstimatePrintWin', {
     if (me.gst_rate)   me.form.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
 
     me.down('#shopfield button').setText('Charge ' + me.shop_supplies_pct + '% Shop Supplies');
-    me.down('#mooragefield button').setText('Charge $' + me.moorage_amt + ' Moorage');
+    me.down('#mooragefield button').setText('Charge ' + me.moorage_amt + '% Moorage');
 
     if (me.shop_supplies_pct > 0)       me.down('#shopfield').setValue('1');
     if (parseFloat(me.moorage_amt) > 0) me.down('#mooragefield').setValue('1');
@@ -400,7 +400,7 @@ Ext.define('Ext.ux.WorkorderPrintWin', {
     if (me.gst_rate)   me.down('#gstfield button').setText('Charge ' + me.gst_rate + '% GST');
 
     me.down('#shopfield button').setText('Charge ' + me.shop_supplies_pct + '% Shop Supplies');
-    me.down('#mooragefield button').setText('Charge $' + me.moorage_amt + ' Moorage');
+    me.down('#mooragefield button').setText('Charge ' + me.moorage_amt + ' % Moorage');
 
     if (me.shop_supplies_pct > 0)       me.down('#shopfield').setValue('1');
     if (parseFloat(me.moorage_amt) > 0) me.down('#mooragefield').setValue('1');

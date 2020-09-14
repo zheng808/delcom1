@@ -1,0 +1,146 @@
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:26:51 symfony [info] {sfPatternRouting} Match route "homepage" (/) for / with parameters array (  'module' => 'dashboard',  'action' => 'index',)
+Sep 13 21:26:51 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:26:51 symfony [info] {sfFilterChain} Executing filter "sfGuardBasicSecurityFilter"
+Sep 13 21:26:51 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:26:51 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:26:51 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:26:51 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:26:51 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/modules/sfGuardAuth/templates/signinSuccess.php"
+Sep 13 21:26:51 symfony [info] {sfPHPView} Decorate content with "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:26:51 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:26:51 symfony [info] {sfWebResponse} Send content (2779 o)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:26:57 symfony [info] {sfPatternRouting} Match route "sf_guard_signin" (/login) for /login with parameters array (  'module' => 'sfGuardAuth',  'action' => 'signin',)
+Sep 13 21:26:57 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:26:57 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:26:57 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:26:57 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} exec: SET NAMES 'utf8'
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user.ID, sf_guard_user.USERNAME, sf_guard_user.ALGORITHM, sf_guard_user.SALT, sf_guard_user.PASSWORD, sf_guard_user.CREATED_AT, sf_guard_user.LAST_LOGIN, sf_guard_user.IS_ACTIVE, sf_guard_user.IS_SUPER_ADMIN FROM `sf_guard_user` WHERE sf_guard_user.USERNAME=:p1 AND sf_guard_user.IS_ACTIVE=:p2 LIMIT 1
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding 'alex' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding 1 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:26:57 symfony [info] {myUser} User is authenticated
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_permission.USER_ID, sf_guard_user_permission.PERMISSION_ID, sf_guard_permission.ID, sf_guard_permission.NAME, sf_guard_permission.DESCRIPTION FROM `sf_guard_user_permission` LEFT JOIN sf_guard_permission ON (sf_guard_user_permission.PERMISSION_ID=sf_guard_permission.ID) WHERE sf_guard_user_permission.USER_ID=:p1
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_group.USER_ID, sf_guard_user_group.GROUP_ID, sf_guard_group.ID, sf_guard_group.NAME, sf_guard_group.DESCRIPTION FROM `sf_guard_user_group` LEFT JOIN sf_guard_group ON (sf_guard_user_group.GROUP_ID=sf_guard_group.ID) WHERE sf_guard_user_group.USER_ID=:p1
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:26:57 symfony [info] {myUser} Add credential(s) "app_admin, app_touch, parts_view, parts_edit, parts_inventory, parts_delete, parts_supplier_view, parts_supplier_edit, parts_manufacturer_view, parts_manufacturer_edit, parts_category_view, parts_category_edit, orders_view, orders_edit, orders_approve, orders_send, orders_unfinalize, orders_receive, customer_view, customer_edit, employee_view, employee_edit, employee_login, employee_permissions, employee_departments, sales_view, sales_edit, sales_approve, sales_ship, sales_unfinalize, sales_returns, sales_payments, timelogs_view, timelogs_add_self, timelogs_add_other, timelogs_approve, timelogs_edit, timelogs_labour, touch_addtimelog, touch_addtimelog_notimes, touch_addpart, workorder_view, workorder_estimates, workorder_approve, workorder_edit, workorder_invoice, workorder_payment, employee_payrate, workorder_add, reports_view"
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} prepare: UPDATE sf_guard_user SET `LAST_LOGIN`=:p1 WHERE sf_guard_user.ID=:p2
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding '2020-09-13 21:26:57' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:26:57 symfony [debug] {sfPropelLogger} Binding 128 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:26:58 symfony [info] {sfFrontWebController} Redirect to "http://192.168.5.107/"
+Sep 13 21:26:58 symfony [info] {sfWebResponse} Send content (92 o)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:26:58 symfony [info] {sfPatternRouting} Match route "homepage" (/) for / with parameters array (  'module' => 'dashboard',  'action' => 'index',)
+Sep 13 21:26:58 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:26:58 symfony [info] {sfFilterChain} Executing filter "sfGuardBasicSecurityFilter"
+Sep 13 21:26:58 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:26:58 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:26:58 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:26:58 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:26:58 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/modules/sfGuardAuth/templates/signinSuccess.php"
+Sep 13 21:26:58 symfony [info] {sfPHPView} Decorate content with "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:26:58 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:26:58 symfony [info] {sfWebResponse} Send content (2779 o)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Match route "sf_guard_signin" (/login) for /login with parameters array (  'module' => 'sfGuardAuth',  'action' => 'signin',)
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:27:05 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} exec: SET NAMES 'utf8'
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user.ID, sf_guard_user.USERNAME, sf_guard_user.ALGORITHM, sf_guard_user.SALT, sf_guard_user.PASSWORD, sf_guard_user.CREATED_AT, sf_guard_user.LAST_LOGIN, sf_guard_user.IS_ACTIVE, sf_guard_user.IS_SUPER_ADMIN FROM `sf_guard_user` WHERE sf_guard_user.USERNAME=:p1 AND sf_guard_user.IS_ACTIVE=:p2 LIMIT 1
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding 'alex' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding 1 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:05 symfony [info] {myUser} User is authenticated
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_permission.USER_ID, sf_guard_user_permission.PERMISSION_ID, sf_guard_permission.ID, sf_guard_permission.NAME, sf_guard_permission.DESCRIPTION FROM `sf_guard_user_permission` LEFT JOIN sf_guard_permission ON (sf_guard_user_permission.PERMISSION_ID=sf_guard_permission.ID) WHERE sf_guard_user_permission.USER_ID=:p1
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_group.USER_ID, sf_guard_user_group.GROUP_ID, sf_guard_group.ID, sf_guard_group.NAME, sf_guard_group.DESCRIPTION FROM `sf_guard_user_group` LEFT JOIN sf_guard_group ON (sf_guard_user_group.GROUP_ID=sf_guard_group.ID) WHERE sf_guard_user_group.USER_ID=:p1
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:05 symfony [info] {myUser} Add credential(s) "app_admin, app_touch, parts_view, parts_edit, parts_inventory, parts_delete, parts_supplier_view, parts_supplier_edit, parts_manufacturer_view, parts_manufacturer_edit, parts_category_view, parts_category_edit, orders_view, orders_edit, orders_approve, orders_send, orders_unfinalize, orders_receive, customer_view, customer_edit, employee_view, employee_edit, employee_login, employee_permissions, employee_departments, sales_view, sales_edit, sales_approve, sales_ship, sales_unfinalize, sales_returns, sales_payments, timelogs_view, timelogs_add_self, timelogs_add_other, timelogs_approve, timelogs_edit, timelogs_labour, touch_addtimelog, touch_addtimelog_notimes, touch_addpart, workorder_view, workorder_estimates, workorder_approve, workorder_edit, workorder_invoice, workorder_payment, employee_payrate, workorder_add, reports_view"
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} prepare: UPDATE sf_guard_user SET `LAST_LOGIN`=:p1 WHERE sf_guard_user.ID=:p2
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding '2020-09-13 21:27:05' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:27:05 symfony [debug] {sfPropelLogger} Binding 128 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:05 symfony [info] {sfFrontWebController} Redirect to "http://192.168.5.107/"
+Sep 13 21:27:05 symfony [info] {sfWebResponse} Send content (92 o)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:27:05 symfony [info] {sfPatternRouting} Match route "homepage" (/) for / with parameters array (  'module' => 'dashboard',  'action' => 'index',)
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfGuardBasicSecurityFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:27:05 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:27:05 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:27:05 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/modules/sfGuardAuth/templates/signinSuccess.php"
+Sep 13 21:27:05 symfony [info] {sfPHPView} Decorate content with "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:27:05 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:27:05 symfony [info] {sfWebResponse} Send content (2779 o)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Match route "sf_guard_signin" (/login) for /login with parameters array (  'module' => 'sfGuardAuth',  'action' => 'signin',)
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:27:13 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} exec: SET NAMES 'utf8'
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user.ID, sf_guard_user.USERNAME, sf_guard_user.ALGORITHM, sf_guard_user.SALT, sf_guard_user.PASSWORD, sf_guard_user.CREATED_AT, sf_guard_user.LAST_LOGIN, sf_guard_user.IS_ACTIVE, sf_guard_user.IS_SUPER_ADMIN FROM `sf_guard_user` WHERE sf_guard_user.USERNAME=:p1 AND sf_guard_user.IS_ACTIVE=:p2 LIMIT 1
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding 'alex' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding 1 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:13 symfony [info] {myUser} User is authenticated
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_permission.USER_ID, sf_guard_user_permission.PERMISSION_ID, sf_guard_permission.ID, sf_guard_permission.NAME, sf_guard_permission.DESCRIPTION FROM `sf_guard_user_permission` LEFT JOIN sf_guard_permission ON (sf_guard_user_permission.PERMISSION_ID=sf_guard_permission.ID) WHERE sf_guard_user_permission.USER_ID=:p1
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} prepare: SELECT sf_guard_user_group.USER_ID, sf_guard_user_group.GROUP_ID, sf_guard_group.ID, sf_guard_group.NAME, sf_guard_group.DESCRIPTION FROM `sf_guard_user_group` LEFT JOIN sf_guard_group ON (sf_guard_user_group.GROUP_ID=sf_guard_group.ID) WHERE sf_guard_user_group.USER_ID=:p1
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding 128 at position :p1 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:13 symfony [info] {myUser} Add credential(s) "app_admin, app_touch, parts_view, parts_edit, parts_inventory, parts_delete, parts_supplier_view, parts_supplier_edit, parts_manufacturer_view, parts_manufacturer_edit, parts_category_view, parts_category_edit, orders_view, orders_edit, orders_approve, orders_send, orders_unfinalize, orders_receive, customer_view, customer_edit, employee_view, employee_edit, employee_login, employee_permissions, employee_departments, sales_view, sales_edit, sales_approve, sales_ship, sales_unfinalize, sales_returns, sales_payments, timelogs_view, timelogs_add_self, timelogs_add_other, timelogs_approve, timelogs_edit, timelogs_labour, touch_addtimelog, touch_addtimelog_notimes, touch_addpart, workorder_view, workorder_estimates, workorder_approve, workorder_edit, workorder_invoice, workorder_payment, employee_payrate, workorder_add, reports_view"
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} prepare: UPDATE sf_guard_user SET `LAST_LOGIN`=:p1 WHERE sf_guard_user.ID=:p2
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding '2020-09-13 21:27:13' at position :p1 w/ PDO type PDO::PARAM_STR
+Sep 13 21:27:13 symfony [debug] {sfPropelLogger} Binding 128 at position :p2 w/ PDO type PDO::PARAM_INT
+Sep 13 21:27:13 symfony [info] {sfFrontWebController} Redirect to "http://192.168.5.107/"
+Sep 13 21:27:13 symfony [info] {sfWebResponse} Send content (92 o)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "homepage" (/)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "default_index" (/:module)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "default" (/:module/:action/*)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signin" (/login)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_signout" (/logout)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Connect sfRoute "sf_guard_password" (/request_password)
+Sep 13 21:27:13 symfony [info] {sfPatternRouting} Match route "homepage" (/) for / with parameters array (  'module' => 'dashboard',  'action' => 'index',)
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfGuardBasicSecurityFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfRenderingFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfCommonFilter"
+Sep 13 21:27:13 symfony [info] {sfFilterChain} Executing filter "sfExecutionFilter"
+Sep 13 21:27:13 symfony [info] {sfGuardAuthActions} Call "sfGuardAuthActions->executeSignin()"
+Sep 13 21:27:13 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/modules/sfGuardAuth/templates/signinSuccess.php"
+Sep 13 21:27:13 symfony [info] {sfPHPView} Decorate content with "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:27:13 symfony [info] {sfPHPView} Render "/var/www/delta/deltamarine/apps/admin/templates/plain.php"
+Sep 13 21:27:13 symfony [info] {sfWebResponse} Send content (2779 o)

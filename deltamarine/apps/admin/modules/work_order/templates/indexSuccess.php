@@ -691,9 +691,10 @@ var WorkOrderAddWin = new Ext.Window({
       value: 0
     },{
       xtype: 'numberfield',
-      fieldLabel: 'Power/Moorage $',
+      fieldLabel: 'Power/Moorage %',
       name: 'moorage_surcharge_amt',
       minValue: 0,
+      maxValue: 100,
       forcePrecision: true,
       anchor: '50%',
       value: 0

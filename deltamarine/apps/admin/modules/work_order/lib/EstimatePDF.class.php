@@ -964,6 +964,7 @@ class EstimatePDF extends sfTCPDF
       //add shopsupplies
       if ($this->settings['shop_supplies'])
       {
+        
         $total_shopsupplies = round(($this->workorder->getShopSuppliesSurcharge()/100) * ($total_parts + $total_labour + $total_expenses),2);
         if ($total_shopsupplies > 0)
         {
@@ -976,7 +977,8 @@ class EstimatePDF extends sfTCPDF
       //add power & moorage
       if ($this->settings['moorage'])
       {
-        $total_moorage = $this->workorder->getMoorageSurchargeAmt();
+        
+        $total_moorage = round(($this->workorder->getMoorageSurchargeAmt()/100) * ($total_parts + $total_labour + $total_expenses),2);
         if ($total_moorage > 0)
         {
           if (!$this->workorder->getHstExempt()) $total_hst += $total_moorage * (sfconfig::get('app_hst_rate')/100);

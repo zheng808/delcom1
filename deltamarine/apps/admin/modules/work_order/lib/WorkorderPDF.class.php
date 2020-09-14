@@ -1483,13 +1483,15 @@ class WorkorderPDF extends sfTCPDF
       }
 
       //add power & moorage
-      $total_moorage = $this->workorder->getMoorageSurchargeAmt();
+      $total_moorage = round(($this->workorder->getMoorageSurchargeAmt()/100) * ($total_parts + $total_labour + $total_expenses),2);
       if ($total_moorage > 0)
       {
         if (!$this->workorder->getHstExempt()) $total_hst += $total_moorage * (sfconfig::get('app_hst_rate')/100);
         if (!$this->workorder->getPstExempt() && $this->settings['taxable_pst']) $total_pst += $total_moorage * (sfconfig::get('app_pst_rate')/100);
         if (!$this->workorder->getGstExempt() && $this->settings['taxable_gst']) $total_gst += $total_moorage * (sfconfig::get('app_gst_rate')/100);
       }
+
+      error_log(print_r($total_moorage));
 
       //tally final totals
       $total_hst = round($total_hst,2);

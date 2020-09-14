@@ -44,7 +44,7 @@ class billingDatagridAction extends sfAction
 
       $fees = $payer_total['fees'];
       $supplies = round($total * ($workorder->getShopSuppliesSurcharge()/100), 2);
-      $moorage = ($key == 'cust' ? $workorder->getMoorageSurchargeAmt() : 0);
+      $moorage = round($total * ($workorder->getMoorageSurchargeAmt()/100), 2); 
 
       $total_amt = $total + $fees + $supplies + $moorage;
       $total_with_tax = $total_amt;
@@ -106,7 +106,7 @@ class billingDatagridAction extends sfAction
                        'items'    => $itemsarray);
 
     $this->renderText(json_encode($dataarray));
-
+    error_log(print_r($dataarray, TRUE)); 
     return sfView::NONE;
   }
 

@@ -1,3 +1,7 @@
 
 deltamarine/.DS_Store
 deltamarine/**/.DS_Store
+deltamarine/cache/project_autoload.cache
+deltamarine/log/admin_prod.log
+deltamarine/log/touch_prod.log
+deltamarine/log/cache

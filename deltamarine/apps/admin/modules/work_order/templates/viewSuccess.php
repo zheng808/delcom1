@@ -2443,7 +2443,7 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       value: <?php echo $workorder->getShopSuppliesSurcharge(); ?>
     },{
       xtype: 'numberfield',
-      fieldLabel: 'Power/Moorage $',
+      fieldLabel: 'Power/Moorage %',
       name: 'moorage_surcharge_amt',
       forcePrecision: true,
       minValue: 0,
