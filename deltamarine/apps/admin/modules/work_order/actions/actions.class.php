@@ -774,27 +774,26 @@ class work_orderActions extends sfActions
     $this->forward404Unless($request->isMethod('post'));
 
     $workorder = $this->loadWorkorder($request);
-    $this->forward404Unless($item = WorkorderItemPeer::retrieveByPk($request->getParameter('item_id')));
+    $this->forward404Unless($item= WorkorderItemPeer::retrieveByPk($request->getParameter('item_id')));
     $this->forward404Unless($item->getWorkorderId() == $workorder->getId());
 
-    //check to see if empty first
-    $empty = true;
-    $c = new Criteria();
-    $c->add(PartInstancePeer::DELIVERED, true);
-    if ($item->countPartInstances($c) > 0) $empty = false;
-    if ($item->countTimelogs() > 0) $empty = false;
-    if ($item->countWorkorderExpenses() > 0) $empty = false;
+    
 
-    if ($empty)
-    {
-      $item->delete();
-      $this->renderText("{success:true}");
-    }
-    else
-    {
-      $reason = 'Task was not empty-- could not delete. <br />Delete all parts/expenses/timelogs first if you wish to remove this task.';
-      $this->renderText(json_encode(array('success' => false, 'errors' => array('reason' => $reason))));
-    }
+    //check to see if empty first
+    // $empty = true;
+    // $c = new Criteria();
+    // $c->add(PartInstancePeer::DELIVERED, true);
+    // if ($item->countPartInstances($c) > 0) $empty = false;
+    // if ($item->countTimelogs() > 0) $empty = false;
+    // if ($item->countWorkorderExpenses() > 0) $empty = false;
+
+    $item->delete();
+    $this->renderText("{success:true}");
+    // else
+    // {
+    //   $reason = 'Task was not empty-- could not delete. <br />Delete all parts/expenses/timelogs first if you wish to remove this task.';
+    //   $this->renderText(json_encode(array('success' => false, 'errors' => array('reason' => $reason))));
+    // }
 
     return sfView::NONE;
   }

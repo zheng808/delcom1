@@ -5,6 +5,7 @@ Ext.onReady(function(){
 /*********************************************/
 
 
+
 whomStore = new Ext.data.JsonStore({
   fields: ['id','desc', 'name', 'taxable_hst', 'taxable_pst', 'taxable_gst'],
   autoLoad: false,
@@ -16,6 +17,7 @@ whomStore = new Ext.data.JsonStore({
     }
   }
 });
+
 
 progressStore = new Ext.data.JsonStore({
   fields: ['id', 'desc', 'name'],
@@ -753,9 +755,8 @@ Ext.define('Ext.ux.ItemEditWin', {
   updatingPercent: false,
   color_codes: null,
  
-  doneSetup: function(){
+  doneSetup: function(r){
     var me = this;
-
     if (me.workorder_id) me.form.params.id = me.workorder_id;
     if (me.down)
 
@@ -822,7 +823,6 @@ Ext.define('Ext.ux.ItemEditWin', {
 
     formLoad: function(r){
       var me = this;
-
       //manually set the manufacturer and supplier autocomplete fields, since it can't be loaded
       if (r.manufacturer_id){
         mf = me.down('#bill_manufacturerfield');
@@ -836,6 +836,15 @@ Ext.define('Ext.ux.ItemEditWin', {
       }
       if (r.completed){
         me.down('#completeinfo').setValue('<strong>'+r.completed_date+' by '+r.completed_by+'</strong>');
+        //disable input
+        $("textarea").prop("disabled", true);
+        $("div[role='button']").hide();
+        $("input").css('background', '#cccccc');
+        $("textarea").css('background', '#cccccc');
+      }else{
+        $("input").prop("disabled", false);
+        $("textarea").prop("disabled", false);
+        $("div[role='button']").show();
       }
 
       me.parentWin.updateCustomerPercent();
@@ -898,6 +907,7 @@ Ext.define('Ext.ux.ItemEditWin', {
           value: 'N/A'
         },{
           xtype: 'numberfield',
+          itemId: 'amount_paidNum',
           name: 'amount_paid',
           fieldLabel: 'Amount Paid',
           forcePrecision: 2,
@@ -1616,6 +1626,7 @@ Ext.define('Ext.ux.PartQuickaddWin', {
         callback : function (opt,success,response){
           Ext.Msg.hide(); 
           if (success){
+            
             data = Ext.decode(response.responseText);
             if (data && data.parts.length > 0){
               if (data.parts && data.parts.length == 1){
@@ -2804,6 +2815,7 @@ Ext.define('Ext.ux.WorkorderAddInvoiceWin', {
     var me = this;
 
     me.form.params.id = me.workorder_id;
+    
   },
 
   defaultFormConfig: {
@@ -3247,7 +3259,4 @@ Ext.define('Ext.ux.WorkorderReportPanel', {
     }]
   }
 });
-
-
-
 });

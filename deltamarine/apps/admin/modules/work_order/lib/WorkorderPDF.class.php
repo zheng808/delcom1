@@ -1491,8 +1491,8 @@ class WorkorderPDF extends sfTCPDF
         if (!$this->workorder->getGstExempt() && $this->settings['taxable_gst']) $total_gst += $total_moorage * (sfconfig::get('app_gst_rate')/100);
       }
 
-      error_log(print_r($total_moorage));
 
+  
       //tally final totals
       $total_hst = round($total_hst,2);
       $total_pst = round($total_pst,2);

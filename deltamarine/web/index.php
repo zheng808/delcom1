@@ -35,6 +35,6 @@ $env = 'prod';
 $debug = true;
 
 //load the appropriate app (doesn't check for existence, so will throw error if invalid one specified)
-$configuration = ProjectConfiguration::getApplicationConfiguration($app, $env, $debug);
+$configuration = ProjectConfiguration::getApplicationConfiguration($app, $env, true);
 
 sfContext::createInstance($configuration)->dispatch();

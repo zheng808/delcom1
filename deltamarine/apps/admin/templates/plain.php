@@ -3,10 +3,12 @@
   <head>
     <!-- script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script -->
     <!-- script>window.LogRocket && window.LogRocket.init('dknck2/dev-demo');</script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
     <?php include_title() ?>
     <link rel="shortcut icon" href="/favicon.ico" />
+    
   </head>
   <body style="height: 100%;">
     <div id="container" style="height: 100%;">

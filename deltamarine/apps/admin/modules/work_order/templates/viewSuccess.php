@@ -1,3 +1,4 @@
+
 <div class="leftside" style="padding-top: 27px;">
   <?php
     echo link_to('Return to Workorders List', 'work_order/index',
@@ -164,7 +165,7 @@ var gst_rate = <?php echo sfConfig::get('app_gst_rate'); ?>;
 var partPstTaxed = <?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>;
 var partGstTaxed = <?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>;
 
-
+var arrayitem = [];
 
 var color_code_array = [
       <?php $colors = WorkorderPeer::getColorCodesArray(); ?>
@@ -189,6 +190,7 @@ var tree_root_node = {
   expanded: true
 };
 
+
 var boattypesTpl = new Ext.XTemplate(
   '<tpl for="."><div class="x-boundlist-item">{make}',
     '<tpl if="model == \'\'"> <span style="font-size: 10px; color: #999;"> (all models)</span></tpl>',
@@ -212,7 +214,20 @@ function reload_tree(){
 
   tree_root_node.expanded = true;
   foldersStore.setRootNode(tree_root_node);
+
 }
+
+function addId(val){
+  var itemId = this.workorder_tree.getSelectionModel().getSelection()[0].data.id;
+  const index = arrayitem.indexOf(itemId);
+  if($(val).prop("checked") == true){
+      arrayitem.push(itemId);
+  }else{
+      arrayitem.splice(index, 1);
+  }
+  console.log(arrayitem);
+}
+
 
 var workordersStore = new Ext.data.JsonStore({
   fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt','text'],
@@ -383,7 +398,6 @@ var partsfindStore = new Ext.data.JsonStore({
 
 
 
-
 /*********************************************/
 /*      PARTS STUFF                          */
 /*********************************************/
@@ -457,7 +471,6 @@ var showPartEditWin = function(inst_id, data){
 };//showPartEditWin()----------------------------------------------------------
 
 function showPartEditWindow(inst_id, wo, data){
-
   if (inst_id){
 
     var config = {
@@ -471,7 +484,6 @@ function showPartEditWindow(inst_id, wo, data){
       gstOverrideFlg: 'N', //data.gst_override_flg,
     };
 
- 
     config.title = 'Edit Part';
     config.formConfig = { autoLoadUrl: '<?php echo url_for('work_order/partload?id='.$workorder->getId()); ?>?instance_id=' + inst_id }
     new Ext.ux.PartEditWin(config);
@@ -503,8 +515,7 @@ function showPartEditWindow(inst_id, wo, data){
     partTaskId = woTaskId;
 
     workorderItemsStore.proxy.setExtraParam('workorder_id', this_workorder_id);
-    workorderItemsStore.load();
-
+    workorderItemsStore.load();    
     PartAddSelectedWin.show();
 
     Ext.getCmp('name').setValue('<a href="/part/view/id/'+partId+'"><strong>'+partName+'</strong></a>');//(partName);
@@ -521,6 +532,8 @@ function showPartEditWindow(inst_id, wo, data){
 
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
+
+
   }
    
 };//showPartEditWindow()-------------------------------------------------------
@@ -948,7 +961,6 @@ var PartAddSelectedWin = new Ext.Window({
               },
               success: function(){
                 Ext.Msg.hide();
-
                 PartAddSelectedWin.hide();
                 Ext.Msg.hide();
                 //location.reload(true);
@@ -1789,7 +1801,7 @@ var timelogs_list = new Ext.grid.GridPanel({
     {
       text:'Add Timelog',
       iconCls: 'timeadd',
-      handler: function(){
+      handler: function(r){
         <?php if ($sf_user->hasCredential(array('timelogs_add_self','timelogs_add_other'), false)): ?>
           new Ext.ux.TimelogEditWin({
             title: 'Add Timelog',
@@ -2738,8 +2750,9 @@ var workorder_bbar = new Ext.Toolbar({
     disabled: true,
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
-        var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
-        if (/^[0-9]+$/.test(sel_id))
+        //var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+        var sel_id = arrayitem;
+        if (sel_id!=null)
         {
           Ext.Msg.show({
             icon: Ext.MessageBox.QUESTION,
@@ -2754,35 +2767,39 @@ var workorder_bbar = new Ext.Toolbar({
                   width: 300,
                   wait: true
                 });
-                Ext.Ajax.request({
-                  url: '<?php echo url_for('work_order/itemdelete?id='.$workorder->getId()); ?>',
-                  method: 'POST',
-                  params: { item_id: sel_id },
-                  callback : function (opt,success,response){
-                    Ext.Msg.hide();
-                    var data = Ext.decode(response.responseText);
-                
-                    if (success && data && data.success == true){
-                      reload_tree();
-                      partslistStore.load();
-                      timelogsStore.load();
-                    } else {
-                      if (data && data.errors && data.errors.reason){
-                        var myMsg = data.errors.reason;
+                for(var i = 0; i < sel_id.length; i++){
+                    Ext.Ajax.request({
+                    url: '<?php echo url_for('work_order/itemdelete?id='.$workorder->getId()); ?>',
+                    method: 'POST',
+                    params: { item_id: sel_id[i]},
+                    callback : function (opt,success,response){
+                      Ext.Msg.hide();
+                      var data = Ext.decode(response.responseText);
+                  
+                      if (success && data && data.success == true){
+                        reload_tree();
+                        partslistStore.load();
+                        timelogsStore.load();
                       } else {
-                        var myMsg = 'Could not delete task. Try again later!';  
-                      }
+                        if (data && data.errors && data.errors.reason){
+                          var myMsg = data.errors.reason;
+                          console.log(myMsg);
+                        } else {
+                          var myMsg = 'Could not delete task. Try again later!';  
+                        }
 
-                      Ext.Msg.show({
-                        icon: Ext.MessageBox.ERROR,
-                        buttons: Ext.MessageBox.OK,
-                        msg: myMsg,
-                        modal: true,
-                        title: 'Error'
-                      });
+                        Ext.Msg.show({
+                          icon: Ext.MessageBox.ERROR,
+                          buttons: Ext.MessageBox.OK,
+                          msg: myMsg,
+                          modal: true,
+                          title: 'Error'
+                        });
+                      }
                     }
-                  }
-                });
+                  });
+                }
+
               }
             }
           });
@@ -2900,15 +2917,46 @@ var workorder_tbar = new Ext.Toolbar({
   items: [{
     text: 'Add a Task',
     iconCls: 'folderadd',
-    handler: function(){    
-      <?php if ($sf_user->hasCredential('workorder_add')): ?>
-        new Ext.ux.ItemEditWin({ 
-          workorder_id: this_workorder_id,
-          color_codes: item_color_code_array,  //color_code_array
-        });
-      <?php else: ?>    
-        Ext.Msg.alert('Permission Denied','You do not have permission to edit work orders');
-      <?php endif; ?>
+    handler: function(){     
+          <?php if ($sf_user->hasCredential('workorder_add')): ?>
+            if(workorder_tree.getSelectionModel().getSelection()[0]!=null){
+              var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+              Ext.Ajax.request({
+                url: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id,
+                method: 'POST',
+                success: function(r){
+                  data = Ext.decode(r.responseText);
+                  console.log(data);
+                  if(data.data.completed == "1"){
+                    Ext.Msg.alert('Invalid Action','The task has already completed');
+                  }else{
+                    new Ext.ux.ItemEditWin({ 
+                      workorder_id: this_workorder_id,
+                      color_codes: item_color_code_array,  //color_code_array
+                    });
+                  }
+                },
+                failure: function(){
+                  Ext.Msg.hide();
+                    Ext.Msg.show({
+                      icon: Ext.MessageBox.ERROR,
+                      buttons: Ext.MessageBox.OK,
+                      msg: 'Could not add task!',
+                      modal: true,
+                      title: 'Error'
+                    });
+                }
+            });
+            }else{
+              new Ext.ux.ItemEditWin({ 
+                  workorder_id: this_workorder_id,
+                  color_codes: item_color_code_array,  //color_code_array
+                });
+            }       
+          <?php else: ?>    
+            Ext.Msg.alert('Permission Denied','You do not have permission to edit work orders');
+          <?php endif; ?>
+
     }
 <?php if ($workorder->isEstimate() || $workorder->isInProgress()): ?>
   },'-',{
@@ -2916,7 +2964,34 @@ var workorder_tbar = new Ext.Toolbar({
     iconCls: 'partadd',
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_add')): ?>
-        showPartAddWin();
+        if(workorder_tree.getSelectionModel().getSelection()[0]!=null){
+        var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+        Ext.Ajax.request({
+            url: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id,
+            method: 'POST',
+            success: function(r){
+              data = Ext.decode(r.responseText);
+              if(data.data.completed == "1"){
+                Ext.Msg.alert('Invalid Action','The task has already completed');
+              }else{
+                showPartAddWin();
+              }
+            },
+            failure: function(){
+              Ext.Msg.hide();
+                Ext.Msg.show({
+                  icon: Ext.MessageBox.ERROR,
+                  buttons: Ext.MessageBox.OK,
+                  msg: 'Could not add parts!',
+                  modal: true,
+                  title: 'Error'
+                });
+            }
+         });
+        }else{
+          showPartAddWin();
+        }    
+        
       <?php else: ?>    
         Ext.Msg.alert('Permission Denied','You do not have permission to edit worklogs');
       <?php endif; ?>
@@ -2928,14 +3003,47 @@ var workorder_tbar = new Ext.Toolbar({
     iconCls: 'timeadd',
     handler: function(){
       <?php if ($sf_user->hasCredential(array('timelogs_add_other','timelogs_add_self'), false)): ?>
-        new Ext.ux.TimelogEditWin({
-          title: 'Add Timelog',
-          workorder_id: <?php echo $workorder->getId(); ?>,
-          is_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
-          formConfig: {
-            params: { id: 'new' }
-          }
-        });
+        if(workorder_tree.getSelectionModel().getSelection()[0].data!=null){
+        var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+        Ext.Ajax.request({
+            url: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id,
+            method: 'POST',
+            success: function(r){
+              data = Ext.decode(r.responseText);
+              if(data.data.completed == "1"){
+                Ext.Msg.alert('Invalid Action','The task has already completed');
+              }else{
+                new Ext.ux.TimelogEditWin({
+                  title: 'Add Timelog',
+                  workorder_id: <?php echo $workorder->getId(); ?>,
+                  is_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
+                  formConfig: {
+                    params: { id: 'new' }
+                  }
+                });
+              }
+            },
+            failure: function(){
+              Ext.Msg.hide();
+                Ext.Msg.show({
+                  icon: Ext.MessageBox.ERROR,
+                  buttons: Ext.MessageBox.OK,
+                  msg: 'Could not add parts!',
+                  modal: true,
+                  title: 'Error'
+                });
+            }
+         });
+        }else{
+          new Ext.ux.TimelogEditWin({
+                  title: 'Add Timelog',
+                  workorder_id: <?php echo $workorder->getId(); ?>,
+                  is_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
+                  formConfig: {
+                    params: { id: 'new' }
+                  }
+          });
+        }    
       <?php else: ?>    
         Ext.Msg.alert('Permission Denied','You do not have permission to add timelogs to a work order');
       <?php endif; ?>
@@ -2947,18 +3055,52 @@ var workorder_tbar = new Ext.Toolbar({
     iconCls: 'moneyadd',
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_add')): ?>
-        var win = new Ext.ux.ExpenseEditWin({
-          title: 'Add Expense',
-          workorder_id: <?php echo $workorder->getId(); ?>,
-          workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
-          pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
-          gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
-          pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
-          gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>
-        });
-      <?php else: ?>    
-        Ext.Msg.alert('Permission Denied','You do not have permission to edit workorders');
-      <?php endif; ?>
+        if(workorder_tree.getSelectionModel().getSelection()[0].data!=null){
+        var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+        Ext.Ajax.request({
+            url: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id,
+            method: 'POST',
+            success: function(r){
+              data = Ext.decode(r.responseText);
+              if(data.data.completed == "1"){
+                Ext.Msg.alert('Invalid Action','The task has already completed');
+              }else{
+                var win = new Ext.ux.ExpenseEditWin({
+                title: 'Add Expense',
+                workorder_id: <?php echo $workorder->getId(); ?>,
+                workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
+                pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
+                gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
+                pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
+                gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>
+              });
+              }
+            },
+            failure: function(){
+              Ext.Msg.hide();
+                Ext.Msg.show({
+                  icon: Ext.MessageBox.ERROR,
+                  buttons: Ext.MessageBox.OK,
+                  msg: 'Could not add expense!',
+                  modal: true,
+                  title: 'Error'
+                });
+            }
+         });
+        }else{
+          var win = new Ext.ux.ExpenseEditWin({
+            title: 'Add Expense',
+            workorder_id: <?php echo $workorder->getId(); ?>,
+            workorder_estimate: <?php echo ($workorder->isEstimate() ? 'true' : 'false'); ?>,
+            pst_rate: <?php echo sfConfig::get('app_pst_rate'); ?>,
+            gst_rate: <?php echo sfConfig::get('app_gst_rate'); ?>,
+            pst_exempt: <?php echo ($workorder->getPstExempt() ? 'true' : 'false'); ?>,
+            gst_exempt: <?php echo ($workorder->getGstExempt() ? 'true' : 'false'); ?>
+          });
+        }    
+        <?php else: ?>    
+          Ext.Msg.alert('Permission Denied','You do not have permission to edit workorders');
+        <?php endif; ?>
     }
 <?php endif; ?>
   },'-',{
@@ -3390,9 +3532,19 @@ var workorder_tree = new Ext.tree.TreePanel({
       header:'Info',
       dataIndex:'info',
       width: 170
-    }]
+    },{
+      header:'Checkbox',
+      width:60, 
+      selModel: {
+	        checkOnly: false,
+	        injectCheckbox: 'last',
+	        mode: 'SIMPLE'
+      },
+      renderer: function(){
+        return '<input type="checkbox"  name="checkbox" onclick="addId(this)">';   
+      }
+    }],
   }
-
 });
 
 
@@ -3662,6 +3814,8 @@ var workorder_tabs = new Ext.TabPanel({
 
 });
 
+
+
 var workorder_toolbar = new Ext.Toolbar({
   height: 27,
   items: [{
@@ -3796,6 +3950,9 @@ Ext.onReady(function(){
 
   workorder_tabs.render('workorder_tabs');
   workorder_toolbar.render('view-toolbar');
+
 });
+
+
 
 </script>
