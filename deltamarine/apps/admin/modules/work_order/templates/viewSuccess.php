@@ -2783,7 +2783,6 @@ var workorder_bbar = new Ext.Toolbar({
                       } else {
                         if (data && data.errors && data.errors.reason){
                           var myMsg = data.errors.reason;
-                          console.log(myMsg);
                         } else {
                           var myMsg = 'Could not delete task. Try again later!';  
                         }
@@ -2926,7 +2925,6 @@ var workorder_tbar = new Ext.Toolbar({
                 method: 'POST',
                 success: function(r){
                   data = Ext.decode(r.responseText);
-                  console.log(data);
                   if(data.data.completed == "1"){
                     Ext.Msg.alert('Invalid Action','The task has already completed');
                   }else{
