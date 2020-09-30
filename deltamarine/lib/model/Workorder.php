@@ -605,7 +605,7 @@ class Workorder extends BaseWorkorder
         $subprefix[] = $this_number;
         $numbering = implode('.', $subprefix);
         $childarray = array('id' => $child->getId(),
-                            'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.$child->getLabel(),
+                            'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">'.$child->getLabel(),
                             'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
                             'estimate' => $child->getTotalEstimate(true),
                             'actual' => $child->getTotalActual(),

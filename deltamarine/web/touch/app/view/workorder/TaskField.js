@@ -119,7 +119,7 @@ Ext.define('Delta.view.workorder.TaskSelector', {
       align: 'center',
       docked: 'top',
       layout: { type: 'hbox', pack: 'right', align: 'center'},
-      title: 'Select Workorder Task',
+      title: 'Select Workorder Taskkk',
       items: [{
         xtype: 'button',
         text: 'Cancel',
@@ -215,6 +215,7 @@ Ext.define('Delta.view.workorder.TaskRenderer', {
     var me = this;
     var items = me.getInnerItems();
     var data = me.parent.getRecord().data;
+    console.log(data);
     var oldval = parseInt(Ext.ComponentQuery.query('fieldset field[name="task_id"]')[0].getValue());
 
     me.parent.setMargin('0 0 4 ' + (20 + data.level * 25));
