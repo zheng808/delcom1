@@ -81,6 +81,8 @@ abstract class BaseWorkorderItemPeer {
 	/** the column name for the COLOR_CODE field */
 	const COLOR_CODE = 'workorder_item.COLOR_CODE';
 
+	const TASK_CODE = 'workorder_item.TASK_CODE';
+
 	/**
 	 * An identiy map to hold any loaded instances of WorkorderItem objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -102,11 +104,11 @@ abstract class BaseWorkorderItemPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'WorkorderId', 'Label', 'Left', 'Right', 'OwnerCompany', 'LabourEstimate', 'LabourActual', 'OtherEstimate', 'OtherActual', 'PartEstimate', 'PartActual', 'AmountPaid', 'Completed', 'CompletedBy', 'CompletedDate', 'CustomerNotes', 'InternalNotes', 'ColorCode', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'workorderId', 'label', 'left', 'right', 'ownerCompany', 'labourEstimate', 'labourActual', 'otherEstimate', 'otherActual', 'partEstimate', 'partActual', 'amountPaid', 'completed', 'completedBy', 'completedDate', 'customerNotes', 'internalNotes', 'colorCode', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::WORKORDER_ID, self::LABEL, self::LFT, self::RGT, self::OWNER_COMPANY, self::LABOUR_ESTIMATE, self::LABOUR_ACTUAL, self::OTHER_ESTIMATE, self::OTHER_ACTUAL, self::PART_ESTIMATE, self::PART_ACTUAL, self::AMOUNT_PAID, self::COMPLETED, self::COMPLETED_BY, self::COMPLETED_DATE, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::COLOR_CODE, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'workorder_id', 'label', 'lft', 'rgt', 'owner_company', 'labour_estimate', 'labour_actual', 'other_estimate', 'other_actual', 'part_estimate', 'part_actual', 'amount_paid', 'completed', 'completed_by', 'completed_date', 'customer_notes', 'internal_notes', 'color_code', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'WorkorderId', 'Label', 'Left', 'Right', 'OwnerCompany', 'LabourEstimate', 'LabourActual', 'OtherEstimate', 'OtherActual', 'PartEstimate', 'PartActual', 'AmountPaid', 'Completed', 'CompletedBy', 'CompletedDate', 'CustomerNotes', 'InternalNotes', 'ColorCode', 'TaskCode'),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'workorderId', 'label', 'left', 'right', 'ownerCompany', 'labourEstimate', 'labourActual', 'otherEstimate', 'otherActual', 'partEstimate', 'partActual', 'amountPaid', 'completed', 'completedBy', 'completedDate', 'customerNotes', 'internalNotes', 'colorCode', 'taskCode'),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::WORKORDER_ID, self::LABEL, self::LFT, self::RGT, self::OWNER_COMPANY, self::LABOUR_ESTIMATE, self::LABOUR_ACTUAL, self::OTHER_ESTIMATE, self::OTHER_ACTUAL, self::PART_ESTIMATE, self::PART_ACTUAL, self::AMOUNT_PAID, self::COMPLETED, self::COMPLETED_BY, self::COMPLETED_DATE, self::CUSTOMER_NOTES, self::INTERNAL_NOTES, self::COLOR_CODE, self::TASK_CODE),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'workorder_id', 'label', 'lft', 'rgt', 'owner_company', 'labour_estimate', 'labour_actual', 'other_estimate', 'other_actual', 'part_estimate', 'part_actual', 'amount_paid', 'completed', 'completed_by', 'completed_date', 'customer_notes', 'internal_notes', 'color_code', 'task_code'),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
 	);
 
 	/**
@@ -116,11 +118,11 @@ abstract class BaseWorkorderItemPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'WorkorderId' => 1, 'Label' => 2, 'Left' => 3, 'Right' => 4, 'OwnerCompany' => 5, 'LabourEstimate' => 6, 'LabourActual' => 7, 'OtherEstimate' => 8, 'OtherActual' => 9, 'PartEstimate' => 10, 'PartActual' => 11, 'AmountPaid' => 12, 'Completed' => 13, 'CompletedBy' => 14, 'CompletedDate' => 15, 'CustomerNotes' => 16, 'InternalNotes' => 17, 'ColorCode' => 18, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'workorderId' => 1, 'label' => 2, 'left' => 3, 'right' => 4, 'ownerCompany' => 5, 'labourEstimate' => 6, 'labourActual' => 7, 'otherEstimate' => 8, 'otherActual' => 9, 'partEstimate' => 10, 'partActual' => 11, 'amountPaid' => 12, 'completed' => 13, 'completedBy' => 14, 'completedDate' => 15, 'customerNotes' => 16, 'internalNotes' => 17, 'colorCode' => 18, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::WORKORDER_ID => 1, self::LABEL => 2, self::LFT => 3, self::RGT => 4, self::OWNER_COMPANY => 5, self::LABOUR_ESTIMATE => 6, self::LABOUR_ACTUAL => 7, self::OTHER_ESTIMATE => 8, self::OTHER_ACTUAL => 9, self::PART_ESTIMATE => 10, self::PART_ACTUAL => 11, self::AMOUNT_PAID => 12, self::COMPLETED => 13, self::COMPLETED_BY => 14, self::COMPLETED_DATE => 15, self::CUSTOMER_NOTES => 16, self::INTERNAL_NOTES => 17, self::COLOR_CODE => 18, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'workorder_id' => 1, 'label' => 2, 'lft' => 3, 'rgt' => 4, 'owner_company' => 5, 'labour_estimate' => 6, 'labour_actual' => 7, 'other_estimate' => 8, 'other_actual' => 9, 'part_estimate' => 10, 'part_actual' => 11, 'amount_paid' => 12, 'completed' => 13, 'completed_by' => 14, 'completed_date' => 15, 'customer_notes' => 16, 'internal_notes' => 17, 'color_code' => 18, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'WorkorderId' => 1, 'Label' => 2, 'Left' => 3, 'Right' => 4, 'OwnerCompany' => 5, 'LabourEstimate' => 6, 'LabourActual' => 7, 'OtherEstimate' => 8, 'OtherActual' => 9, 'PartEstimate' => 10, 'PartActual' => 11, 'AmountPaid' => 12, 'Completed' => 13, 'CompletedBy' => 14, 'CompletedDate' => 15, 'CustomerNotes' => 16, 'InternalNotes' => 17, 'ColorCode' => 18, 'TaskCode' => 19),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'workorderId' => 1, 'label' => 2, 'left' => 3, 'right' => 4, 'ownerCompany' => 5, 'labourEstimate' => 6, 'labourActual' => 7, 'otherEstimate' => 8, 'otherActual' => 9, 'partEstimate' => 10, 'partActual' => 11, 'amountPaid' => 12, 'completed' => 13, 'completedBy' => 14, 'completedDate' => 15, 'customerNotes' => 16, 'internalNotes' => 17, 'colorCode' => 18, 'taskCode' =>19),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::WORKORDER_ID => 1, self::LABEL => 2, self::LFT => 3, self::RGT => 4, self::OWNER_COMPANY => 5, self::LABOUR_ESTIMATE => 6, self::LABOUR_ACTUAL => 7, self::OTHER_ESTIMATE => 8, self::OTHER_ACTUAL => 9, self::PART_ESTIMATE => 10, self::PART_ACTUAL => 11, self::AMOUNT_PAID => 12, self::COMPLETED => 13, self::COMPLETED_BY => 14, self::COMPLETED_DATE => 15, self::CUSTOMER_NOTES => 16, self::INTERNAL_NOTES => 17, self::COLOR_CODE => 18, self::TASK_CODE => 19),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'workorder_id' => 1, 'label' => 2, 'lft' => 3, 'rgt' => 4, 'owner_company' => 5, 'labour_estimate' => 6, 'labour_actual' => 7, 'other_estimate' => 8, 'other_actual' => 9, 'part_estimate' => 10, 'part_actual' => 11, 'amount_paid' => 12, 'completed' => 13, 'completed_by' => 14, 'completed_date' => 15, 'customer_notes' => 16, 'internal_notes' => 17, 'color_code' => 18, 'task_code' => 19),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
 	);
 
 	/**
@@ -240,6 +242,7 @@ abstract class BaseWorkorderItemPeer {
 
 		$criteria->addSelectColumn(WorkorderItemPeer::COLOR_CODE);
 
+		$criteria->addSelectColumn(WorkorderItemPeer::TASK_CODE);
 	}
 
 	/**

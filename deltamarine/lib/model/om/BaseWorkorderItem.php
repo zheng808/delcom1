@@ -220,6 +220,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 	 */
 	protected $alreadyInValidation = false;
 
+	protected $task_code;
 	/**
 	 * Initializes internal state of BaseWorkorderItem object.
 	 * @see        applyDefaults()
@@ -240,6 +241,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 	{
 		$this->completed = false;
 		$this->color_code = 'FFFFFF';
+		$this->task_code = 'FFFFFF';
 	}
 
 	/**
@@ -458,6 +460,10 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 	public function getColorCode()
 	{
 		return $this->color_code;
+	}
+
+	public function getTaskColorCode(){
+		return $this->task_code;
 	}
 
 	/**
@@ -877,6 +883,20 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 		return $this;
 	} // setColorCode()
 
+	public function setTaskColorCode($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->task_code !== $v || $v === 'FFFFFF') {
+			$this->task_code = $v;
+			$this->modifiedColumns[] = WorkorderItemPeer::TASK_CODE;
+		}
+
+		return $this;
+	} // setColorCode()
+
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
@@ -888,7 +908,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(WorkorderItemPeer::COMPLETED,WorkorderItemPeer::COLOR_CODE))) {
+			if (array_diff($this->modifiedColumns, array(WorkorderItemPeer::COMPLETED,WorkorderItemPeer::COLOR_CODE, WorkorderItemPeer::TASK_CODE))) {
 				return false;
 			}
 
@@ -897,6 +917,10 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 			}
 
 			if ($this->color_code !== 'FFFFFF') {
+				return false;
+			}
+
+			if ($this->task_code !== 'FFFFFF') {
 				return false;
 			}
 
@@ -941,6 +965,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 			$this->customer_notes = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
 			$this->internal_notes = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
 			$this->color_code = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
+			$this->task_code = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1600,6 +1625,9 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 			case 18:
 				$this->setColorCode($value);
 				break;
+			case 19:
+				$this->setTaskColorCode($value);
+				break;
 		} // switch()
 	}
 
@@ -1643,6 +1671,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[16], $arr)) $this->setCustomerNotes($arr[$keys[16]]);
 		if (array_key_exists($keys[17], $arr)) $this->setInternalNotes($arr[$keys[17]]);
 		if (array_key_exists($keys[18], $arr)) $this->setColorCode($arr[$keys[18]]);
+		if (array_key_exists($keys[19], $arr)) $this->setTaskColorCode($arr[$keys[19]]);
 	}
 
 	/**
@@ -1673,7 +1702,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderItemPeer::CUSTOMER_NOTES)) $criteria->add(WorkorderItemPeer::CUSTOMER_NOTES, $this->customer_notes);
 		if ($this->isColumnModified(WorkorderItemPeer::INTERNAL_NOTES)) $criteria->add(WorkorderItemPeer::INTERNAL_NOTES, $this->internal_notes);
 		if ($this->isColumnModified(WorkorderItemPeer::COLOR_CODE)) $criteria->add(WorkorderItemPeer::COLOR_CODE, $this->color_code);
-
+		if ($this->isColumnModified(WorkorderItemPeer::TASK_CODE)) $criteria->add(WorkorderItemPeer::TASK_CODE, $this->task_code);
 		return $criteria;
 	}
 
@@ -1763,6 +1792,7 @@ abstract class BaseWorkorderItem extends BaseObject  implements Persistent {
 
 		$copyObj->setColorCode($this->color_code);
 
+		$copyObj->setTaskColorCode($this->task_code);
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of

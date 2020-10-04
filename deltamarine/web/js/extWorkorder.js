@@ -754,6 +754,7 @@ Ext.define('Ext.ux.ItemEditWin', {
   workorder_id: null,
   updatingPercent: false,
   color_codes: null,
+  task_color_codes: null,
  
   doneSetup: function(r){
     var me = this;
@@ -791,6 +792,16 @@ Ext.define('Ext.ux.ItemEditWin', {
       });
       colorfield.initValue();
     }
+
+    if (me.task_color_codes) {
+      var colorfield = me.down('#taskcolorcode');
+      colorfield.removeAll();
+      Ext.Array.forEach(me.task_color_codes, function(i){
+        colorfield.add(i);
+      });
+      colorfield.initValue();
+    }
+
 
   },
 
@@ -868,6 +879,15 @@ Ext.define('Ext.ux.ItemEditWin', {
           initialFocus: true,
           minChars: 2
         },{
+          itemId: 'taskcolorcode',
+          xtype: 'acbuttongroup',
+          fieldLabel: 'Task Color Code',
+          name: 'taskcolor_code',
+          width: 300,
+          value: 'FFFFFF',
+          items: ['None']
+        },
+        {
           itemId: 'parentfield',
           fieldLabel: 'Parent Task',
           xtype: 'treecombo',

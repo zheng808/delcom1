@@ -13,6 +13,12 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
     return $conv[$this->getColorCode()];
   }
 
+  public function getTaskColorCodeName()
+  {
+    $conv = WorkorderPeer::getItemColorCodesArray();
+    return $conv[$this->getTaskColorCode()];
+  }
+
   public function getLabelWithLevel($spacer = '&nbsp;', $repeat_chars = 4)
   {
     return (str_repeat($spacer, $this->getLevel() * $repeat_chars).$this->getLabel());

@@ -193,8 +193,9 @@ class work_orderActions extends sfActions
     }    
     //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
+    var_dump($request);
     $workorder = $this->loadWorkorder($request);
-
+    
     //validate
     $result = true;
     $errors = array();
@@ -223,7 +224,7 @@ class work_orderActions extends sfActions
 
       $workorder->setCustomer($customer);
       $workorder->setCustomerBoat($boat);
-      $workorder->setCreatedOn($request->getParameter('created_on') ? strtotime($request->getParameter('created_on')) : null);
+      $workorder->setCreatedOn($request->getParameter('Yes') ? strtotime($request->getParameter('created_on')) : null);
       $workorder->setStartedOn($request->getParameter('started_on') ? strtotime($request->getParameter('started_on')) : null);
       $workorder->setCompletedOn($request->getParameter('completed_on') ? strtotime($request->getParameter('completed_on')) : null);
       $workorder->setHauloutDate($request->getParameter('haulout') ? strtotime($request->getParameter('haulout').' '.$request->getParameter('haulout_time')): null);
@@ -558,8 +559,8 @@ class work_orderActions extends sfActions
                   'in_house_labour_percent'     => 0, 
                   'customer_parts_percent'      => 100,
                   'customer_labour_percent'     => 100,
-                  'customer_notes'  => $item->getCustomerNotes()
-
+                  'customer_notes'  => $item->getCustomerNotes(),
+                  'taskcolor_code' => $item->getTaskColorCode()
                 );
 
     $data = array_merge($data, $splitarray);
@@ -571,6 +572,7 @@ class work_orderActions extends sfActions
 
   public function executeItemedit(sfWebRequest $request)
   {
+
     $workorder = $this->loadWorkorder($request);
 
     if ($request->hasParameter('item_id') && $request->getParameter('item_id') != 'new')
@@ -695,6 +697,8 @@ class work_orderActions extends sfActions
       $item->setCustomerNotes(trim($request->getParameter('customer_notes')));
       $item->setAmountPaid($request->getParameter('amount_paid') > 0 ? $request->getParameter('amount_paid') : 0);
       $item->setColorCode($request->getParameter('color_code','FFFFFF'));
+      $item->setTaskColorCode($request->getParameter('taskcolor_code','FFFFFF'));
+
       if (!$item->getCompleted() && $request->getParameter('completed') == '1')
       {
         $item->setCompleted(true);

@@ -167,8 +167,8 @@ var partGstTaxed = <?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>;
 
 var arrayitem = [];
 
-var color_code_array = [
-      <?php $colors = WorkorderPeer::getColorCodesArray(); ?>
+var task_color_code = [
+  <?php $colors = WorkorderPeer::getItemColorCodesArray(); ?>
       <?php $first = current($colors); ?>
       <?php foreach ($colors AS $colorcode => $colorname): ?><?php if ($first != $colorname) echo ','; ?>
         { value: '<?php echo $colorcode; ?>', text: '<span style="display: inline-block; height: 15px; width: 16px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;' }
@@ -2697,7 +2697,8 @@ var workorder_bbar = new Ext.Toolbar({
           var win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
-            color_codes: item_color_code_array,  //color_code_array,
+            task_color_codes: task_color_code,
+            color_codes: item_color_code_array,  
             formConfig: {
               params: { item_id: sel_id },
               autoLoadUrl: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id
@@ -2930,7 +2931,8 @@ var workorder_tbar = new Ext.Toolbar({
                   }else{
                     new Ext.ux.ItemEditWin({ 
                       workorder_id: this_workorder_id,
-                      color_codes: item_color_code_array,  //color_code_array
+                      color_codes: item_color_code_array,  
+                      task_color_codes: task_color_code,
                     });
                   }
                 },
@@ -2948,7 +2950,8 @@ var workorder_tbar = new Ext.Toolbar({
             }else{
               new Ext.ux.ItemEditWin({ 
                   workorder_id: this_workorder_id,
-                  color_codes: item_color_code_array,  //color_code_array
+                  color_codes: item_color_code_array, 
+                  task_color_codes: task_color_code,
                 });
             }       
           <?php else: ?>    
@@ -3261,7 +3264,8 @@ var workorder_tree = new Ext.tree.TreePanel({
           win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
-            color_codes: item_color_code_array,  //color_code_array,
+            color_codes: item_color_code_array,
+            task_color_codes: task_color_code, 
             formConfig: {
               params: { item_id: sel_id },
               autoLoadUrl: '<?php echo url_for('work_order/itemload?id='.$workorder->getId()); ?>?item_id=' + sel_id
@@ -3273,6 +3277,7 @@ var workorder_tree = new Ext.tree.TreePanel({
           var win = new Ext.ux.ItemEditWin({
             title: 'Edit Task',
             workorder_id: this_workorder_id,
+            task_color_codes: task_color_code,
             color_codes: item_color_code_array,  //color_code_array,
             formConfig: {
               params: { item_id: sel_id },

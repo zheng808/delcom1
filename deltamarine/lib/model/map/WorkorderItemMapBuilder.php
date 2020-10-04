@@ -100,6 +100,8 @@ class WorkorderItemMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('COLOR_CODE', 'ColorCode', 'VARCHAR', true, 6);
 
+		$tMap->addColumn('TASK_CODE', 'TASK_CODE', 'VARCHAR', true, 6);
+
 	} // doBuild()
 
 } // WorkorderItemMapBuilder
