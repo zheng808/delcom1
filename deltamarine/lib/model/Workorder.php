@@ -604,15 +604,29 @@ class Workorder extends BaseWorkorder
         $subprefix = $prefix;
         $subprefix[] = $this_number;
         $numbering = implode('.', $subprefix);
-        $childarray = array('id' => $child->getId(),
-                            'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">'.$child->getLabel(),
-                            'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
-                            'estimate' => $child->getTotalEstimate(true),
-                            'actual' => $child->getTotalActual(),
-                            'leaf' => false,
-                            'info' => $status,
-                            'children' => array()
-                          );
+        $label = $child->getLabel();
+        if($label == 'Electronics/Electrical'|| $label == 'Fiberglass/Misc' || $label == 'Woodworking' || $label == 'Mechanical' || $label =='Varnish' || $label == 'Bottom Painting/Waxing' || $label == 'Welding/Fabrication'){
+          $childarray = array('id' => $child->getId(),
+          'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-brown">'.$child->getLabel(),
+          'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
+          'estimate' => $child->getTotalEstimate(true),
+          'actual' => $child->getTotalActual(),
+          'leaf' => false,
+          'info' => $status,
+          'children' => array()
+          );
+        }else{
+          $childarray = array('id' => $child->getId(),
+          'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">'.$child->getLabel(),
+          'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
+          'estimate' => $child->getTotalEstimate(true),
+          'actual' => $child->getTotalActual(),
+          'leaf' => false,
+          'info' => $status,
+          'children' => array()
+        );
+        }
+      
         //add child nodes
         if ($child->hasChildren())
         {

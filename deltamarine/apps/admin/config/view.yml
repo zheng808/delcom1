@@ -5,7 +5,7 @@ default:
   metas:
     title:         Delta Marine - Management
 
-  stylesheets:    [base, main, /js/ext-4.2.1/resources/css/ext-all, admin-161013]
+  stylesheets:    [base, main, /js/ext-4.2.1/resources/css/ext-all, admin]
 
   javascripts:    [ext-4.2.1/ext-all-debug, ext-4.2.1/examples/ux/IFrame.js, barcodes_base, barcodes_admin, waitfix, precisionfix, extObjs-161010]
 

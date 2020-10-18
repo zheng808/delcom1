@@ -24,5 +24,10 @@ class reportsActions extends sfActions
   {
   }
 
+  public function executePartsCSV(sfWebRequest $request)
+  {
+  }
+
+
 
 }

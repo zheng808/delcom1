@@ -15,7 +15,7 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
 
   public function getTaskColorCodeName()
   {
-    $conv = WorkorderPeer::getItemColorCodesArray();
+    $conv = WorkorderPeer::getTaskColorCodesArray();
     return $conv[$this->getTaskColorCode()];
   }
 

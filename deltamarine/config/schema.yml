@@ -299,6 +299,7 @@ propel:
     customer_notes:         { type: longvarchar } # notes viewable by the customer
     internal_notes:         { type: longvarchar } # notes viewable by staff only
     color_code:             { type: varchar(6), required: true, default: FFFFFF }
+    task_code:             { type: varchar(6), required: true, default: FFFFFF }
 
   workorder_item_billable:        #by default all items get billed to workorder customer_id. This table allows overriding this.
     id:                           ~

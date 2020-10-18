@@ -168,7 +168,7 @@ var partGstTaxed = <?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>;
 var arrayitem = [];
 
 var task_color_code = [
-  <?php $colors = WorkorderPeer::getItemColorCodesArray(); ?>
+  <?php $colors = WorkorderPeer::getTaskColorCodesArray(); ?>
       <?php $first = current($colors); ?>
       <?php foreach ($colors AS $colorcode => $colorname): ?><?php if ($first != $colorname) echo ','; ?>
         { value: '<?php echo $colorcode; ?>', text: '<span style="display: inline-block; height: 15px; width: 16px; margin-left: 1px; border: 1px solid #333; background-color: #<?php echo $colorcode; ?>;' }
