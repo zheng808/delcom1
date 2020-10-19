@@ -1,8 +1,9 @@
 <div class="leftside" style="padding-top: 36px;">
   <div id="index-goto"></div>
+  <div id="index-PartExcel"></div>
   <?php
-    echo link_to('Print Parts Data', '/reports/generatePartsExcel',
-      array('class' => 'button tabbutton', 'style' => 'margin: 20px auto;'));
+    echo link_to('Print Parts CSV Data', 'reports/generatePartsExcel',
+      array('class' => 'button tabbutton printPartsData', 'style' => 'margin: 20px auto;'));
   ?>
 </div>
 <div class="rightside rightside-narrow">
@@ -23,6 +24,37 @@ proxy: {
     url: '<?php echo url_for('/reports/retreiveParts'); ?>'
   }
 });
+var workNumberField = new Ext.Panel({
+  width: 225,
+  margin: '0 0 25px 0',
+  title: 'Download Part Data',
+  items: [
+  new Ext.FormPanel({
+    autoWidth: true,
+    standardSubmit: true,
+    id: 'downloadExcel',
+    bodyStyle: 'padding: 10px',
+    labelWidth: 70,
+    items: [{
+      layout: 'column',
+      border: false,
+      items: [{
+        border: false,
+        columnWidth: 0.8,
+        layout: 'anchor',
+        items: [{      
+          itemId: 'woid',
+          id:'workIdData',
+          name: 'workExcel',
+          xtype: 'textfield',
+          fieldLabel: 'Enter Workorder',
+          anchor: '-1',
+        }]
+    }]
+  }]
+  })]
+});
+  
 
  //php echo url_for('reports/partsCSV'); ?>,
 var goto_panel = new Ext.Panel({
@@ -147,10 +179,17 @@ var grid = new Ext.grid.GridPanel({
   }]
 });
 
+$(".printPartsData").click(function(){
+      var work_id = $("#workIdData-inputEl").val();
+      var href = $('.printPartsData').attr('href');
+      var queryString = '?id=' +  encodeURIComponent(work_id);
+      $('.printPartsData').attr('href', href + queryString );
+});
 
 
 Ext.onReady(function(){
     grid.render("index-grid");
     goto_panel.render("index-goto");
+    workNumberField.render("index-PartExcel");
 });
 </script>

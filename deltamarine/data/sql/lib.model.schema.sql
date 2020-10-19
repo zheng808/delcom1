@@ -700,6 +700,7 @@ CREATE TABLE `workorder_item`
 	`customer_notes` TEXT,
 	`internal_notes` TEXT,
 	`color_code` VARCHAR(6) default '' NOT NULL,
+	`task_code` VARCHAR(6) default '' NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `workorder_item_FI_1` (`workorder_id`),
 	CONSTRAINT `workorder_item_FK_1`

@@ -2,7 +2,7 @@
   <div id="index-goto"></div>
   <div id="index-filter"></div>
   <?php
-    echo link_to('Print Open Workorders List', 'work_order/openWorkordersSheet',
+    echo link_to('Print Open Workorders List', 'work_order/openWorkordersSheet?id=',
       array('class' => 'button tabbutton', 'style' => 'margin: 20px auto;'));
   ?>
 </div>
