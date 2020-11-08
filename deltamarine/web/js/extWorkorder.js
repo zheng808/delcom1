@@ -2582,7 +2582,7 @@ Ext.define('Ext.ux.ExpenseEditWin', {
 /*********************************************/
 
 var otherWorkordersStore = new Ext.data.JsonStore({
-  fields: ['id','summary', 'customer','boat','date','status'],
+  fields: ['id','summary', 'customer','boat','date','status', 'boattype'],
   pageSize: 15,
   proxy: {
     type: 'ajax',
@@ -2642,14 +2642,18 @@ Ext.define('Ext.ux.ItemCopyWin', {
   closeAction: 'destroy',
 
   itemtext: '',
-  item_id: 0,
+  item_id: null,
   workorder_id: 0,
 
   doneSetup: function(){
     var me = this;
   
     me.down('#itemcopy_text').body.update('<strong>' + me.itemtext + '</strong>');
-    me.form.params.item_id = me.item_id;
+    var items = me.item_id;
+    for(var i=0; i<items.length; i++){
+      me.form.params.item_id = items[i];
+    }
+    
     me.form.params.id = me.workorder_id;
   },
 
@@ -2658,7 +2662,8 @@ Ext.define('Ext.ux.ItemCopyWin', {
     params: {
       item_id: null,
       id: null
-    },
+  },
+
 
     formSuccess: function() {
       Ext.Msg.alert('Success', 'Item was copied.');

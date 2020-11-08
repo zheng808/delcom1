@@ -484,12 +484,13 @@ class WorkorderPeer extends BaseWorkorderPeer
   public static function getTaskColorCodesArray(){
 
     return array(
-      'FFFFFF' => 'White',
-      '0066ff' => 'Blue',
-      '000000' => 'Black',
-      '00ff99' => 'Green',
-      'FF3300' => 'Red',
-      '996623' => 'Brown'
+      '808080' => 'BoldGrey',
+      'ffff99' => 'Yellow',
+      'cc6600' => 'Brown',
+      'ffa500' => 'Orange',
+      'd2b48c' => 'Tan',
+      '008080' => 'Teal',
+      '800080' => 'Purple'
     );
     
   }
@@ -497,15 +498,14 @@ class WorkorderPeer extends BaseWorkorderPeer
   public static function getItemColorCodesArray(){
 
     return array(
-      'FFFFFF' => 'White',
-      '0000FF' => 'Blue',
+      'FFFFFF' => 'Grey',
+      '0066ff' => 'Blue',
       '000000' => 'Black',
-      '33DD33' => 'Green',
-      'FF3333' => 'Red',
-      'FFFF00' => 'Yellow',
-      'FFA500' => 'Orange',
-      'A52A2A' => 'Brown'
+      '00ff99' => 'Green',
+      'FF3300' => 'Red',
+      '996623' => 'Brown'
     );
+    
     
   }
 

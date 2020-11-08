@@ -224,8 +224,7 @@ function addId(val){
       arrayitem.push(itemId);
   }else{
       arrayitem.splice(index, 1);
-  }
-  console.log(arrayitem);
+  } 
 }
 
 
@@ -2672,12 +2671,13 @@ var workorder_bbar = new Ext.Toolbar({
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
         var sel = workorder_tree.getSelectionModel().getSelection()[0].data;
-        if (/^[0-9]+$/.test(sel.id)){
-          new Ext.ux.ItemCopyWin({
-            itemtext: sel.text,
-            item_id: sel.id,
-            workorder_id: <?php echo $workorder->getId(); ?>
-          });
+        var multi_itemId = JSON.stringify(arrayitem);
+          if (/^[0-9]+$/.test(sel.id)){
+            new Ext.ux.ItemCopyWin({
+              itemtext: sel.text,
+              workorder_id: <?php echo $workorder->getId(); ?>,
+              item_id: multi_itemId
+            });
         }
       <?php else: ?>
         Ext.Msg.alert('Permission Denied','You do not have permission to edit workorder items');

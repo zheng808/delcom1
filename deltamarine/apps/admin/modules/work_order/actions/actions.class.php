@@ -452,22 +452,26 @@ class work_orderActions extends sfActions
     $this->forward404Unless($request->isMethod('post'));
     $this->forward404Unless($request->hasParameter('item_id') && $request->getParameter('item_id') != 'new');
     $this->forward404Unless($this->getUser()->hasCredential('workorder_edit'));
-    $this->forward404Unless($item = WorkorderItemPeer::retrieveByPk($request->getParameter('item_id')));
-    $this->forward404Unless($item->getWorkorderId() == $workorder->getId());
-    $this->forward404Unless($newwo = WorkorderPeer::retrieveByPk($request->getParameter('workorder_id')));
+    $arrayItem = json_decode($request->getParameter('item_id'));
 
-    if ($newwo->getId() == $workorder->getId())
-    {
-      $errors['workorder_id'] = 'You can\'t copy a task to the same workorder.';
-      return $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
+    foreach($arrayItem as $itemNum){
+      $this->forward404Unless($item = WorkorderItemPeer::retrieveByPk($itemNum));
+      $this->forward404Unless($item->getWorkorderId() == $workorder->getId());
+      $this->forward404Unless($newwo = WorkorderPeer::retrieveByPk($request->getParameter('workorder_id')));
+      if ($newwo->getId() == $workorder->getId())
+      {
+        $errors['workorder_id'] = 'You can\'t copy a task to the same workorder.';
+        return $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
+      }
+      
+      $item->duplicate(
+        $newwo, null, 
+        $request->getParameter('p'), $request->getParameter('pest'),
+        $request->getParameter('e'), $request->getParameter('eest'),
+        $request->getParameter('l'), $request->getParameter('lest')
+      );
     }
 
-    $item->duplicate(
-      $newwo, null, 
-      $request->getParameter('p'), $request->getParameter('pest'),
-      $request->getParameter('e'), $request->getParameter('eest'),
-      $request->getParameter('l'), $request->getParameter('lest')
-    );
 
     return $this->renderText("{success:true}");
   }
@@ -793,11 +797,6 @@ class work_orderActions extends sfActions
 
     $item->delete();
     $this->renderText("{success:true}");
-    // else
-    // {
-    //   $reason = 'Task was not empty-- could not delete. <br />Delete all parts/expenses/timelogs first if you wish to remove this task.';
-    //   $this->renderText(json_encode(array('success' => false, 'errors' => array('reason' => $reason))));
-    // }
 
     return sfView::NONE;
   }
@@ -2510,6 +2509,7 @@ class work_orderActions extends sfActions
   
   private function loadWorkorder(sfWebRequest $request)
   {
+
     $workorder = WorkorderPeer::retrieveByPk($request->getParameter('id'));
     $this->forward404Unless($workorder, sprintf('Workorder does not exist (id = %s).', $request->getParameter('id')));
 

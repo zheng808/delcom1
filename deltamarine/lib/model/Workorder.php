@@ -605,9 +605,7 @@ class Workorder extends BaseWorkorder
         $subprefix[] = $this_number;
         $numbering = implode('.', $subprefix);
         $label = $child->getLabel();
-        if($label == 'Electronics/Electrical'|| $label == 'Fiberglass/Misc' || $label == 'Woodworking' || $label == 'Mechanical' || $label =='Varnish' || $label == 'Bottom Painting/Waxing' || $label == 'Welding/Fabrication'){
-          $childarray = array('id' => $child->getId(),
-          'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-brown">'.$child->getLabel(),
+        $childarray = array('id' => $child->getId(),
           'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
           'estimate' => $child->getTotalEstimate(true),
           'actual' => $child->getTotalActual(),
@@ -615,17 +613,22 @@ class Workorder extends BaseWorkorder
           'info' => $status,
           'children' => array()
           );
-        }else{
-          $childarray = array('id' => $child->getId(),
-          'text' => '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">'.$child->getLabel(),
-          'iconCls' => $child->getCompleted() ? 'folder-done' : 'folder',
-          'estimate' => $child->getTotalEstimate(true),
-          'actual' => $child->getTotalActual(),
-          'leaf' => false,
-          'info' => $status,
-          'children' => array()
-        );
-        }
+        // if($label == 'Welding/Fabrication'){
+        //   $childarray['text'] = '<span class="blocky bl-boldgrey">Task '.$numbering.'</span> '.'<span class="blocky"">'.$child->getLabel();
+        // }else if($label == 'Vanishing'){
+        //   $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky" style="background:#ffff99">'.$child->getLabel();
+        // }else if($label == 'Woodworking'){
+        //   $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky" style="background:#cc6600">'.$child->getLabel();
+        // }else if($label == 'Mechanical'){
+        //   $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky" style="background:#ffa500">'.$child->getLabel();
+        // }else if($label == 'Bottom painting/Waxing'){
+        //   $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky" style="background:#d2b48c">'.$child->getLabel();
+        // }else if($label == 'Fiberglass'){
+        //   $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky" style="background:#008080">'.$child->getLabel();
+        // }else{
+          $childarray['text'] = '<span class="blocky bl-'.strtolower($child->getColorCodeName()).'">Task '.$numbering.'</span> '.'<span class="blocky bl-'.strtolower($child->getTaskColorCodeName()).'">'.$child->getLabel();
+        //}
+
       
         //add child nodes
         if ($child->hasChildren())
