@@ -17,7 +17,7 @@
 var partItemsStore = new Ext.data.JsonStore({
 storeId:'employeeStore',
 autoLoad: true,
-fields: ['taskname','tasknumber', 'partname','quantity','unitprice', 'origin', 'total'],
+fields: ['taskname','tasknumber', 'partname','quantity','unitprice', 'origin', 'total', 'ExpectedDate'],
 pageSize: 20,
 proxy: {
     type: 'ajax',
@@ -139,7 +139,7 @@ var grid = new Ext.grid.GridPanel({
     dataIndex: 'taskname',
     sortable: true,
     format: 0,
-    width: 180
+    width: 120
   },{
     header: "Task Number",
     dataIndex: 'tasknumber',
@@ -152,7 +152,7 @@ var grid = new Ext.grid.GridPanel({
     dataIndex: 'partname',
     hideable: false,
     sortable: true,
-    width: 200
+    width: 160
   },{
     header: "Quantity",
     dataIndex: 'quantity',
@@ -174,6 +174,12 @@ var grid = new Ext.grid.GridPanel({
   {
     header: "Origin",
     dataIndex: 'origin',
+    sortable: true,
+    width: 75
+  },
+  {
+    header: "ExpectedDate",
+    dataIndex: 'ExpectedDate',
     sortable: true,
     width: 75
   }]

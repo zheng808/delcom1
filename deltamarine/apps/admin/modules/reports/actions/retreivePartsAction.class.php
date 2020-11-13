@@ -27,7 +27,8 @@ class retreivePartsAction extends sfAction
              'quantity' => $part[2],
              'unitprice' =>$part[3],
              'origin' => $part[4],
-             'total' => $part[5]
+             'total' => $part[5],
+             'ExpectedDate' => $part[6]
           );
         }
       }
