@@ -89,13 +89,25 @@ class generatePartsExcelAction extends sfAction
               $task = $task . $taskcount;
             } 
           }
+
+          if(is_null($part[1])){
+            $partName = $part[6];
+          }else{
+            $partName = $part[1];
+          }
+          if(is_null($part[4])){
+            $origin = $part[7];
+          }else{
+            $origin = $part[4];
+          }
+
           $worksheet->writeString($row, 0, $part[0]);
           $worksheet->writeString($row, 1, $task);
-          $worksheet->writeString($row, 2, $part[1]); 
+          $worksheet->writeString($row, 2, $partName); 
           $worksheet->writeString($row, 3, $part[3]); 
           $worksheet->writeString($row, 4, $part[2]);
           $worksheet->writeString($row, 5, $part[5]);
-          $worksheet->writeString($row, 6, $part[4]); 
+          $worksheet->writeString($row, 6, $origin); 
       }
     }
 

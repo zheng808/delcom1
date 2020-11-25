@@ -214,7 +214,6 @@ function reload_tree(){
 
   tree_root_node.expanded = true;
   foldersStore.setRootNode(tree_root_node);
-
 }
 
 function addId(val){
@@ -3502,7 +3501,7 @@ var workorder_tree = new Ext.tree.TreePanel({
       xtype: 'treecolumn',
       header:'Name',
       dataIndex:'text',
-      width: 310
+      width: 400
     },{
       header:'Estimate',
       width:80,
@@ -3534,7 +3533,7 @@ var workorder_tree = new Ext.tree.TreePanel({
     },{
       header:'Info',
       dataIndex:'info',
-      width: 170
+      width: 100
     },{
       header:'Checkbox',
       width:60, 

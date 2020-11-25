@@ -11,6 +11,13 @@
   <h1 class="headicon headicon-part" id="gridtitle"><?php echo ($onhold ? 'Parts On Hold' : ($ondupe ? 'Duplicate SKUs' : 'Parts')); ?></h1>
   <div id="index-tabs"></div>
 </div>
+<div class="loading">
+      <div class="percent">100%</div>
+       <label class="text">Completed!</label>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+</div>
 
 <script type="text/javascript">
 var global_code = null;
@@ -1402,7 +1409,7 @@ var CycleInventorySheetWin = new Ext.Window({
       itemId: 'category'      
     }],
     buttons:[{
-      text: 'Download',
+      text: 'Download Excel',
       formBind: true,
       handler:function(){
         CycleInventorySheetWin.hide();
@@ -1427,14 +1434,16 @@ var InventorySheetWin = new Ext.Window({
   resizable: false,
   closeAction: 'hide',
   layout: 'fit',
-
+  viewConfig: { stripeRows: true, loadMask: true },
   items: new Ext.form.FormPanel({
     fieldDefaults: {
       labelAlign: 'left'
     },
     url: '<?php echo url_for('part/inventorySheet'); ?>',
+    method: 'POST',
     target: 'iframe',
     bodyStyle: 'padding: 20px',
+
     standardSubmit: true,
     items: [{
       border: false,
@@ -1464,8 +1473,14 @@ var InventorySheetWin = new Ext.Window({
       text: 'Download',
       formBind: true,
       handler:function(){
-        InventorySheetWin.hide();
-        supform = this.findParentByType('form').submit();
+        InventorySheetWin.hide(); 
+        var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait for one or two minutes"});
+        myMask.show();
+        setInterval(() => {
+        myMask.hide();
+        }, 50000);
+        this.findParentByType('form').getForm().submit({  
+        });
       }
     },{
       text: 'Cancel',
@@ -1482,7 +1497,7 @@ var holdgrid = new Ext.grid.GridPanel({
   enableColumnMove: false,
   autoRender: false,
   viewConfig: { stripeRows: true, loadMask: true },
-
+ 
   columns: [{
     header: 'Part Name',
     flex: 2,
@@ -2336,9 +2351,30 @@ var part_tabs = new Ext.Panel({
   items: [ parts_grid, holdgrid, dupegrid ]
 });
 
+function progress(){
+  var percent = document.querySelector('.percent');
+  var progress = document.querySelector('.progress');
+  var text = document.querySelector('.text');
+  var count = 4;
+  var per = 16;
+  var loading = setInterval(animate, 50);
+  function animate(){
+    if(count == 100 && per == 400){
+      percent.classList.add("text-blink");
+      text.style.display = "block";
+      clearInterval(loading);
+    }else{
+      per = per + 4;
+      count = count + 1;
+      progress.style.width = per + 'px';
+      percent.textContent = count + '%';
+    }
+  }
+}
+
 
 Ext.onReady(function(){
-
+  
   //create iframe for printing pdfs
   var body = Ext.getBody();
   var frame = body.createChild({
@@ -2347,10 +2383,10 @@ Ext.onReady(function(){
     id:'iframe',
     name:'iframe'
   });
-
+  
   filter.render("index-filter");
   part_tabs.render("index-tabs");
-
+  
 
 });//onReady()-----------------------------------------------------------------
 

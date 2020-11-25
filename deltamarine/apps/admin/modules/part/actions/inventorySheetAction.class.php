@@ -297,7 +297,7 @@ class inventorySheetAction extends sfAction
     $worksheet->writeString($row + 1, 7, number_format($total_value, 2), $right_format);
 
     $workbook->close();
-
+    $this->renderText('{success:true}');
     if (sfConfig::get('sf_logging_enabled'))
     {
       $message = 'DONE inventorySheetAction.execute====================';

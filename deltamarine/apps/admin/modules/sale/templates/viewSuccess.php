@@ -354,6 +354,7 @@ function AddItemSelect(record,focusquantity,setquantity){
 /*
 * TODO
 */
+
 function showAddCustomPartWin(partInstId){
   
     var pst_rate = 0;

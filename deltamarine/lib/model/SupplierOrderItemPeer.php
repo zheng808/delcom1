@@ -55,6 +55,7 @@ class SupplierOrderItemPeer extends BaseSupplierOrderItemPeer
         PartVariantPeer::addInstanceToPool($variant, $variant_key);
       }
 
+    
       //load part
       $part_key = PartPeer::getPrimaryKeyHashFromRow($row, $part_startcol);
       if (null === ($part = PartPeer::getInstanceFromPool($part_key)))

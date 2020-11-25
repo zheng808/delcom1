@@ -86,6 +86,7 @@ class supplierorderitemDatagridAction extends sfAction
                                 );
     }
 
+    
     //count the totals and add stuff to the final array
     $c2->addJoin(PartPeer::ID, PartVariantPeer::PART_ID);
     $c2->addJoin(PartVariantPeer::ID, SupplierOrderItemPeer::PART_VARIANT_ID);

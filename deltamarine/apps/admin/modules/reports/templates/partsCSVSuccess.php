@@ -139,7 +139,7 @@ var grid = new Ext.grid.GridPanel({
     dataIndex: 'taskname',
     sortable: true,
     format: 0,
-    width: 120
+    width: 150
   },{
     header: "Task Number",
     dataIndex: 'tasknumber',
@@ -152,7 +152,7 @@ var grid = new Ext.grid.GridPanel({
     dataIndex: 'partname',
     hideable: false,
     sortable: true,
-    width: 160
+    width: 200
   },{
     header: "Quantity",
     dataIndex: 'quantity',
@@ -174,12 +174,6 @@ var grid = new Ext.grid.GridPanel({
   {
     header: "Origin",
     dataIndex: 'origin',
-    sortable: true,
-    width: 75
-  },
-  {
-    header: "ExpectedDate",
-    dataIndex: 'ExpectedDate',
     sortable: true,
     width: 75
   }]

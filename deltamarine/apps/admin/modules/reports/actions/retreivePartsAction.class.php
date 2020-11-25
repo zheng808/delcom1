@@ -20,16 +20,29 @@ class retreivePartsAction extends sfAction
             }else{
               $task = $task . $taskcount;
             }
-          }  
+            //check custom part
+            if(is_null($part[1])){
+              $partName = $part[6];
+            }else{
+              $partName = $part[1];
+            }
+            if(is_null($part[4])){
+              $origin = $part[7];
+            }else{
+              $origin = $part[4];
+            }
+          } 
+          
           $childarray[] = array('taskname' => $part[0],
              'tasknumber' => $task,
-             'partname' => $part[1],
+             'partname' => $partName,
              'quantity' => $part[2],
              'unitprice' =>$part[3],
-             'origin' => $part[4],
+             'origin' => $origin,
              'total' => $part[5],
-             'ExpectedDate' => $part[6]
           );
+          
+          
         }
       }
      

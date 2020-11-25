@@ -2649,11 +2649,7 @@ Ext.define('Ext.ux.ItemCopyWin', {
     var me = this;
   
     me.down('#itemcopy_text').body.update('<strong>' + me.itemtext + '</strong>');
-    var items = me.item_id;
-    for(var i=0; i<items.length; i++){
-      me.form.params.item_id = items[i];
-    }
-    
+    me.form.params.item_id = me.item_id;
     me.form.params.id = me.workorder_id;
   },
 

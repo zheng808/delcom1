@@ -1512,6 +1512,7 @@ class work_orderActions extends sfActions
   /**********************************/  
   /*      CUSTOM PART STUFF         */
   /**********************************/
+  
   public function executePartcustomEdit(sfWebRequest $request)
   {
     if (sfConfig::get('sf_logging_enabled'))
