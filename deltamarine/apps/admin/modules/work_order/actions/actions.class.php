@@ -191,9 +191,8 @@ class work_orderActions extends sfActions
       $message = 'START executeEdit======================';
       sfContext::getInstance()->getLogger()->info($message);
     }    
-    //$this->forward404Unless($request->isXmlHttpRequest());
     $this->forward404Unless($request->isMethod('post'));
-    var_dump($request);
+
     $workorder = $this->loadWorkorder($request);
     
     //validate
@@ -221,10 +220,10 @@ class work_orderActions extends sfActions
       $old_pst = $workorder->getPstExempt();
       $old_gst = $workorder->getGstExempt();
       $oldstatus = $workorder->getStatus();
-
+      echo $request->getParameter('created_on');
       $workorder->setCustomer($customer);
       $workorder->setCustomerBoat($boat);
-      $workorder->setCreatedOn($request->getParameter('Yes') ? strtotime($request->getParameter('created_on')) : null);
+      $workorder->setCreatedOn(strtotime($request->getParameter('created_on')));
       $workorder->setStartedOn($request->getParameter('started_on') ? strtotime($request->getParameter('started_on')) : null);
       $workorder->setCompletedOn($request->getParameter('completed_on') ? strtotime($request->getParameter('completed_on')) : null);
       $workorder->setHauloutDate($request->getParameter('haulout') ? strtotime($request->getParameter('haulout').' '.$request->getParameter('haulout_time')): null);
@@ -424,7 +423,7 @@ class work_orderActions extends sfActions
           }
         }
       }
-
+      
       //output result as JSON
       $this->renderText("{success:true,suppliererror:".($invalid_suppliers ? 'true' : 'false')."}");
     }

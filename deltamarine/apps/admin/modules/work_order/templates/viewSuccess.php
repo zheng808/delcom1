@@ -165,7 +165,10 @@ var gst_rate = <?php echo sfConfig::get('app_gst_rate'); ?>;
 var partPstTaxed = <?php echo ($workorder->getPstExempt() ? '0' : '1'); ?>;
 var partGstTaxed = <?php echo ($workorder->getGstExempt() ? '0' : '1'); ?>;
 
-var arrayitem = [];
+var taskArray = [];
+var partArray = [];
+var labourArray = [];
+var expenseArray = [];
 
 var task_color_code = [
   <?php $colors = WorkorderPeer::getTaskColorCodesArray(); ?>
@@ -217,13 +220,44 @@ function reload_tree(){
 }
 
 function addId(val){
+  
+  if(this.workorder_tree.getSelectionModel().getSelection()[0] == null){
+    Ext.Msg.show({title:'Not a valid selection',msg:'Please choose the below items ', closable: true});
+    return;
+  }
   var itemId = this.workorder_tree.getSelectionModel().getSelection()[0].data.id;
-  const index = arrayitem.indexOf(itemId);
-  if($(val).prop("checked") == true){
-      arrayitem.push(itemId);
-  }else{
-      arrayitem.splice(index, 1);
-  } 
+  //console.log(itemId);
+  var index;
+  if (/^[0-9]+$/.test(itemId)){
+    index = taskArray.indexOf(itemId);
+    if($(val).prop("checked") == true){
+      taskArray.push(itemId);
+    }else{
+      taskArray.splice(index, 1);
+    } 
+  }else if(/^part-[0-9]+-[0-9]+$/.test(itemId)){
+    index = partArray.indexOf(itemId);
+    if($(val).prop("checked") == true){
+      partArray.push(itemId);
+    }else{
+      partArray.splice(index, 1);
+    } 
+  }else if(/^labour-[0-9]+-(?:estimate|(?:[0-9]+))-[0-9]+$/.test(itemId)){
+    index = labourArray.indexOf(itemId);
+    if($(val).prop("checked") == true){
+      labourArray.push(itemId);
+    }else{
+      labourArray.splice(index, 1);
+    }     
+  }else if(/^expense-[0-9]+-[0-9]+$/.test(itemId)){
+    index = expenseArray.indexOf(itemId);
+    if($(val).prop("checked") == true){
+      expenseArray.push(itemId);
+    }else{
+      expenseArray.splice(index, 1);
+    } 
+  }
+  
 }
 
 
@@ -2751,8 +2785,12 @@ var workorder_bbar = new Ext.Toolbar({
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
         //var sel_id = workorder_tree.getSelectionModel().getSelection()[0].data.id;
-        var sel_id = arrayitem;
-        if (sel_id!=null)
+        var taskItem = taskArray;
+        var partItem = partArray;
+        var labourItem = labourArray;
+        var expenseItem = expenseArray;
+        console.log("1111", partItem);
+        if (taskItem.length !=0 && partItem.length == 0 && labourItem.length == 0  && expenseItem.length == 0)
         {
           Ext.Msg.show({
             icon: Ext.MessageBox.QUESTION,
@@ -2767,19 +2805,19 @@ var workorder_bbar = new Ext.Toolbar({
                   width: 300,
                   wait: true
                 });
-                for(var i = 0; i < sel_id.length; i++){
+                for(var i = 0; i<taskItem.length; i++){
                     Ext.Ajax.request({
                     url: '<?php echo url_for('work_order/itemdelete?id='.$workorder->getId()); ?>',
                     method: 'POST',
-                    params: { item_id: sel_id[i]},
+                    params: { item_id: taskItem[i]},
                     callback : function (opt,success,response){
                       Ext.Msg.hide();
-                      var data = Ext.decode(response.responseText);
-                  
+                      var data = Ext.decode(response.responseText);                  
                       if (success && data && data.success == true){
                         reload_tree();
                         partslistStore.load();
                         timelogsStore.load();
+                        taskItem.splice(0, taskItem.length);
                       } else {
                         if (data && data.errors && data.errors.reason){
                           var myMsg = data.errors.reason;
@@ -2798,11 +2836,10 @@ var workorder_bbar = new Ext.Toolbar({
                     }
                   });
                 }
-
               }
             }
           });
-        } else if (/^part-[0-9]+-[0-9]+$/.test(sel_id)) {
+        } else if (taskItem.length == 0 && partItem.length !=0 && labourItem.length == 0 && expenseItem.length == 0) {
           //delete part
           Ext.Msg.show({
             icon: Ext.MessageBox.QUESTION,
@@ -2813,31 +2850,35 @@ var workorder_bbar = new Ext.Toolbar({
             fn: function(butid){
               if (butid == 'ok'){
                 Ext.Msg.show({title:'Please Wait',msg:'Removing Part, please wait...', closable: false});
-                Ext.Ajax.request({
-                  url: '<?php echo url_for('work_order/partdelete?id='.$workorder->getId()); ?>',
-                  method: 'POST',
-                  params: { instance_id: sel_id.replace(/^part-[0-9]+-([0-9]+)$/, '$1') },
-                  success: function(){
-                    Ext.Msg.hide();
-                    reload_tree();
-                    partslistStore.load();
-                  },
-                  failure: function(){
-                    Ext.Msg.hide();
-                    Ext.Msg.show({
-                      icon: Ext.MessageBox.ERROR,
-                      buttons: Ext.MessageBox.OK,
-                      msg: 'Could not delete part!',
-                      modal: true,
-                      title: 'Error'
-                    });
-                  }
-                });
+                for(var i = 0; i<partItem.length; i++){
+                  Ext.Ajax.request({
+                    url: '<?php echo url_for('work_order/partdelete?id='.$workorder->getId()); ?>',
+                    method: 'POST',
+                    params: { instance_id: partItem[i].replace(/^part-[0-9]+-([0-9]+)$/, '$1') },
+                    success: function(){
+                      Ext.Msg.hide();
+                      reload_tree();
+                      partslistStore.load();
+                      partItem.splice(0, partItem.length);
+                    },
+                    failure: function(){
+                      Ext.Msg.hide();
+                      Ext.Msg.show({
+                        icon: Ext.MessageBox.ERROR,
+                        buttons: Ext.MessageBox.OK,
+                        msg: 'Could not delete part!',
+                        modal: true,
+                        title: 'Error'
+                      });
+                    }
+                  });
+                //for
+                }
               }
             }
           });
           //end delete part
-        } else if (/^labour-[0-9]+-(?:estimate|(?:[0-9]+))-[0-9]+$/.test(sel_id)){
+        } else if (taskItem.length == 0 && partItem.length == 0 && labourItem.length != 0 && expenseItem.length == 0){
           Ext.Msg.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.OKCANCEL,
@@ -2847,30 +2888,33 @@ var workorder_bbar = new Ext.Toolbar({
             fn: function(butid){
               if (butid == 'ok'){
                 Ext.Msg.show({title:'Please Wait',msg:'Removing Timelog, please wait...', closable: false});
-                Ext.Ajax.request({
-                  url: '<?php echo url_for('timelogs/changeStatus?dowhat=delete'); ?>',
-                  method: 'POST',
-                  params: {ids: sel_id.replace(/^labour-[0-9]+-(?:estimate|(?:[0-9]+))-([0-9]+)$/, '$1') },
-                  success: function(){
-                    Ext.Msg.hide();
-                    reload_tree();
-                  },
-                  failure: function(){
-                    Ext.Msg.hide();
-                    Ext.Msg.show({
-                      icon: Ext.MessageBox.ERROR,
-                      buttons: Ext.MessageBox.OK,
-                      msg: 'Could not delete timelog!',
-                      modal: true,
-                      title: 'Error'
-                    });
-                  }
-                });
+                for(var i = 0; i<labourItem.length; i++){
+                  Ext.Ajax.request({
+                    url: '<?php echo url_for('timelogs/changeStatus?dowhat=delete'); ?>',
+                    method: 'POST',
+                    params: {ids: labourItem[i].replace(/^labour-[0-9]+-(?:estimate|(?:[0-9]+))-([0-9]+)$/, '$1') },
+                    success: function(){
+                      Ext.Msg.hide();
+                      reload_tree();
+                      labourItem.splice(0, labourItem.length);
+                    },
+                    failure: function(){
+                      Ext.Msg.hide();
+                      Ext.Msg.show({
+                        icon: Ext.MessageBox.ERROR,
+                        buttons: Ext.MessageBox.OK,
+                        msg: 'Could not delete timelog!',
+                        modal: true,
+                        title: 'Error'
+                      });
+                    }
+                  });
+                }
               }
             }
           });
           //end delete labour
-        } else if (/^expense-[0-9]+-[0-9]+$/.test(sel_id)) {
+        } else if (taskItem.length == 0 && partItem.length == 0 && labourItem.length == 0 && expenseItem.length != 0) {
           Ext.Msg.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.OKCANCEL,
@@ -2880,25 +2924,28 @@ var workorder_bbar = new Ext.Toolbar({
             fn: function(butid){
               if (butid == 'ok'){
                 Ext.Msg.show({title:'Please Wait',msg:'Removing Expense, please wait...', closable: false});
-                Ext.Ajax.request({
-                  url: '<?php echo url_for('work_order/expensedelete?id='.$workorder->getId()); ?>',
-                  method: 'POST',
-                  params: {expense_id: sel_id.replace(/^expense-[0-9]+-([0-9]+)$/, '$1') },
-                  success: function(){
-                    Ext.Msg.hide();
-                    reload_tree();
-                  },
-                  failure: function(){
-                    Ext.Msg.hide();
-                    Ext.Msg.show({
-                      icon: Ext.MessageBox.ERROR,
-                      buttons: Ext.MessageBox.OK,
-                      msg: 'Could not delete expense!',
-                      modal: true,
-                      title: 'Error'
-                    });
-                  }
-                });
+                for(var i = 0; i<expenseItem.length; i++){
+                  Ext.Ajax.request({
+                    url: '<?php echo url_for('work_order/expensedelete?id='.$workorder->getId()); ?>',
+                    method: 'POST',
+                    params: {expense_id: expenseItem[i].replace(/^expense-[0-9]+-([0-9]+)$/, '$1') },
+                    success: function(){
+                      Ext.Msg.hide();
+                      reload_tree();
+                      expenseItem.splice(0, expenseItem.length);
+                    },
+                    failure: function(){
+                      Ext.Msg.hide();
+                      Ext.Msg.show({
+                        icon: Ext.MessageBox.ERROR,
+                        buttons: Ext.MessageBox.OK,
+                        msg: 'Could not delete expense!',
+                        modal: true,
+                        title: 'Error'
+                      });
+                    }
+                  });
+                }
               }
             }
           });
