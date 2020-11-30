@@ -111,4 +111,13 @@ class TimelogPeer extends BaseTimelogPeer
       
     return $results;
   }
+
+  public static function retrieveWorkOrderID($TimeLogID){
+     $sql = 'select workorder_id from workorder_item where id = (SELECT workorder_item_id FROM deltamarine.timelog where id =' .$TimeLogID.');';
+     $con = Propel::getConnection();
+     $stmt = $con->prepare($sql);
+     $stmt->execute();
+     $row = $stmt->fetchall(PDO::FETCH_NUM);
+     return $row;
+  }
 }

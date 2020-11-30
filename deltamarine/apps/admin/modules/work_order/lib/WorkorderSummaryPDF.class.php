@@ -5,6 +5,7 @@ class WorkorderSummaryPDF extends sfTCPDF
     var $current_section_title;
     var $current_section_color;
     var $current_section_number;
+    var $task_section_color;
 
     var $cols;
     var $title_font = 20;
@@ -261,6 +262,12 @@ class WorkorderSummaryPDF extends sfTCPDF
         $this->SetDrawColor(0,0,0);
         $this->Rect($this->page_width - 18, $this->getY() - $rowheight, 8, $rowheight, 'FD');
 
+        //task
+        $taskcolor = $this->task_section_color;
+        $this->SetFillColor(hexdec(substr($taskcolor,0,2)), hexdec(substr($taskcolor,2,2)), hexdec(substr($taskcolor,4,2)));
+        $this->SetDrawColor(0,0,0);
+        $this->Rect($this->page_width - 9, $this->getY() - $rowheight, 8, $rowheight, 'FD');
+
         $this->SetFillColor(255);
         $this->SetDrawColor(231,239,239);
         $this->SetFont("Arial", "", $this->default_fontsize);
@@ -271,6 +278,7 @@ class WorkorderSummaryPDF extends sfTCPDF
     {
         $this->current_section_title = $title;
         $this->current_section_color = $section->getColorCode();
+        $this->task_section_color = $section->getTaskColorCode();
         $this->current_section_number = $number;
 
         //determine if we need a page break

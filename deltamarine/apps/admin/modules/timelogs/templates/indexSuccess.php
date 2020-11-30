@@ -54,18 +54,21 @@ var employeesFilterStore = new Ext.data.JsonStore({
   }
 });
 
-  var workordersStore = new Ext.data.JsonStore({
-    fields: ['id','summary', 'customer','boat','date','status'],
-    pageSize: 15,
-    proxy: {
-      type: 'ajax',
-      url: '/work_order/datagrid',
-      reader: { 
-        root: 'workorders',
-        totalProperty: 'totalCount'
-      }
+var workordersStore = new Ext.data.JsonStore({
+  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt','text'],
+  remoteSort: true,
+  pageSize: 1000,
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('work_order/datagrid'); ?>',
+    extraParams: { status: 'In Progress', sort: 'id', dir: 'DESC' },
+    reader: { 
+      root: 'workorders',
+      totalProperty: 'totalCount',
+      idProperty: 'id'
     }
-  });
+  }
+});
 
   var timelogsStore = new Ext.data.JsonStore({
     fields: ['id', 'employee_id', 'employee', 'date', 'billable', 'type', 
@@ -152,7 +155,7 @@ var employeesFilterStore = new Ext.data.JsonStore({
       flex: 1,
       renderer: function(value,metaData,record){
         if (record.data['workorder'] != ''){
-          return '#' + record.data['workorder'] + ' - ' + record.data['boat'];
+          return '#' + record.data['workorder'] + ' - ' + record.data['item'];
         } else {
           return 'None';
         }
@@ -194,6 +197,7 @@ var employeesFilterStore = new Ext.data.JsonStore({
           } else if (sm.getCount() == 1){
             Ext.getCmp('details').getLayout().setActiveItem(1);
             thisdata = sm.getSelection()[0].data;
+            console.log(thisdata);
             detailsTpl.overwrite(Ext.getCmp('details').items.get(1).body, thisdata);
             Ext.getCmp('singleflag').setVisible(thisdata.status != 'Flagged');
             Ext.getCmp('singleunflag').setVisible(thisdata.status == 'Flagged');
@@ -521,7 +525,7 @@ var employeesFilterStore = new Ext.data.JsonStore({
     '<tpl if="start_time != \'\'"><tr><td class="label">Start Time:</td><td>{start_time}</td>',
     '  <td class="label">End Time:</td><td>{end_time}</td></tr></tpl>',
     '<tr><td class="label">Workorder:</td><td><tpl if="workorder == \'\'">None</tpl>',
-    '  <tpl if="workorder != \'\'"><a href="<?php echo url_for('work_order/view?id='); ?>{workorder}">#{workorder} - {boat}</a><br />{customer}</tpl>',
+    '  <tpl if="workorder != \'\'"><a href="<?php echo url_for('work_order/view?id='); ?>{workorder}">#{workorder} - {item}</a><br />{customer}</tpl>',
     '</td>',
     '<tpl if="item != \'\'"><td class="label">Workorder Item:</td><td>{item}</td></tpl></tr>',
     '<tr><td class="label">Status:</td><td>{status}</td>',

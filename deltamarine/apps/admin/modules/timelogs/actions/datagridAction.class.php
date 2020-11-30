@@ -15,6 +15,7 @@ class datagridAction extends sfAction
     {
       $c->add(TimelogPeer::EMPLOYEE_ID, $request->getParameter('employee_id'));
     }
+    
     //filter by workorder
     if ($request->getParameter('workorder_id'))
     {
@@ -112,6 +113,7 @@ class datagridAction extends sfAction
     $timelogs = TimelogPeer::doSelectForListing($c);
     $count_all = TimelogPeer::doCount($c2);
 
+    
     //generate JSON output
     $timelogarray = array();
     foreach ($timelogs AS $timelog)
@@ -138,7 +140,7 @@ class datagridAction extends sfAction
                   : "General");
         $rate = null;
       }
-
+      $workorderID = TimelogPeer::retrieveWorkOrderID($timelog->getId());
       $timelogarray[] = array('id'          => $timelog->getId(), 
                               'date'        => $timelog->getEndTime('m/d/Y'),
                               'employee_id' => $timelog->getEmployeeId(),
@@ -151,7 +153,7 @@ class datagridAction extends sfAction
                               'billable_hours' => $timelog->getBillableHoursAndMinutes(),
                               'start_time'  => ($timelog->getStartTime() ? $timelog->getStartTime('g:iA') : ''),
                               'end_time'    => ($timelog->getStartTime() ? $timelog->getEndTime('g:iA') : ''),
-                              'workorder'   => $timelog->getWorkorderId(),
+                              'workorder'   => $workorderID,
                               'item'        => $timelog->getWorkorderItemName(),
                               'boat'        => $timelog->getWorkorderBoat(),
                               'customer'    => $timelog->getWorkorderCustomerName(),
