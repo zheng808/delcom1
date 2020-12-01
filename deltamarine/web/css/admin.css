@@ -513,7 +513,7 @@ a.buttongroup-bottom, .buttongroup-bottom input {
 .blocky.bl-white  { background: #ffffff; color: #000; }
 .blocky.bl-blue   { background: #0066ff; box-shadow: 0px 0px 5px rgba(  0,   0, 200, 0.7);  color: #FFFFFF; }
 .blocky.bl-black  { background: #333333; box-shadow: 0px 0px 5px rgba( 50,  50,  50, 0.7); color: #FFFFFF; }
-.blocky.bl-green  { background: #00ff99; box-shadow: 0px 0px 5px rgba( 50, 200,  50, 0.7); }
+.blocky.bl-green  { background: #52BE80; box-shadow: 0px 0px 5px rgba( 50, 200,  50, 0.7); }
 .blocky.bl-red    { background: #FF3300; box-shadow: 0px 0px 5px rgba(200,  50,  50, 0.7); }
 .blocky.bl-yellow { background: #ffff99; box-shadow: 0px 0px 5px rgba(200, 200,   0, 0.7); }
 .blocky.bl-orange { background: #FFA500; box-shadow: 0px 0px 5px rgba(240, 200,   0, 0.7); }
@@ -522,6 +522,8 @@ a.buttongroup-bottom, .buttongroup-bottom input {
 .blocky.bl-teal  { background: #008080; box-shadow: 0px 0px 5px rgba(150,  50,  50, 0.7);  color: #FFFFFF; }
 .blocky.bl-boldgrey  { background: #808080; box-shadow: 0px 0px 5px rgba(150,  50,  50, 0.7);  color: #FFFFFF; }
 .blocky.bl-purple  { background: #800080; box-shadow: 0px 0px 5px rgba(150,  50,  50, 0.7);  color: #FFFFFF; }
+.blocky.bl-pink  { background: #FF33F6; box-shadow: 0px 0px 5px rgba(150,  50,  50, 0.7);  color: #FFFFFF; }
+.blocky.bl-lightblue  { background: #5DADE2; box-shadow: 0px 0px 5px rgba(150,  50,  50, 0.7);  color: #FFFFFF; }
 
 .loading{
   position: absolute;

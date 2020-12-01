@@ -467,18 +467,7 @@ class WorkorderPeer extends BaseWorkorderPeer
       'FFA500' => 'Orange',
       'FF3333' => 'Red'
     );
-    /*
-    return array(
-      'FFFFFF' => 'White',
-      '0000FF' => 'Blue',
-      '000000' => 'Black',
-      '33DD33' => 'Green',
-      'FF3333' => 'Red',
-      'FFFF00' => 'Yellow',
-      'FFA500' => 'Orange',
-      'A52A2A' => 'Brown'
-    );
-    */
+
   }
 
   public static function getTaskColorCodesArray(){
@@ -490,7 +479,9 @@ class WorkorderPeer extends BaseWorkorderPeer
       'ffa500' => 'Orange',
       'd2b48c' => 'Tan',
       '008080' => 'Teal',
-      '800080' => 'Purple'
+      '800080' => 'Purple',
+      'FF33F6' => 'Pink',
+      '5DADE2' => 'LightBlue'
     );
     
   }
@@ -501,7 +492,7 @@ class WorkorderPeer extends BaseWorkorderPeer
       'FFFFFF' => 'Grey',
       '0066ff' => 'Blue',
       '000000' => 'Black',
-      '00ff99' => 'Green',
+      '52BE80' => 'Green',
       'FF3300' => 'Red',
       '996623' => 'Brown'
     );

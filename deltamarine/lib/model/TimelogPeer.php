@@ -117,7 +117,16 @@ class TimelogPeer extends BaseTimelogPeer
      $con = Propel::getConnection();
      $stmt = $con->prepare($sql);
      $stmt->execute();
-     $row = $stmt->fetchall(PDO::FETCH_NUM);
+     $row = $stmt->fetch(PDO::FETCH_NUM);
      return $row;
   }
+
+  public static function retrieveCustomerName($workOrderID){
+    $sql = 'select alpha_name from deltamarine.wf_crm where id = (select wf_crm_id from customer where id = (select customer_id from workorder where id = ' .$workOrderID.'));';
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+ }
 }

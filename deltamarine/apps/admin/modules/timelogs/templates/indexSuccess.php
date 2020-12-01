@@ -155,7 +155,7 @@ var workordersStore = new Ext.data.JsonStore({
       flex: 1,
       renderer: function(value,metaData,record){
         if (record.data['workorder'] != ''){
-          return '#' + record.data['workorder'] + ' - ' + record.data['item'];
+          return '#' + record.data['workorder'] + ' - ' + record.data['customer'];
         } else {
           return 'None';
         }
@@ -525,7 +525,7 @@ var workordersStore = new Ext.data.JsonStore({
     '<tpl if="start_time != \'\'"><tr><td class="label">Start Time:</td><td>{start_time}</td>',
     '  <td class="label">End Time:</td><td>{end_time}</td></tr></tpl>',
     '<tr><td class="label">Workorder:</td><td><tpl if="workorder == \'\'">None</tpl>',
-    '  <tpl if="workorder != \'\'"><a href="<?php echo url_for('work_order/view?id='); ?>{workorder}">#{workorder} - {item}</a><br />{customer}</tpl>',
+    '  <tpl if="workorder != \'\'"><a href="<?php echo url_for('work_order/view?id='); ?>{workorder}">#{workorder} - {customer}</a></tpl>',
     '</td>',
     '<tpl if="item != \'\'"><td class="label">Workorder Item:</td><td>{item}</td></tpl></tr>',
     '<tr><td class="label">Status:</td><td>{status}</td>',
