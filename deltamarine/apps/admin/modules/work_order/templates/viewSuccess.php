@@ -2704,7 +2704,7 @@ var workorder_bbar = new Ext.Toolbar({
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
         var sel = workorder_tree.getSelectionModel().getSelection()[0].data;
-        var multi_itemId = JSON.stringify(arrayitem);
+        var multi_itemId = JSON.stringify(taskArray);
           if (/^[0-9]+$/.test(sel.id)){
             new Ext.ux.ItemCopyWin({
               itemtext: sel.text,
