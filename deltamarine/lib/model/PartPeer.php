@@ -373,4 +373,16 @@ class PartPeer extends BasePartPeer
     return $row;
   }
 
+  public function getPartsName($instanceID){
+    $sql = 'select custom_name, name, part_id from part_instance a
+    left join part_variant c on a.part_variant_id = c.id
+    left join part d on c.part_id = d.id
+    where a.id = ' .$instanceID;
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_NUM);
+    return $row;
+  }
+
 }

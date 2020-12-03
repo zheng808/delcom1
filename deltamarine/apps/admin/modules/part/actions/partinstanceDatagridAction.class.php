@@ -169,13 +169,21 @@ class partinstanceDatagridAction extends sfAction
         $sku = $instance->getPartVariant()->getInternalSku();
         $manufacturer_sku = $instance->getPartVariant()->getManufacturerSku();
       }
+      $row = PartPeer::getPartsName($instance->getId());
+      if(is_null($row[0])){
+        $name =  $row[1];
+      }else{
+        $name = $row[0];
+      }
+      $partid = $row[2];
+
       $instancesarray[] = array('id' => $instance->getId(),
                                 'description' => $description,
                                 'description_url' => $description_url,
                                 'status' => $status,
                                 'base_status' => $base_status,
                                 'quantity' => $instance->outputQuantity(),
-                                'name' => $name = $instance->__toString(),
+                                'name' => $name,
                                 'part_id' => $partid,
                                 'sku' => $sku,
                                 'manufacturer_sku' => $manufacturer_sku,
@@ -185,9 +193,13 @@ class partinstanceDatagridAction extends sfAction
                                );
     }
 
+
+
     //count the totals and add stuff to the final array
     $count_all = PartInstancePeer::doCount($c2);
     $dataarray = array('totalCount' => $count_all, 'instances' => $instancesarray);
+
+    
 
     $this->renderText(json_encode($dataarray));
 
@@ -196,6 +208,8 @@ class partinstanceDatagridAction extends sfAction
       $message = 'DONE partinstanceDatagridAction.execute====================';
       sfContext::getInstance()->getLogger()->info($message);
     }
+
+    
 
     return sfView::NONE;
   }//execute()-----------------------------------------------------------------

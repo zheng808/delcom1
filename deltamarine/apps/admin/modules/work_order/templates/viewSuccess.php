@@ -226,7 +226,6 @@ function addId(val){
     return;
   }
   var itemId = this.workorder_tree.getSelectionModel().getSelection()[0].data.id;
-  //console.log(itemId);
   var index;
   if (/^[0-9]+$/.test(itemId)){
     index = taskArray.indexOf(itemId);
@@ -2704,6 +2703,7 @@ var workorder_bbar = new Ext.Toolbar({
     handler: function(){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
         var sel = workorder_tree.getSelectionModel().getSelection()[0].data;
+        var taskItem = taskArray;
         var multi_itemId = JSON.stringify(taskArray);
           if (/^[0-9]+$/.test(sel.id)){
             new Ext.ux.ItemCopyWin({
@@ -2789,7 +2789,6 @@ var workorder_bbar = new Ext.Toolbar({
         var partItem = partArray;
         var labourItem = labourArray;
         var expenseItem = expenseArray;
-        console.log("1111", partItem);
         if (taskItem.length !=0 && partItem.length == 0 && labourItem.length == 0  && expenseItem.length == 0)
         {
           Ext.Msg.show({
