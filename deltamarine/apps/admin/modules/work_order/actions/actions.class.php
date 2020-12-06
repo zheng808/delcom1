@@ -220,7 +220,6 @@ class work_orderActions extends sfActions
       $old_pst = $workorder->getPstExempt();
       $old_gst = $workorder->getGstExempt();
       $oldstatus = $workorder->getStatus();
-      echo $request->getParameter('created_on');
       $workorder->setCustomer($customer);
       $workorder->setCustomerBoat($boat);
       $workorder->setCreatedOn(strtotime($request->getParameter('created_on')));
