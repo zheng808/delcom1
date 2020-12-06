@@ -3547,7 +3547,8 @@ var workorder_tree = new Ext.tree.TreePanel({
       xtype: 'treecolumn',
       header:'Name',
       dataIndex:'text',
-      width: 400
+      width: 400,
+      flex: 1,
     },{
       header:'Estimate',
       width:80,

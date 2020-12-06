@@ -155,7 +155,7 @@ var workordersStore = new Ext.data.JsonStore({
       flex: 1,
       renderer: function(value,metaData,record){
         if (record.data['workorder'] != ''){
-          return '#' + record.data['workorder'] + ' - ' + record.data['customer'];
+          return '#' + record.data['workorder'] + ' - ' + record.data['item'];
         } else {
           return 'None';
         }
@@ -197,7 +197,6 @@ var workordersStore = new Ext.data.JsonStore({
           } else if (sm.getCount() == 1){
             Ext.getCmp('details').getLayout().setActiveItem(1);
             thisdata = sm.getSelection()[0].data;
-            console.log(thisdata);
             detailsTpl.overwrite(Ext.getCmp('details').items.get(1).body, thisdata);
             Ext.getCmp('singleflag').setVisible(thisdata.status != 'Flagged');
             Ext.getCmp('singleunflag').setVisible(thisdata.status == 'Flagged');
