@@ -170,6 +170,8 @@ var partArray = [];
 var labourArray = [];
 var expenseArray = [];
 
+
+
 var task_color_code = [
   <?php $colors = WorkorderPeer::getTaskColorCodesArray(); ?>
       <?php $first = current($colors); ?>
@@ -4000,8 +4002,28 @@ Ext.onReady(function(){
   workorder_tabs.render('workorder_tabs');
   workorder_toolbar.render('view-toolbar');
 
-});
+var checkboxes = document.querySelectorAll('input[type = "checkbox"]');
+let lastChecked;
+function handleCheck(e) {
+  
+let inBetween = false;
+if (e.shiftKey && this.checked) {
+  checkboxes.forEach(checkbox => {
+  if (checkbox === this || checkbox === lastChecked) {
+    inBetween = !inBetween;
+    console.log('STarting to check them inbetween!');
+  }
 
+  if (inBetween) {
+    checkbox.checked = true;
+  }
+  });
+}
+lastChecked = this;
+}
+
+checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+});
 
 
 </script>
