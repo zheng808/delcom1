@@ -142,6 +142,8 @@ class datagridAction extends sfAction
       }
       $workorderID = TimelogPeer::retrieveWorkOrderID($timelog->getId());
       $customerName = TimelogPeer::retrieveCustomerName(current($workorderID));
+      $workItemID = $timelog->getWorkorderItemId();
+      $item = WorkorderItemPeer::retrieveByPk($workItemID);
       $timelogarray[] = array('id'          => $timelog->getId(), 
                               'date'        => $timelog->getEndTime('m/d/Y'),
                               'employee_id' => $timelog->getEmployeeId(),
@@ -162,6 +164,7 @@ class datagridAction extends sfAction
                               'custom_label'   =>  $timelog->getCustomLabel(),
                               'employee_notes' => ($timelog->getEmployeeNotes() ? nl2br($timelog->getEmployeeNotes()) : ''),
                               'admin_notes'    => ($timelog->getAdminNotes() ? nl2br($timelog->getAdminNotes()) : ''),
+                              'completed_status' => $item->getCompleted(),
 		              'created_at'     => $timelog->getCreatedAt('M/d/Y g:i A'),
 		              'updated_at'     => $timelog->getUpdatedAt('M/d/Y g:i A')
 

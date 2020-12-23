@@ -74,7 +74,7 @@ var workordersStore = new Ext.data.JsonStore({
     fields: ['id', 'employee_id', 'employee', 'date', 'billable', 'type', 
              'rate', 'cost', 'payroll_hours', 'billable_hours', 'start_time', 'end_time', 
              'workorder', 'item', 'boat', 'customer', 'status', 'created_at', 'updated_at',
-             'employee_notes', 'admin_notes'],
+             'employee_notes', 'admin_notes', 'completed_status'],
     remoteSort: true,
     pageSize: 50,
     sorters: [{ property: 'date', direction: 'DESC' }],
@@ -159,6 +159,20 @@ var workordersStore = new Ext.data.JsonStore({
         } else {
           return 'None';
         }
+      }
+    },{
+      header: "Complete Status",
+      dataIndex: 'completed_status',
+      sortable: false,
+      width: 55,
+      flex: 1,
+      renderer: function(value,metaData,record){
+        if (record.data['completed_status'] == '1'){
+          output = '<img src="/images/silkicon/accept.png" width="15" height="15"/>';
+        }else{
+          output = '<img src="/images/silkicon/folder_edit.png" width="15" height="15"/>';
+        } 
+        return output;
       }
     },{
       header: "Status",

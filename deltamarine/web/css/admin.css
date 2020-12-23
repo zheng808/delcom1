@@ -19,8 +19,8 @@
 
 html, body { height: 100%; margin: 0; padding: 0; background-color: #EFEFEF; font-size: 14px;}
 h1,h2,h3 { font-family: Lato;}
-h1, h2 {font-weight: 300; }
-h1 { font-size: 1.6em; }
+h1, h2 {font-weight: 400; }
+h1 { font-size: 1.6em;   font-family: 'Oswald', sans-serif}
 h2 { font-size: 1.4em; }
 h3 { font-size: 1.3em; font-weight: 700;}
 body, td, button, .x-body   { font-family: Lato, Arial, Helvetica, sans-serif; font-weight: 400 }
@@ -43,8 +43,7 @@ a.button:hover,.button:hover{
   box-shadow:         0px 0px 10px rgba(242, 96, 82, 0.5);
 }
 input.button {padding-top: 0px; padding-bottom: 3px; height: 20px; line-height: 20px; display: block;}
-button.redbutton   { background-image: none; background-color: #DD3333; }
-button.greenbutton {  }
+button.redbutton   { background-image: none; background-color: #DD3333; } 
 table { width: 100%; border-collapse: collapse; }
 
 .left { text-align: left; }
@@ -575,4 +574,12 @@ a.buttongroup-bottom, .buttongroup-bottom input {
   100%{
     opacity: 1;
   }
+}
+
+#dashboard{
+  overflow:hidden;
+}
+
+#dashboardNextRow{
+  overflow:hidden;
 }

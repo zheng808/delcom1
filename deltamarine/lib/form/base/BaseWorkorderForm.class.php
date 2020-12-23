@@ -67,7 +67,6 @@ class BaseWorkorderForm extends BaseFormPropel
       'canada_entry_date'       => new sfValidatorDateTime(array('required' => false)),
       'usa_entry_num'           => new sfValidatorString(array('max_length' => 255, 'required' => false)),
       'usa_entry_date'          => new sfValidatorDateTime(array('required' => false)),
-
     ));
 
     $this->widgetSchema->setNameFormat('workorder[%s]');

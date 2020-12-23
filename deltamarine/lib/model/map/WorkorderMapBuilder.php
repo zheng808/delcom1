@@ -114,6 +114,13 @@ class WorkorderMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('USA_ENTRY_DATE', 'UsaEntryDate', 'TIMESTAMP', true, 255);
 
+		$tMap->addColumn('E2B_IMPORT_DATE', 'E2bImportDate', 'TIMESTAMP', true, 255);
+
+		$tMap->addColumn('EXPIRED_DATE', 'ExpiredDate', 'TIMESTAMP', true, 255);
+
+		$tMap->addColumn('DELIVERED_DATE', 'DeliveryDate', 'TIMESTAMP', true, 255);
+
+		$tMap->addColumn('PICKUP_DATE', 'PickupDate', 'TIMESTAMP', true, 255);
 	} // doBuild()
 
 } // WorkorderMapBuilder

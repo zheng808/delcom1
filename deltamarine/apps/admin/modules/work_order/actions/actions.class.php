@@ -95,6 +95,100 @@ class work_orderActions extends sfActions
     return sfView::NONE;
   }//executeHaulins()----------------------------------------------------------
 
+  public function executeExpire(sfWebRequest $request){
+    $start_of_today = mktime(0,0,0);
+    $c = new Criteria();
+    $c->add(WorkorderPeer::EXPIRED_DATE, null, Criteria::ISNOTNULL);
+    $c->add(WorkorderPeer::EXPIRED_DATE, $start_of_today, Criteria::GREATER_EQUAL);
+    $c->add(WorkorderPeer::EXPIRED_DATE, WorkorderPeer::DELIVERED_DATE, Criteria::LESS_THAN);
+    $c2 = clone $c;
+
+    //paging
+    if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
+    if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));
+
+    $workorders = WorkorderPeer::doSelectForListing($c);
+    $count_all = WorkorderPeer::doCount($c2);
+
+    $workorderarray = array();
+    foreach ($workorders AS $workorder)
+    {
+      $workorderarray[] = array(
+        'id'       => $workorder->getId(), 
+        'boat'     => $workorder->getCustomerBoat()->getName(),
+        'boattype' => $workorder->getCustomerBoat()->getMakeModel(),
+        'expire'  =>  $workorder->getExpiredDate('m/d/Y'),
+        'customer' => $workorder->getCustomer()->getName()
+       );
+    }
+    $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);
+    $this->renderText(json_encode($dataarray));
+
+    return sfView::NONE;
+  }
+
+  public function executePickup(sfWebRequest $request){
+    $start_of_today = mktime(0,0,0);
+    $c = new Criteria();
+    $c->add(WorkorderPeer::PICKUP_DATE, null, Criteria::ISNOTNULL);
+    $c->add(WorkorderPeer::PICKUP_DATE, $start_of_today, Criteria::GREATER_EQUAL);
+    $c2 = clone $c;
+
+    //paging
+    if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
+    if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));
+
+    $workorders = WorkorderPeer::doSelectForListing($c);
+    $count_all = WorkorderPeer::doCount($c2);
+
+    $workorderarray = array();
+    foreach ($workorders AS $workorder)
+    {
+      $workorderarray[] = array(
+        'id'       => $workorder->getId(), 
+        'boat'     => $workorder->getCustomerBoat()->getName(),
+        'boattype' => $workorder->getCustomerBoat()->getMakeModel(),
+        'pickup'  =>  $workorder->getPickUpDate('m/d/Y'),
+        'customer' => $workorder->getCustomer()->getName()
+       );
+    }
+    $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);
+    $this->renderText(json_encode($dataarray));
+
+    return sfView::NONE;
+  }
+
+  public function executeDelivery(sfWebRequest $request){
+    $start_of_today = mktime(0,0,0);
+    $c = new Criteria();
+    $c->add(WorkorderPeer::DELIVERED_DATE, null, Criteria::ISNOTNULL);
+    $c->add(WorkorderPeer::DELIVERED_DATE, $start_of_today, Criteria::GREATER_EQUAL);
+    $c2 = clone $c;
+
+    //paging
+    if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
+    if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));
+
+    $workorders = WorkorderPeer::doSelectForListing($c);
+    $count_all = WorkorderPeer::doCount($c2);
+
+    $workorderarray = array();
+    foreach ($workorders AS $workorder)
+    {
+      $workorderarray[] = array(
+        'id'       => $workorder->getId(), 
+        'boat'     => $workorder->getCustomerBoat()->getName(),
+        'boattype' => $workorder->getCustomerBoat()->getMakeModel(),
+        'delivery'  =>  $workorder->getDeliveredDate('m/d/Y'),
+        'customer' => $workorder->getCustomer()->getName()
+       );
+    }
+    $dataarray = array('totalCount' => $count_all, 'workorders' => $workorderarray);
+    $this->renderText(json_encode($dataarray));
+
+    return sfView::NONE;
+  }
+
 
   /*
    * create a new work order for a given customer and boat.
@@ -244,6 +338,10 @@ class work_orderActions extends sfActions
       }  
       $workorder->setCanadaEntryDate($request->getParameter('canada_entry_date') ? strtotime($request->getParameter('canada_entry_date')) : null);
       $workorder->setUsaEntryDate($request->getParameter('usa_entry_date') ? strtotime($request->getParameter('usa_entry_date')) : null);
+      $workorder->setE2BImportDate($request->getParameter('e2b_import_date') ? strtotime($request->getParameter('e2b_import_date')) : null);
+      $workorder->setE2BExpireDate($request->getParameter('expired_date') ? strtotime($request->getParameter('expired_date')) : null);
+      $workorder->setDeliveredDate($request->getParameter('delivered_date') ? strtotime($request->getParameter('delivered_date')) : null);
+      $workorder->setPickUpDate($request->getParameter('pickup_date') ? strtotime($request->getParameter('pickup_date')) : null);
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Finished Setting Canada Entry Num and Date';

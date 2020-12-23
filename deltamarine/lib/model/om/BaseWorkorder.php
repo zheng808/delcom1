@@ -160,7 +160,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	protected $canada_entry_date;
 	protected $usa_entry_num;
 	protected $usa_entry_date;
-
+	protected $e2b_import_date;
+	protected $expired_date;
+	protected $delivered_date;
+	protected $pickup_date;
 
 	/**
 	 * @var        Customer
@@ -675,6 +678,124 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 				$dt = new DateTime($this->usa_entry_date);
 			} catch (Exception $x) {
 				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->usa_entry_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	
+
+	public function getExpiredDate($format = 'Y-m-d')
+	{
+		if ($this->expired_date === null) {
+			return null;
+		}
+
+
+		if ($this->expired_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->expired_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->expired_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	public function getImportDate($format = 'Y-m-d')
+	{
+		if ($this->e2b_import_date === null) {
+			return null;
+		}
+
+
+		if ($this->e2b_import_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->e2b_import_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->e2b_import_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	public function getDeliveredDate($format = 'Y-m-d')
+	{
+		if ($this->delivered_date === null) {
+			return null;
+		}
+
+
+		if ($this->delivered_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->delivered_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->delivered_date, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	public function getPickUpDate($format = 'Y-m-d')
+	{
+		if ($this->pickup_date === null) {
+			return null;
+		}
+
+
+		if ($this->pickup_date === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->pickup_date);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->pickup_date, true), $x);
 			}
 		}
 
@@ -1394,6 +1515,162 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 
 
+	public function setE2BExpireDate($v){
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->expired_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->expired_date !== null && $tmpDt = new DateTime($this->expired_date)) ? $tmpDt->format('Y-m-d') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->expired_date = ($dt ? $dt->format('Y-m-d') : null);
+				$this->modifiedColumns[] = WorkorderPeer::EXPIRED_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+
+	public function setE2BImportDate($v){
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->e2b_import_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->e2b_import_date !== null && $tmpDt = new DateTime($this->e2b_import_date)) ? $tmpDt->format('Y-m-d') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->e2b_import_date = ($dt ? $dt->format('Y-m-d') : null);
+				$this->modifiedColumns[] = WorkorderPeer::E2B_IMPORT_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+
+	public function setDeliveredDate($v){
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->delivered_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->delivered_date !== null && $tmpDt = new DateTime($this->delivered_date)) ? $tmpDt->format('Y-m-d') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->delivered_date = ($dt ? $dt->format('Y-m-d') : null);
+				$this->modifiedColumns[] = WorkorderPeer::DELIVERED_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+
+	public function setPickUpDate($v){
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->pickup_date !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->pickup_date !== null && $tmpDt = new DateTime($this->pickup_date)) ? $tmpDt->format('Y-m-d') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->pickup_date = ($dt ? $dt->format('Y-m-d') : null);
+				$this->modifiedColumns[] = WorkorderPeer::PICKUP_DATE;
+			}
+		} // if either are not null
+
+		return $this;
+	}
+
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
@@ -1489,6 +1766,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$this->canada_entry_date = ($row[$startcol + 23] !== null) ? (string) $row[$startcol + 23] : null;
 			$this->usa_entry_num = ($row[$startcol + 24] !== null) ? (string) $row[$startcol + 24] : null;
 			$this->usa_entry_date = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
+			$this->e2b_import_date = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
+			$this->expired_date = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
+			$this->delivered_date = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
+			$this->pickup_date = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -2025,6 +2306,18 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			case 25:
 				return $this->getUsaEntryDate();
 				break;
+			case 26:
+				return $this->getImportDate();
+				break;
+			case 27:
+				return $this->getExpiredDate();
+				break;
+			case 28:
+				return $this->getDeliveredDate();
+				break;
+			case 28:
+				return $this->getPickUpDate();
+				break;		
 			default:
 				return null;
 				break;
@@ -2072,6 +2365,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$keys[23] => $this->getCanadaEntryDate(),
 			$keys[24] => $this->getUsaEntryNum(),
 			$keys[25] => $this->getUsaEntryDate(),
+			$keys[26] => $this->getImportDate(),
+			$keys[27] => $this->getExpiredDate(),
+			$keys[28] => $this->getDeliveredDate(),
+			$keys[29] => $this->getPickUpDate()
 		);
 		return $result;
 	}
@@ -2181,6 +2478,18 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			case 25:
 				$this->setUsaEntryDate($value);
 				break;
+			case 26:
+				$this->setE2BImportDate($value);
+				break;
+			case 27:
+				$this->setE2BExpireDate($value);
+				break;
+			case 28:
+				$this->setDeliveredDate($value);
+				break;
+			case 29:
+				$this->setPickUpDate($value);
+				break;
 		} // switch()
 	}
 	
@@ -2231,6 +2540,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[23], $arr)) $this->setCanadaEntryDate($arr[$keys[23]]);
 		if (array_key_exists($keys[24], $arr)) $this->setUsaEntryNum($arr[$keys[24]]);
 		if (array_key_exists($keys[25], $arr)) $this->setUsaEntryDate($arr[$keys[25]]);
+		if (array_key_exists($keys[26], $arr)) $this->setE2BImportDate($arr[$keys[26]]);
+		if (array_key_exists($keys[27], $arr)) $this->setE2BExpireDate($arr[$keys[27]]);
+		if (array_key_exists($keys[28], $arr)) $this->setDeliveredDate($arr[$keys[28]]);
+		if (array_key_exists($keys[29], $arr)) $this->setPickUpDate($arr[$keys[29]]);
 	}
 	
 	/**
@@ -2268,7 +2581,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderPeer::CANADA_ENTRY_DATE)) $criteria->add(WorkorderPeer::CANADA_ENTRY_DATE, $this->canada_entry_date);
 		if ($this->isColumnModified(WorkorderPeer::USA_ENTRY_NUM)) $criteria->add(WorkorderPeer::USA_ENTRY_NUM, $this->usa_entry_num);
 		if ($this->isColumnModified(WorkorderPeer::USA_ENTRY_DATE)) $criteria->add(WorkorderPeer::USA_ENTRY_DATE, $this->usa_entry_date);
-
+		if ($this->isColumnModified(WorkorderPeer::E2B_IMPORT_DATE)) $criteria->add(WorkorderPeer::E2B_IMPORT_DATE, $this->e2b_import_date);
+		if ($this->isColumnModified(WorkorderPeer::EXPIRED_DATE)) $criteria->add(WorkorderPeer::EXPIRED_DATE, $this->expired_date);
+		if ($this->isColumnModified(WorkorderPeer::DELIVERED_DATE)) $criteria->add(WorkorderPeer::DELIVERED_DATE, $this->delivered_date);
+		if ($this->isColumnModified(WorkorderPeer::PICKUP_DATE)) $criteria->add(WorkorderPeer::PICKUP_DATE, $this->pickup_date); 
 		return $criteria;
 	}
 
@@ -2372,6 +2688,13 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 		$copyObj->setUsaEntryDate($this->usa_entry_date);
 
+		$copyObj->setE2BImportDate($this->e2b_import_date);
+
+		$copyObj->setE2BExpireDate($this->expired_date);
+
+		$copyObj->setDeliveredDate($this->delivered_date);
+
+		$copyObj->setPickUpDate($this->pickup_date);
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.

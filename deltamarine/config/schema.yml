@@ -271,7 +271,10 @@ propel:
     canada_entry_date:       { type: timestamp }
     usa_entry_num:           { type: varchar(255) }
     usa_entry_date:          { type: timestamp }
-
+    e2b_import_date:          { type: timestamp }
+    expired_date:          { type: timestamp }
+    delivered_date:          { type: timestamp }
+    pickup_date:          { type: timestamp }    
 
   workorder_category:
     id:                     ~

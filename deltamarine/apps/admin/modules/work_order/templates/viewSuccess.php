@@ -53,7 +53,10 @@
         $cdnEntryDate  =    '<td class="label">Canadian Entry Date:</td><td>'.$workorder->getCanadaEntryDate('M j, Y').'</td>';
         $usaEntryNum  =    '<td class="label">USA Entry Number:</td><td>'.$workorder->getUsaEntryNum().'</td>';
         $usaEntryDate  =    '<td class="label">USA Entry Date:</td><td>'.$workorder->getUsaEntryDate('M j, Y').'</td>';
-
+        $e29ImportDate  =    '<td class="label">E29 B Import Date:</td><td>'.$workorder->getImportDate('M j, Y').'</td>';
+        $e29ExpireDate  =    '<td class="label">E29 B Expire Date:</td><td>'.$workorder->getExpiredDate('M j, Y').'</td>';
+        $deliveryDate  =    '<td class="label">Delivery Date:</td><td>'.$workorder->getDeliveredDate('M j, Y').'</td>';
+        $pickupDate  =    '<td class="label">Pick up Date:</td><td>'.$workorder->getPickUpDate('M j, Y').'</td>';
         $blank = '<td class="label"></td><td class="blank"></td>';
 
         $taxCategory = 'UNKNOWN';
@@ -120,6 +123,26 @@
         {
            echo '<tr>'.$usaEntryNum.$usaEntryDate.'</tr>';
         }
+        if ($workorder->getImportDate())
+        {
+           echo '<tr>'.$e29ImportDate.'</tr>';
+        }
+
+        if ($workorder->getExpiredDate())
+        {
+           echo '<tr>'.$e29ExpireDate.'</tr>';
+        }
+
+        if ($workorder->getDeliveredDate())
+        {
+           echo '<tr>'.$deliveryDate.'</tr>';
+        }
+
+        if ($workorder->getPickUpDate())
+        {
+           echo '<tr>'.$pickupDate.'</tr>';
+        }
+
       ?>
     </table>
 
@@ -2262,9 +2285,6 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         }
       }
     },
-    
-    
-    
     {
       itemId: 'oldtaxstatus',
       xtype: 'displayfield',
@@ -2402,8 +2422,6 @@ Ext.define('Ext.ux.WorkorderEditWin', {
               btn.prev('hidden').setValue(btn.valueField);
               Ext.getCmp('pstfield').setValue(1);
               Ext.getCmp('gstfield').setValue(1);
-              //field.up('form').down('#pstfield').setValue(0);
-              //field.up('form').down('#gstfield').setValue(0);
             }
           }},
           valueField: 'FF3333',
@@ -2608,6 +2626,34 @@ Ext.define('Ext.ux.WorkorderEditWin', {
         name: 'usa_entry_date',
         value: <?php echo ($workorder->getUsaEntryDate() ? '\''.$workorder->getUsaEntryDate('M j, Y').'\'' : 'null'); ?>
       }]
+    },{
+      xtype: 'datefield',
+      fieldLabel: 'E29 B Import date',
+      anchor: '-165',
+      format: 'M j, Y',
+      name: 'e2b_import_date',
+      value: <?php echo ($workorder->getImportDate() ? '\''.$workorder->getImportDate('M j, Y').'\'' : 'null'); ?>,
+    },{
+      xtype: 'datefield',
+      fieldLabel: 'E29 B Expire date',
+      anchor: '-165',
+      format: 'M j, Y',
+      name: 'expired_date',
+      value: <?php echo ($workorder->getExpiredDate() ? '\''.$workorder->getExpiredDate('M j, Y').'\'' : 'null'); ?>,
+    },{
+      xtype: 'datefield',
+      fieldLabel: 'Delivery date',
+      anchor: '-165',
+      format: 'M j, Y',
+      name: 'delivered_date',
+      value: <?php echo ($workorder->getDeliveredDate() ? '\''.$workorder->getDeliveredDate('M j, Y').'\'' : 'null'); ?>,
+    },{
+      xtype: 'datefield',
+      fieldLabel: 'Pick up date',
+      anchor: '-165',
+      format: 'M j, Y',
+      name: 'pickup_date',
+      value: <?php echo ($workorder->getPickUpDate() ? '\''.$workorder->getPickUpDate('M j, Y').'\'' : 'null'); ?>,
     },{
       itemId: 'holdaction',
       xtype: 'fieldset',
