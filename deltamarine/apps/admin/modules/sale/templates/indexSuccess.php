@@ -267,7 +267,7 @@ var grid = new Ext.grid.GridPanel({
     sortable: true,
     xtype: 'numbercolumn',
     format: 0,
-    width: 35
+    width: 100
   },{
     header: "Sale Date",
     dataIndex: 'date',

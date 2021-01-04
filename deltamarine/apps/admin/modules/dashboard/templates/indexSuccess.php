@@ -322,7 +322,6 @@ var pickup_datagrid = new Ext.grid.GridPanel({
     sortable: true,
     width: 135,
     renderer: function (value, metaData, record, rowIndex, colIndex, store) {
-      console.log(value);
       if(Date.parse(record.get('pickup')) < sixetyDays){
         return '<span style="color: red;">' + value + '</span>';
       } else {
@@ -379,7 +378,6 @@ var delivery_datagrid = new Ext.grid.GridPanel({
     sortable: true,
     width: 135,
     renderer: function (value, metaData, record, rowIndex, colIndex, store) {
-      console.log(value);
       if(Date.parse(record.get('delivery')) < sixetyDays){
         return '<span style="color: red;">' + value + '</span>';
       } else {

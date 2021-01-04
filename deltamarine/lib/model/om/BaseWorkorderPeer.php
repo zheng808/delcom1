@@ -12,6 +12,7 @@ abstract class BaseWorkorderPeer {
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
+
 	/** the table name for this class */
 	const TABLE_NAME = 'workorder';
 
@@ -19,7 +20,7 @@ abstract class BaseWorkorderPeer {
 	const CLASS_DEFAULT = 'lib.model.Workorder';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 29;
+	const NUM_COLUMNS = 30;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;

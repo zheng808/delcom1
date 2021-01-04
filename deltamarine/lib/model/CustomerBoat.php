@@ -16,6 +16,7 @@ class CustomerBoat extends BaseCustomerBoat
     return $desc;
   }
 
+  
   public function getMakeModel()
   {
     $info = array();
