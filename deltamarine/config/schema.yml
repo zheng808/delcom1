@@ -274,7 +274,9 @@ propel:
     e2b_import_date:          { type: timestamp }
     expired_date:          { type: timestamp }
     delivered_date:          { type: timestamp }
-    pickup_date:          { type: timestamp }    
+    pickup_date:          { type: timestamp } 
+    fax:                  { type: boolean, required: true, default: false }   
+    
 
   workorder_category:
     id:                     ~

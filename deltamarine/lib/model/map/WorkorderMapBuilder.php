@@ -121,6 +121,10 @@ class WorkorderMapBuilder implements MapBuilder {
 		$tMap->addColumn('DELIVERED_DATE', 'DeliveryDate', 'TIMESTAMP', true, 255);
 
 		$tMap->addColumn('PICKUP_DATE', 'PickupDate', 'TIMESTAMP', true, 255);
+
+		$tMap->addColumn('FAXED', 'Faxed', 'BOOLEAN', true, null);
+
+		$tMap->addColumn('DELIVERED', 'Delivered', 'BOOLEAN', true, null);
 	} // doBuild()
 
 } // WorkorderMapBuilder

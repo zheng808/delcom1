@@ -365,7 +365,7 @@ class PartPeer extends BasePartPeer
     join workorder_item b on a.workorder_item_id = b.id
     left join part_variant c on a.part_variant_id = c.id
     left join part d on c.part_id = d.id
-    where b.workorder_id = ' .$workId; 
+    where b.workorder_id = ' .$workId. ' and a.delivered = 1 and a.allocated = 1'; 
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();

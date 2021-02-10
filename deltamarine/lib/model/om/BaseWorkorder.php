@@ -164,7 +164,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	protected $expired_date;
 	protected $delivered_date;
 	protected $pickup_date;
-
+	protected $faxed;
+	protected $delivered;
 	/**
 	 * @var        Customer
 	 */
@@ -260,6 +261,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		$this->shop_supplies_surcharge = '0';
 		$this->moorage_surcharge = '0';
 		$this->moorage_surcharge_amt = '0';
+		$this->faxed = false;
 	}
 
 	/**
@@ -808,7 +810,16 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			return $dt->format($format);
 		}
 	}
+	
+	public function getfaxed(){
 
+		return $this->faxed;
+
+	}
+
+	public function getdelivered(){
+		return $this->delivered;
+	}
 
 	/**
 	 * Set the value of [id] column.
@@ -1671,6 +1682,30 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		return $this;
 	}
 
+	public function setfaxed($v){
+		if ($v !== null) {
+			$v = (boolean) $v;
+		}
+
+		if ($this->faxed !== $v || $v === true) {
+			$this->faxed = $v;
+			$this->modifiedColumns[] = WorkorderPeer::FAXED;
+		}
+		return $this;
+	}
+
+	public function setdelivered($v){
+		if ($v !== null) {
+			$v = (boolean) $v;
+		}
+
+		if ($this->delivered !== $v || $v === true) {
+			$this->delivered = $v;
+			$this->modifiedColumns[] = WorkorderPeer::DELIVERED;
+		}
+		return $this;
+	}
+
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
@@ -1682,7 +1717,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	public function hasOnlyDefaultValues()
 	{
 			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array(WorkorderPeer::SUMMARY_COLOR,WorkorderPeer::HST_EXEMPT,WorkorderPeer::GST_EXEMPT,WorkorderPeer::PST_EXEMPT,WorkorderPeer::FOR_RIGGING,WorkorderPeer::SHOP_SUPPLIES_SURCHARGE,WorkorderPeer::MOORAGE_SURCHARGE,WorkorderPeer::MOORAGE_SURCHARGE_AMT))) {
+			if (array_diff($this->modifiedColumns, array(WorkorderPeer::SUMMARY_COLOR,WorkorderPeer::HST_EXEMPT,WorkorderPeer::GST_EXEMPT,WorkorderPeer::PST_EXEMPT,WorkorderPeer::FOR_RIGGING,WorkorderPeer::SHOP_SUPPLIES_SURCHARGE,WorkorderPeer::MOORAGE_SURCHARGE,WorkorderPeer::MOORAGE_SURCHARGE_AMT, WorkorderPeer::FAXED, WorkorderPeer::DELIVERED))) {
 				return false;
 			}
 
@@ -1715,6 +1750,14 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			}
 
 			if ($this->moorage_surcharge_amt !== '0') {
+				return false;
+			}
+
+			if ($this->faxed !== false) {
+				return false;
+			}
+
+			if ($this->delivered !== false) {
 				return false;
 			}
 
@@ -1770,6 +1813,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$this->expired_date = ($row[$startcol + 27] !== null) ? (string) $row[$startcol + 27] : null;
 			$this->delivered_date = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
 			$this->pickup_date = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
+			$this->faxed = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
+			$this->delivered = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -2317,7 +2362,13 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 				break;
 			case 28:
 				return $this->getPickUpDate();
-				break;		
+				break;
+			case 30:
+				return $this->getfaxed();
+				break;
+			case 31:
+				return $this->getdelivered();
+				break;				
 			default:
 				return null;
 				break;
@@ -2368,7 +2419,9 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$keys[26] => $this->getImportDate(),
 			$keys[27] => $this->getExpiredDate(),
 			$keys[28] => $this->getDeliveredDate(),
-			$keys[29] => $this->getPickUpDate()
+			$keys[29] => $this->getPickUpDate(),
+			$keys[30] => $this->getfaxed(),
+			$keys[31] => $this->getdelivered()
 		);
 		return $result;
 	}
@@ -2490,6 +2543,11 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			case 29:
 				$this->setPickUpDate($value);
 				break;
+			case 30:
+				$this->setfaxed($value);
+				break;
+			case 31:
+				$this->setdelivered($value);
 		} // switch()
 	}
 	
@@ -2544,6 +2602,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[27], $arr)) $this->setE2BExpireDate($arr[$keys[27]]);
 		if (array_key_exists($keys[28], $arr)) $this->setDeliveredDate($arr[$keys[28]]);
 		if (array_key_exists($keys[29], $arr)) $this->setPickUpDate($arr[$keys[29]]);
+		if (array_key_exists($keys[30], $arr)) $this->setfaxed($arr[$keys[30]]);
+		if (array_key_exists($keys[31], $arr)) $this->setdelivered($arr[$keys[31]]);
 	}
 	
 	/**
@@ -2585,6 +2645,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderPeer::EXPIRED_DATE)) $criteria->add(WorkorderPeer::EXPIRED_DATE, $this->expired_date);
 		if ($this->isColumnModified(WorkorderPeer::DELIVERED_DATE)) $criteria->add(WorkorderPeer::DELIVERED_DATE, $this->delivered_date);
 		if ($this->isColumnModified(WorkorderPeer::PICKUP_DATE)) $criteria->add(WorkorderPeer::PICKUP_DATE, $this->pickup_date); 
+		if ($this->isColumnModified(WorkorderPeer::FAXED)) $criteria->add(WorkorderPeer::FAXED, $this->faxed);
+		if ($this->isColumnModified(WorkorderPeer::DELIVERED)) $criteria->add(WorkorderPeer::DELIVERED, $this->delivered);  
 		return $criteria;
 	}
 
@@ -2695,6 +2757,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		$copyObj->setDeliveredDate($this->delivered_date);
 
 		$copyObj->setPickUpDate($this->pickup_date);
+
+		$copyObj->setfaxed($this->faxed);
+
+		$copyObj->setdelivered($this->delivered);
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.

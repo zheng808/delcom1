@@ -101,6 +101,8 @@ class work_orderActions extends sfActions
     $c->add(WorkorderPeer::EXPIRED_DATE, null, Criteria::ISNOTNULL);
     $c->add(WorkorderPeer::EXPIRED_DATE, $start_of_today, Criteria::GREATER_EQUAL);
     $c->add(WorkorderPeer::EXPIRED_DATE, WorkorderPeer::DELIVERED_DATE, Criteria::LESS_THAN);
+    $c->add(WorkorderPeer::FAXED, 1, Criteria::NOT_EQUAL);
+    $c->add(WorkorderPeer::DELIVERED, 1, Criteria::NOT_EQUAL);
     $c2 = clone $c;
 
     //paging
@@ -342,6 +344,8 @@ class work_orderActions extends sfActions
       $workorder->setE2BExpireDate($request->getParameter('expired_date') ? strtotime($request->getParameter('expired_date')) : null);
       $workorder->setDeliveredDate($request->getParameter('delivered_date') ? strtotime($request->getParameter('delivered_date')) : null);
       $workorder->setPickUpDate($request->getParameter('pickup_date') ? strtotime($request->getParameter('pickup_date')) : null);
+      $workorder->setfaxed($request->getParameter('faxed') == '1');
+      $workorder->setdelivered($request->getParameter('delivered') == '1');
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Finished Setting Canada Entry Num and Date';

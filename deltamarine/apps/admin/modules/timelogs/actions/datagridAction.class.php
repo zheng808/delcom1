@@ -141,6 +141,7 @@ class datagridAction extends sfAction
         $rate = null;
       }
       $workorderID = TimelogPeer::retrieveWorkOrderID($timelog->getId());
+      $workorder = WorkorderPeer::retrieveByPk($workorderID);
       $customerName = TimelogPeer::retrieveCustomerName(current($workorderID));
       $workItemID = $timelog->getWorkorderItemId();
       $item = WorkorderItemPeer::retrieveByPk($workItemID);
@@ -158,7 +159,7 @@ class datagridAction extends sfAction
                               'end_time'    => ($timelog->getStartTime() ? $timelog->getEndTime('g:iA') : ''),
                               'workorder'   => $workorderID,
                               'item'        => $timelog->getWorkorderItemName(),
-                              'boat'        => $timelog->getWorkorderBoat(),
+                              'boat'        => $timelog->getTimeLogBoatName(),
                               'customer'    => $customerName,
                               'status'      => $timelog->getStatus(),
                               'custom_label'   =>  $timelog->getCustomLabel(),

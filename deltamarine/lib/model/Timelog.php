@@ -87,6 +87,21 @@ class Timelog extends BaseTimelog
     return '';
   }//getWorkorderBoat()--------------------------------------------------------
 
+  public function getTimeLogBoatName(){
+    if ($woi = $this->getWorkorderItem())
+    {
+      if ($wo = $woi->getWorkorder())
+      {
+        if ($boat = $wo->getCustomerBoat())
+        {
+          $id = $boat->getCustomerId();
+          $boat = CustomerBoatPeer::retrieveByPk($id);
+          return $boat->getName();
+        }
+      }
+    }
+  }
+
   public function getWorkorderCustomerName()
   {
     if ($woi = $this->getWorkorderItem())

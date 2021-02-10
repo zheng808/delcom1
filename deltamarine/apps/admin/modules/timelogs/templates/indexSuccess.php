@@ -116,6 +116,17 @@ var workordersStore = new Ext.data.JsonStore({
       sortable: true,
       width: 120
     },{
+      header: "Customer",
+      dataIndex: 'customer',
+      sortable: true,
+      width: 120
+    },{ 
+    header: "Boat Name",
+    dataIndex: 'boat',
+    sortable: true,
+    width: 60
+    }, 
+    {
       header: "Type",
       dataIndex: 'type',
       sortable: false,

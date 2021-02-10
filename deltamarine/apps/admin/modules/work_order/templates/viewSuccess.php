@@ -57,6 +57,8 @@
         $e29ExpireDate  =    '<td class="label">E29 B Expire Date:</td><td>'.$workorder->getExpiredDate('M j, Y').'</td>';
         $deliveryDate  =    '<td class="label">Delivery Date:</td><td>'.$workorder->getDeliveredDate('M j, Y').'</td>';
         $pickupDate  =    '<td class="label">Pick up Date:</td><td>'.$workorder->getPickUpDate('M j, Y').'</td>';
+        $fax  =    '<td class="label">Fax Status:</td><td>'.($workorder->getfaxed() ? '<strong>YES</strong>' : 'No').'</td>';
+        $delivered  =    '<td class="label">Delivered Status:</td><td>'.($workorder->getdelivered() ? '<strong>YES</strong>' : 'No').'</td>';
         $blank = '<td class="label"></td><td class="blank"></td>';
 
         $taxCategory = 'UNKNOWN';
@@ -141,6 +143,16 @@
         if ($workorder->getPickUpDate())
         {
            echo '<tr>'.$pickupDate.'</tr>';
+        }
+
+        if ($workorder->getfaxed() == '1')
+        {
+           echo '<tr>'.$fax.'</tr>';
+        }
+
+        if ($workorder->getdelivered() == '1')
+        {
+           echo '<tr>'.$delivered.'</tr>';
         }
 
       ?>
@@ -2641,6 +2653,34 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       name: 'expired_date',
       value: <?php echo ($workorder->getExpiredDate() ? '\''.$workorder->getExpiredDate('M j, Y').'\'' : 'null'); ?>,
     },{
+      itemId: 'faxed',
+      xtype: 'fieldset',
+      layout: 'anchor',
+      title: 'faxed',
+      items: [{
+        xtype: 'radiogroup',
+        columns: 1,
+        hideLabel: true,
+        items: [ 
+          {name: 'faxed', itemId: 'faxed_Yes',  boxLabel: 'Yes', inputValue: '1', checked: <?php echo $workorder->getfaxed() ? 'true':'false' ?>},
+          {name: 'faxed', itemId: 'faxed_No',  boxLabel: 'No', inputValue: '0', checked: <?php echo $workorder->getfaxed() ? 'false':'true' ?>},
+        ]
+      }]  
+    },{
+      itemId: 'delivered',
+      xtype: 'fieldset',
+      layout: 'anchor',
+      title: 'delivered',
+      items: [{
+        xtype: 'radiogroup',
+        columns: 1,
+        hideLabel: true,
+        items: [ 
+          {name: 'delivered', itemId: 'delivered_Yes',  boxLabel: 'Yes', inputValue: '1', checked: <?php echo $workorder->getdelivered() ? 'true':'false' ?>},
+          {name: 'delivered', itemId: 'delivered_No',  boxLabel: 'No', inputValue: '0', checked: <?php echo $workorder->getdelivered() ? 'false':'true' ?>},
+        ]
+      }]  
+    },{
       xtype: 'datefield',
       fieldLabel: 'Delivery date',
       anchor: '-165',
@@ -2654,7 +2694,7 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       format: 'M j, Y',
       name: 'pickup_date',
       value: <?php echo ($workorder->getPickUpDate() ? '\''.$workorder->getPickUpDate('M j, Y').'\'' : 'null'); ?>,
-    },{
+    },,{
       itemId: 'holdaction',
       xtype: 'fieldset',
       layout: 'anchor',
