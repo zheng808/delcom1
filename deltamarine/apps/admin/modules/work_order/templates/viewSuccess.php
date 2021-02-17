@@ -2788,8 +2788,9 @@ var workorder_bbar = new Ext.Toolbar({
     text: 'Copy Task',
     iconCls: 'info',
     disabled: true,
-    handler: function(){
+    handler: function(data){
       <?php if ($sf_user->hasCredential('workorder_edit')): ?>
+        console.log(data);
         var sel = workorder_tree.getSelectionModel().getSelection()[0].data;
         var taskItem = taskArray;
         var multi_itemId = JSON.stringify(taskArray);

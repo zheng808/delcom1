@@ -557,18 +557,20 @@ class work_orderActions extends sfActions
     foreach($arrayItem as $itemNum){
       $this->forward404Unless($item = WorkorderItemPeer::retrieveByPk($itemNum));
       $this->forward404Unless($item->getWorkorderId() == $workorder->getId());
+      $notes = $item->getCustomerNotes();
       $this->forward404Unless($newwo = WorkorderPeer::retrieveByPk($request->getParameter('workorder_id')));
       if ($newwo->getId() == $workorder->getId())
       {
         $errors['workorder_id'] = 'You can\'t copy a task to the same workorder.';
         return $this->renderText(json_encode(array('success' => false, 'errors' => $errors)));
       }
-      
+     
       $item->duplicate(
-        $newwo, null, 
+        $newwo, null,
         $request->getParameter('p'), $request->getParameter('pest'),
         $request->getParameter('e'), $request->getParameter('eest'),
-        $request->getParameter('l'), $request->getParameter('lest')
+        $request->getParameter('l'), $request->getParameter('lest'),
+        $notes
       );
     }
 

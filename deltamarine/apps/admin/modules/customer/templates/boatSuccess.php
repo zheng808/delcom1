@@ -49,7 +49,7 @@
 <script type="text/javascript">
 
 var workordersStore = new Ext.data.JsonStore({
-  fields: ['id', 'date', 'status'],
+  fields: ['id', 'date', 'status', 'haulout'],
   pagesize: 50,
   remoteSort: true,
   sorters: [{ property: 'date', direction: 'DESC' }],
@@ -249,7 +249,14 @@ var boat_workorders = new Ext.grid.GridPanel({
     header: "Status",
     dataIndex: 'status',
     sortable: true,
-    flex: 1
+    flex: 1,
+    width: 120
+  },{
+    header: "Haulout Date",
+    dataIndex: 'haulout',
+    sortable: true,
+    flex: 1,
+    width: 80
   }],
 
   bbar: new Ext.PagingToolbar({

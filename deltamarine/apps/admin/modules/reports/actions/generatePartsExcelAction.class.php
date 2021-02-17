@@ -104,8 +104,8 @@ class generatePartsExcelAction extends sfAction
           $worksheet->writeString($row, 0, $part[0]);
           $worksheet->writeString($row, 1, $task);
           $worksheet->writeString($row, 2, $partName); 
-          $worksheet->writeString($row, 3, $part[3]); 
-          $worksheet->writeString($row, 4, $part[2]);
+          $worksheet->writeString($row, 3, $part[2]); 
+          $worksheet->writeString($row, 4, $part[3]);
           $worksheet->writeString($row, 5, $part[5]);
           $worksheet->writeString($row, 6, $origin); 
       }

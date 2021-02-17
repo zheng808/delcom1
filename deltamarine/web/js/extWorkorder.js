@@ -5,7 +5,6 @@ Ext.onReady(function(){
 /*********************************************/
 
 
-
 whomStore = new Ext.data.JsonStore({
   fields: ['id','desc', 'name', 'taxable_hst', 'taxable_pst', 'taxable_gst'],
   autoLoad: false,
@@ -2647,7 +2646,6 @@ Ext.define('Ext.ux.ItemCopyWin', {
 
   doneSetup: function(){
     var me = this;
-  
     me.down('#itemcopy_text').body.update('<strong>' + me.itemtext + '</strong>');
     me.form.params.item_id = me.item_id;
     me.form.params.id = me.workorder_id;

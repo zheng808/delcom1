@@ -397,11 +397,12 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
   // 1 = duplicate objects (not labour)
   // 2 = copy object totals to estimate
   // 3 = don't copy
-  public function duplicate(Workorder $newwo, $parent = null, $p, $pest, $e, $eest, $l, $lest)
+  public function duplicate(Workorder $newwo, $parent = null, $p, $pest, $e, $eest, $l, $lest, $notes)
   {
       $new_task = new WorkorderItem();
       $new_task->setWorkorderId($newwo->getId());
       $new_task->setLabel($this->getLabel());
+      $new_task->setCustomerNotes($notes);
       if ($parent)
       {
         $new_task->insertAsLastChildOf($parent);
