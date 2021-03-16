@@ -473,6 +473,7 @@ class WorkorderPeer extends BaseWorkorderPeer
   public static function getTaskColorCodesArray(){
 
     return array(
+      'FFFFFF' => 'Grey',
       '808080' => 'BoldGrey',
       'ffff99' => 'Yellow',
       'cc6600' => 'Brown',
