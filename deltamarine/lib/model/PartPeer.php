@@ -361,11 +361,13 @@ class PartPeer extends BasePartPeer
   }
 
   public static function getPartCSVData($workId){
-    $sql = 'select b.label, d.name, a.quantity, a.unit_price, d.origin, round(a.quantity * a.unit_price, 2) as totalAmount, a.custom_name, a.custom_origin from part_instance a
-    join workorder_item b on a.workorder_item_id = b.id
-    left join part_variant c on a.part_variant_id = c.id
-    left join part d on c.part_id = d.id
-    where b.workorder_id = ' .$workId. ' and a.delivered = 1 and a.allocated = 1'; 
+    $sql = 'select s.label, s.name, sum(quantity) as total, s.unit_price, s.origin, round(sum(quantity) * s.unit_price, 2) as totalAmount,  s.custom_name, s.custom_origin  from (
+      select  b.label, d.name, a.quantity, a.unit_price, d.origin, round(a.quantity * a.unit_price, 2) as totalAmount, a.custom_name, a.custom_origin  from part_instance a
+          join workorder_item b on a.workorder_item_id = b.id
+          left  join part_variant c on a.part_variant_id = c.id
+          left  join part d on c.part_id = d.id
+          where b.workorder_id = ' .$workId. ' and a.delivered = 1 and a.allocated = 1
+      ) s group by s.name, s.unit_price, s.origin, s.label, s.custom_name, s.custom_origin order by s.label ';
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();
@@ -382,6 +384,43 @@ class PartPeer extends BasePartPeer
     $stmt = $con->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_NUM);
+    return $row;
+  }
+
+  public function getPartUnitCostCSV($workId){
+    $sql = 'select b.label, d.name, a.quantity, a.unit_cost, a.custom_name, a.date_used, round(a.quantity * a.unit_cost, 2) as totalAmount, c.unit_cost from part_instance a
+    join workorder_item b on a.workorder_item_id = b.id
+    left outer join part_variant c on a.part_variant_id = c.id
+    left outer join part d on c.part_id = d.id
+    where b.workorder_id = ' .$workId. ' and a.delivered = 1 and a.allocated = 1';
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+  }
+
+  public function getExpenseUnitCostCSV($workId){
+    $sql = 'select b.label, a.label, cost,created_at  from  workorder_expense a 
+    left join workorder_item b on a.workorder_item_id = b.id
+    where b.workorder_id = ' .$workId;
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+  }
+
+  public function getLabourUnitCostCSV($workId){
+    $sql = 'select label, rate, payroll_hours, cost, a.updated_at, d.alpha_name from timelog a
+    left join workorder_item b on a.workorder_item_id = b.id
+    left join employee c on a.employee_id = c.id
+    join wf_crm d on c.wf_crm_id = d.id
+    where b.workorder_id = ' .$workId;
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
     return $row;
   }
 

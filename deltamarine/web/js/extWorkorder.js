@@ -2632,6 +2632,102 @@ Ext.define('Ext.ux.NotesEditWin', {
   }
 });
 
+//copy part
+// Ext.define('Ext.ux.PartCopyWin', {
+//   extend: 'Ext.ux.acFormWindow',
+
+//   title: 'Copy Workorder Part',
+//   width: 700,
+//   autoShow: true,
+//   closeAction: 'destroy',
+
+//   itemtext: '',
+//   item_id: null,
+//   workorder_id: 0,
+//   task_folder: null,
+
+//   doneSetup: function(){
+//     var me = this;
+//     me.down('#itemcopy_text').body.update('<strong>' + me.itemtext + '</strong>');
+//     me.form.params.part_id = me.part_id;
+//     me.form.params.id = me.workorder_id;
+//   },
+
+//   defaultFormConfig: { 
+//     url:  '/work_order/itemcopy',
+//     params: {
+//       part_id: null,
+//       id: null
+//     },
+
+
+//     formSuccess: function() {
+//       Ext.Msg.alert('Success', 'Item was copied.');
+//     },
+
+//     fieldDefaults: { labelAlign: 'left', labelWidth: 150 },
+
+//     items: [{
+//       xtype: 'fieldcontainer',
+//       fieldLabel: 'Task to Copy',
+//       items: [{
+//         itemId: 'itemcopy_text',
+//         border: false,
+//         height: 30,
+//         html: ''
+//       }]
+//     },{
+//       fieldLabel: 'Workorder to Copy To',
+//       xtype: 'combo',
+//       name: 'workorder_id',
+//       anchor: '-25',
+//       forceSelection: true,
+//       allowBlank: false,
+//       queryMode: 'remote',
+//       valueField: 'id', 
+//       displayField: 'summary',
+//       hideTrigger: true,
+//       minChars: 1,
+//       pageSize: 15,
+//       listConfig: { 
+//         minWidth: 500,
+//         getInnerTpl: function(){
+//           return '<a class="search-item" style="display: block; border-top: 1px dotted #ccc; color: #000;">' +
+//                  '<span style="font-weight: bold; font-size: 13px;">#{id}: {boat}</span>' +
+//                  '<span style="font-weight: bold; padding-left: 5px;">({customer})</span><br />' +
+//                  '<span style="padding-left: 20px; color: green">{date} - {status}<span>' +
+//                  '</a>';
+//         }
+//       },
+//       emptyText: 'Customer/Boat',
+//       store: otherWorkordersStore,
+//       margin: '0 0 15 0',
+//       listeners: {
+//         'select': function(field,r){
+//            partTaskId = field.getValue();
+//            console.log(partTaskId);
+//         }
+//       }
+//     },{
+//       itemId: 'parentfield',
+//       fieldLabel: 'Parent Task',
+//       xtype: 'treecombo',
+//       anchor: '-25',
+//       treeWidth: 300,
+//       name: 'parent_id',
+//       valueField: 'id',
+//       displayField: 'text',
+//       forceSelection: true,
+//       allowBlank: false,
+//       rootVisible: true,
+//       selectChildren: false,
+//       canSelectFolders: true,
+//       store: foldersStore
+//     }]      
+//   }
+// });
+
+//copy task
 Ext.define('Ext.ux.ItemCopyWin', {
   extend: 'Ext.ux.acFormWindow',
 
@@ -2656,7 +2752,7 @@ Ext.define('Ext.ux.ItemCopyWin', {
     params: {
       item_id: null,
       id: null
-  },
+    },
 
 
     formSuccess: function() {

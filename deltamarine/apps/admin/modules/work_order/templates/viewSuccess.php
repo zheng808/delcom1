@@ -2105,6 +2105,7 @@ Ext.define('Ext.ux.WorkorderEditWin', {
             var myMask = new Ext.LoadMask(Ext.getBody(), { msg: "Workorder Updated. Refreshing Page..."});
             myMask.show();
             location.href = '<?php echo url_for('work_order/view?id='.$workorder->getId()); ?>';
+            reload_tree();
           },
           modal: true,
           title: 'Oops',
@@ -2789,8 +2790,7 @@ var workorder_bbar = new Ext.Toolbar({
     iconCls: 'info',
     disabled: true,
     handler: function(data){
-      <?php if ($sf_user->hasCredential('workorder_edit')): ?>
-        console.log(data);
+      <?php if ($sf_user->hasCredential('workorder_edit')): ?> 
         var sel = workorder_tree.getSelectionModel().getSelection()[0].data;
         var taskItem = taskArray;
         var multi_itemId = JSON.stringify(taskArray);

@@ -61,7 +61,7 @@
     <ul>
       <li><?php echo link_to('Employee Timesheets', 'reports/timelogs'); ?></li>
       <li><?php echo link_to('Parts Data', 'reports/partsCSV'); ?></li>
-      <li class="divider disabled"><a href="#">Inventory Value</a></li>
+      <li><?php echo link_to('Unit Cost Data', 'reports/UnitCostCSV'); ?></li>
       <li class="divider disabled"><a href="#">Workorder Profits</a></li>
       <li class="disabled"><a href="#">Parts Sales</a></li>
       <li class="disabled"><a href="#">Discounts and Warranty</a></li>

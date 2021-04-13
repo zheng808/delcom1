@@ -178,7 +178,7 @@ var workordersStore = new Ext.data.JsonStore({
       width: 55,
       flex: 1,
       renderer: function(value,metaData,record){
-        if (record.data['completed_status'] == '1'){
+        if (record.data['completed_status'] == true){
           output = '<img src="/images/silkicon/accept.png" width="15" height="15"/>';
         }else{
           output = '<img src="/images/silkicon/folder_edit.png" width="15" height="15"/>';
@@ -705,17 +705,37 @@ var workordersStore = new Ext.data.JsonStore({
   function executeTimelogAction(name){
     var selectedIds = new Array;
     var selectedRecords = new Array;
+    var flag = true;
     sm = timelogs_list.getSelectionModel();
     Ext.each(sm.getSelection(),function(record){ 
+      //cannot approve complete timelog
+      if(name == 'approve'){
+         if (record.data['completed_status'] == true){
+            //msg = 'cannot approve Timelog with completed status';
+            flag = false;
+         }
+      }
       selectedRecords.push(record); 
       selectedIds.push(record.data.id); 
+      
     });
-    Ext.Msg.show({
-      msg: 'Updating timelog(s), please wait',
-      width: 300,
-      wait: true
-    });
-    Ext.Ajax.request({
+    if(flag == false){
+        Ext.Msg.show({
+        buttons: Ext.MessageBox.OK,
+        msg: 'cannot approve Timelog with completed status',
+        width: 300,
+      });
+      return;
+    }else{
+      Ext.Msg.show({
+        msg: 'loading...',
+        width: 300,
+        wait: true
+      });
+    }
+    
+    if(flag == true){
+      Ext.Ajax.request({
       url: '<?php echo url_for('timelogs/changeStatus?dowhat='); ?>' + name,
       method: 'POST',
       params: {ids: selectedIds.join()},
@@ -729,6 +749,7 @@ var workordersStore = new Ext.data.JsonStore({
             timelogs_list.getSelectionModel().select(selectedRecords);
           });
           task.delay(200);
+          location.reload();
         } else {
           Ext.Msg.show({
             icon: Ext.MessageBox.ERROR,
@@ -750,6 +771,8 @@ var workordersStore = new Ext.data.JsonStore({
         });
       }
     });
+    }
+    
   }
 
 

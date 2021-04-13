@@ -24,6 +24,8 @@ proxy: {
     url: '<?php echo url_for('/reports/retreiveParts'); ?>'
   }
 });
+
+
 var workNumberField = new Ext.Panel({
   width: 225,
   margin: '0 0 25px 0',
@@ -32,7 +34,7 @@ var workNumberField = new Ext.Panel({
   new Ext.FormPanel({
     autoWidth: true,
     standardSubmit: true,
-    id: 'downloadExcel',
+    id: 'downloadPartUnitExcel',
     bodyStyle: 'padding: 10px',
     labelWidth: 70,
     items: [{
@@ -185,7 +187,6 @@ $(".printPartsData").click(function(){
       var queryString = '?id=' +  encodeURIComponent(work_id);
       $('.printPartsData').attr('href', href + queryString );
 });
-
 
 Ext.onReady(function(){
     grid.render("index-grid");
