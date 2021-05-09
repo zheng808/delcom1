@@ -621,6 +621,18 @@ var workordersStore = new Ext.data.JsonStore({
           text: 'Delete',
           iconCls: 'delete',
           handler: doTimelogAction
+        },'-',{
+          id: 'overtime',
+          doAction: 'OT',
+          text: 'OverTime',
+          iconCls: 'flag',
+          handler: doTimelogAction
+        },{
+          id: 'doubletime',
+          doAction: 'DT',
+          text: 'DoubleTime',
+          iconCls: 'flag',
+          handler: doTimelogAction
         }]
       })
     },{
@@ -749,7 +761,7 @@ var workordersStore = new Ext.data.JsonStore({
             timelogs_list.getSelectionModel().select(selectedRecords);
           });
           task.delay(200);
-          location.reload();
+          //location.reload();
         } else {
           Ext.Msg.show({
             icon: Ext.MessageBox.ERROR,

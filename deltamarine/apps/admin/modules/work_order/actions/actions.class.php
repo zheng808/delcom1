@@ -1932,12 +1932,16 @@ class work_orderActions extends sfActions
       {
         $expense = new WorkorderExpense();
       }
-
+        
       $old_parent = $expense->getWorkorderItem();
       $expense->setWorkorderItemId($request->getParameter('workorder_item_id'));
       $expense->setLabel($request->getParameter('label'));
-      $expense->setEstimate($request->getParameter('estimate') != '0');
-      $expense->setInvoice($request->getParameter('estimate') != '1');
+      if($request->getParameter('estimate') == '2' || $request->getParameter('estimate') == '0'){
+        $expense->setEstimate(false);
+      }else{
+        $expense->setEstimate(true);
+      }
+      $expense->setInvoice($request->getParameter('estimate') != '1'); //set 
       $expense->setCustomerNotes($request->getParameter('customer_notes'));
       $expense->setInternalNotes($request->getParameter('internal_notes'));
       $expense->setCost($request->getParameter('cost') ? $request->getParameter('cost') : 0);
@@ -2389,9 +2393,11 @@ class work_orderActions extends sfActions
         ' AND '. PartInstancePeer::WORKORDER_INVOICE_ID.' IS NULL'.
         ' AND '. PartInstancePeer::DELIVERED.' = 1'.
         ' AND '. PartInstancePeer::DATE_USED ." < '".date('Y-m-d H:i:s', $date)."'";
+       
       $con = Propel::getConnection();
       $stmt = $con->prepare($update_parts);
-      $stmt->execute();        
+      $stmt->execute();
+            
       if (sfConfig::get('sf_logging_enabled')){sfContext::getInstance()->getLogger()->info('updated parts');}
 
       $update_expenses = 'UPDATE '.WorkorderItemPeer::TABLE_NAME.', '.WorkorderExpensePeer::TABLE_NAME.
@@ -2401,6 +2407,7 @@ class work_orderActions extends sfActions
         ' AND '. WorkorderExpensePeer::WORKORDER_INVOICE_ID.' IS NULL'.
         ' AND '. WorkorderExpensePeer::ESTIMATE.' = 0'.
         ' AND '. WorkorderExpensePeer::CREATED_AT ." < '".date('Y-m-d H:i:s', $date)."'";
+      
       $con = Propel::getConnection();
       $stmt = $con->prepare($update_expenses);
       $stmt->execute();

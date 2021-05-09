@@ -2500,7 +2500,7 @@ Ext.define('Ext.ux.ExpenseEditWin', {
       name: 'origin',
       fieldLabel: 'Country of Origin',
       anchor: '-25'      
-    },{      
+    },{    
       itemId: 'estimatefield',
       xtype: 'acbuttongroup',
       fieldLabel: 'Estimate or Invoice',

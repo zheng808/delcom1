@@ -33,7 +33,7 @@ class timelogsActions extends sfActions
     $action = $request->getParameter('dowhat');
     $this->forward404Unless($action == 'approve' || $action == 'unapprove' 
                               || $action == 'flag' || $action == 'unflag' 
-                              || $action == 'delete');
+                              || $action == 'delete' || $action == 'OT' || $action =='DT');
 
     //loop through found timelogs and edit them
     foreach ($timelogs AS $timelog)
@@ -49,22 +49,28 @@ class timelogsActions extends sfActions
 
         //let the model take care of updating the workorder info
         $timelog->delete();
-      }
-      else
-      {
+      }else if($action == 'approve'){
         //unflagging and unapproving both set approved/flagged values to false
-        if ($action != 'unflag')
-        {
-          $timelog->setApproved($action == 'approve');
-        }
+        $timelog->setApproved($action == 'approve');
+        $timelog->save();
+      }else if($action == 'OT'){
+        $hours = $timelog->getBillableHours();
+        $hours = $hours * 1.5;
+        $hours = (round($hours*4))/4;
+        $timelog->setBillableHours($hours);
+        $timelog->save();
+      }else if($action == 'flag'){
         $timelog->setAdminFlagged($action == 'flag');
+        $timelog->save();
+      }else if($action == 'DT'){
+        $hours = $timelog->getBillableHours();
+        $hours = $hours * 2;
+        $timelog->setBillableHours($hours);
         $timelog->save();
       }
     }
-
     //output result as JSON
-    $this->renderText('{success:true}');
-
+    $this->renderText("{success:true, action:".json_encode($action)."}");
     return sfView::NONE;
   }
 

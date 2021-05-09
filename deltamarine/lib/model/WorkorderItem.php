@@ -175,6 +175,7 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
       }
       $part_pct = (float) $part_pct;
       $labour_pct = (float) $labour_pct;
+      
     }
     else if ($whom == 'cust' || !$whom)
     {
@@ -208,6 +209,7 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
           $other_amt = $this->calculateActualOther($invoice_id);
       }
       $val = round(($part_pct/100) * $part_amt, 2) + round(($labour_pct/100) * ($labour_amt + $other_amt), 2);
+      
     }
 
     $need_recurse = ($invoice_id !== null);
@@ -244,9 +246,11 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
              ' WHERE '.WorkorderItemPeer::LEFT_COL.' > '.$this->getLeftValue().
              ' AND '.WorkorderItemPeer::RIGHT_COL.' < '.$this->getRightValue().
              ' AND '.WorkorderItemPeer::SCOPE_COL.' = '.$this->getScopeIdValue();
+      
       $con = Propel::getConnection();
       $stmt = $con->prepare($sql);
       $stmt->execute();
+      
       if ($row = $stmt->fetch(PDO::FETCH_NUM))
       {
         $val += round(($part_pct / 100) * $row[0], 2);
@@ -254,7 +258,6 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
       }
       unset($con, $stmt, $row);
     }
-
     return ($val > 0 ? $val : null);
   }
 
@@ -270,7 +273,7 @@ class WorkorderItem extends BaseWorkorderItemNestedSet
     if ($invoice_id !== null)
     {
       $sql .= ' AND '.TimelogPeer::WORKORDER_INVOICE_ID.($invoice_id === 0 ? ' IS NULL' : ' = '.$invoice_id);
-    }           
+    }         
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();
