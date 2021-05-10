@@ -105,6 +105,8 @@ class work_orderActions extends sfActions
     $c->add(WorkorderPeer::DELIVERED, 1, Criteria::NOT_EQUAL);
     $c2 = clone $c;
 
+    ($request->getParameter('dir', 'DESC') == 'ASC' ?  $c->addAscendingOrderByColumn(WorkorderPeer::EXPIRED_DATE)
+    :  $c->addDescendingOrderByColumn(WorkorderPeer::EXPIRED_DATE));
     //paging
     if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
     if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));
@@ -136,6 +138,8 @@ class work_orderActions extends sfActions
     $c->add(WorkorderPeer::PICKUP_DATE, $start_of_today, Criteria::GREATER_EQUAL);
     $c2 = clone $c;
 
+    ($request->getParameter('dir', 'DESC') == 'ASC' ?  $c->addAscendingOrderByColumn(WorkorderPeer::PICKUP_DATE)
+    :  $c->addDescendingOrderByColumn(WorkorderPeer::PICKUP_DATE));
     //paging
     if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
     if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));
@@ -167,6 +171,8 @@ class work_orderActions extends sfActions
     $c->add(WorkorderPeer::DELIVERED_DATE, $start_of_today, Criteria::GREATER_EQUAL);
     $c2 = clone $c;
 
+    ($request->getParameter('dir', 'DESC') == 'ASC' ?  $c->addAscendingOrderByColumn(WorkorderPeer::DELIVERED_DATE)
+    :  $c->addDescendingOrderByColumn(WorkorderPeer::DELIVERED_DATE));
     //paging
     if ($request->getParameter('limit')) $c->setLimit($request->getParameter('limit'));
     if ($request->getParameter('start')) $c->setOffset($request->getParameter('start'));

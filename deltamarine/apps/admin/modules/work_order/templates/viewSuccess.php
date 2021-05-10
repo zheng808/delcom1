@@ -595,10 +595,19 @@ function showPartEditWindow(inst_id, wo, data){
     Ext.getCmp('enviro_levy').setValue(partEnviroLevy);
     Ext.getCmp('battery_levy').setValue(partBatteryLevy);
     Ext.getCmp('part_quantity').setValue(partQuantity);
-    Ext.getCmp('sub_contractor_flg').setValue(subContractorFlg);
-    Ext.getCmp('enviro_taxable_flg').setValue(enviroTaxableFlg);
 
+    if(Ext.getCmp('sub_contractor_flg')!=null){
+      Ext.getCmp('sub_contractor_flg').setValue(subContractorFlg);
+    }
+    if(Ext.getCmp('enviro_taxable_flg')!=null){
+      Ext.getCmp('enviro_taxable_flg').setValue(enviroTaxableFlg);
+    }
+    
+    
     Ext.getCmp('part_available').setValue(partAvailable + ' (Min: '+minQuantity+', Max: '+maxQuantity+')') ;
+    if(partRegularPrice == 0){
+      partRegularPrice = 0;
+    }
     Ext.getCmp('regular_price').setValue('$'+ Number.parseFloat(partRegularPrice).toFixed(2));
 
 
