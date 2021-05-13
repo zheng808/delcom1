@@ -67,6 +67,12 @@ class timelogsActions extends sfActions
         $hours = $hours * 2;
         $timelog->setBillableHours($hours);
         $timelog->save();
+      }else if($action == 'unapprove'){
+        $timelog->setApproved(false);
+        $timelog->save();
+      }else if($action == 'unflag'){
+        $timelog->setAdminFlagged(false);
+        $timelog->save();
       }
     }
     //output result as JSON
