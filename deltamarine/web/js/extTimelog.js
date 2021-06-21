@@ -543,10 +543,10 @@ Ext.define('Ext.ux.TimelogEditWin', {
         columnWidth: 0.48,
         layout: 'anchor',
         items: [{
-          xtype: 'displayfield',
-          fieldLabel: 'Date Created',
-	  height: 50,	
-	  name: 'created_at'
+        xtype: 'displayfield',
+        fieldLabel: 'Date Created',
+	      height: 50,	
+	      name: 'created_at'
         }]
       },{
         border: false,
@@ -556,7 +556,7 @@ Ext.define('Ext.ux.TimelogEditWin', {
           xtype: 'displayfield',
           fieldLabel: 'Last Updated',
           height: 50,
-	  name: 'updated_at'
+	        name: 'updated_at'
         }]
 
       }]

@@ -2814,6 +2814,40 @@ var workorder_bbar = new Ext.Toolbar({
         Ext.Msg.alert('Permission Denied','You do not have permission to edit workorder items');
       <?php endif; ?>
     }
+  },{
+    id: 'notes_button',
+    text: 'View Notes',
+    iconCls: 'info',
+    handler: function(data){
+      <?php if ($sf_user->hasCredential('workorder_edit')): ?> 
+        var taskId = workorder_tree.getSelectionModel().getSelection()[0].data.id;
+        if (/^[0-9]+$/.test(taskId)){
+          Ext.Ajax.request({
+          url: '<?php echo url_for('work_order/notes'); ?>?taskId=' + taskId,
+          success: function(response){
+            var text = response.responseText;
+            var data = Ext.JSON.decode(text); 
+            console.log(data);
+            if(data!=null){
+              new Ext.ux.ViewNotes({
+                json: data
+              });
+            }else{
+              new Ext.ux.ViewNotes({
+                json: null
+              });
+            }
+            
+            
+          }
+        });
+         
+
+        }
+      <?php else: ?>
+        Ext.Msg.alert('Permission Denied','You do not have permission to edit workorder items');
+      <?php endif; ?>
+    }
   },'->',{
 <?php if ($workorder->isEstimate() || $workorder->isInProgress()): ?>
     id: 'woi_editbutton',

@@ -421,5 +421,13 @@ class PartPeer extends BasePartPeer
     $row = $stmt->fetchall(PDO::FETCH_NUM);
     return $row;
   }
-
+  
+  public function getAllNotes($taskId){
+    $sql = 'select text, owner, date_created from notes where task_id = ' .$taskId;
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+  }
 }

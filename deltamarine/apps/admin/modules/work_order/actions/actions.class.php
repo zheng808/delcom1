@@ -2559,6 +2559,7 @@ class work_orderActions extends sfActions
     }
   }
 
+
   private function formatItemList($workorder_items) {
     //get all labour type data to not request it for each workorder_item
     $labour_types = LabourTypePeer::doSelect(new Criteria());
