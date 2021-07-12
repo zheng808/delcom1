@@ -38,6 +38,12 @@
           <td colspan="3"><?php echo nl2br($boat->getNotes()); ?>
         </tr>
       <?php endif; ?>
+      <?php if ($boat->getFire_Date()): ?>
+        <tr>
+          <td class="label">Fire Certification Date:</td>
+          <td colspan="3"><?php echo nl2br($boat->getFire_Date()); ?>
+        </tr>
+      <?php endif; ?>
     </table>
 
     <div id="view-tabs"></div>
@@ -300,7 +306,7 @@ var boat_workorders = new Ext.grid.GridPanel({
     }
   })
 });
-
+//add new fire date
 var BoatEditWin = new Ext.Window({
   title: 'Edit Boat Info',
   closable: false,
@@ -350,6 +356,13 @@ var BoatEditWin = new Ext.Window({
       fieldLabel: 'Boat Notes',
       anchor: '-25',
       height: 85
+    },{
+      xtype: 'datefield',
+      name: 'fire_date',
+      format: 'Y-m-d H:i:s',
+      fieldLabel: ' Fire /Certification Date',
+      anchor: '-1',
+      height: 40
     }],
 
     buttons:[{
