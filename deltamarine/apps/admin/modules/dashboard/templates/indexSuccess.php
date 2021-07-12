@@ -118,6 +118,24 @@ var delivery_store = new Ext.data.JsonStore({
   }
 });
 
+var fire_store = new Ext.data.JsonStore({
+  fields: ['id', 'name', 'make', 'model', 'fire_date', 'customer_name', 'lastworkorder'],
+  sorters: [{ property: 'fire', direction: 'ASC' }],
+  remoteSort: true,
+  autoLoad: true,
+  pageSize: 100,
+  proxy: {
+    type: 'ajax',
+    url: '<?php echo url_for('dashboard/fireDate'); ?>',
+    simpleSortMode: true,
+    reader: { 
+      root: 'boats',
+      totalProperty: 'totalCount',
+      idProperty: 'id'
+    }
+  }
+});
+
 var endoftoday = new Date();
 endoftoday.setHours(24,0,0,0);
 
@@ -420,6 +438,54 @@ var delivery_datagrid = new Ext.grid.GridPanel({
 
 });
 
+//fire
+var fire_datagrid = new Ext.grid.GridPanel({
+  width: 651,
+  minHeight: 300,
+  bodyCls: 'indexgrid',
+  enableColumnMove: false,
+  emptyText: 'No Fire Certification Date',
+  viewConfig: { stripeRows: true, loadMask: true },
+  store: fire_store,
+  columns: [{
+    header: 'Date/Time',
+    dataIndex: 'fire_date',
+    sortable: true,
+    width: 135,
+    renderer: function (value, metaData, record, rowIndex, colIndex, store) {
+      return '<span style="color: red;">' + value + '</span>';
+    }    
+  },{
+    header: "ID",
+    dataIndex: 'id',
+    sortable: true,
+    xtype: 'numbercolumn',
+    format: 0,
+    width: 45,
+  },{
+    header: "Boat Name",
+    dataIndex: 'name',
+    sortable: false,
+    flex: 1
+  },{
+    header: "Customer",
+    dataIndex: 'customer_name',
+    sortable: false,
+    flex: 1
+  }],
+
+  // selModel: new Ext.selection.RowModel({
+  //   listeners: {
+  //     select: function(sm, record){
+  //       var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Loading Work Order Details..."});
+  //       myMask.show();
+  //       location.href= '<?php echo url_for('work_order/view?id='); ?>' + record.data.id ;
+  //     }
+  //   }
+  // })
+
+});
+
 var notes_col = new Ext.Container({
   flex: 1,
   margin: '0 10 0 0',
@@ -484,6 +550,18 @@ flex: 1,
   ]
 });
 
+
+var fire_col = new Ext.Container({
+flex: 1,
+  items: [{
+    html: '<h2>Fire Certification Date',
+    border: false,
+  },
+    fire_datagrid
+  ]
+});
+
+
 var notes = new Ext.Container({
   border: false,
   layout: 'vbox',
@@ -505,7 +583,7 @@ var dashboard2 = new Ext.Container({
 var dashboard3 = new Ext.Container({
   border: false,
   layout: 'hbox',
-  items: [delivery_col]
+  items: [delivery_col, fire_col]
 });
 
 Ext.onReady(function(){

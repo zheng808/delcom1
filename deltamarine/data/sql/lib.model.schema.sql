@@ -1041,6 +1041,7 @@ CREATE TABLE `customer_boat`
 	`name` VARCHAR(255),
 	`registration` VARCHAR(255),
 	`notes` TEXT,
+	`fire_date` TIMESTAMP
 	PRIMARY KEY (`id`),
 	INDEX `customer_boat_FI_1` (`customer_id`),
 	CONSTRAINT `customer_boat_FK_1`

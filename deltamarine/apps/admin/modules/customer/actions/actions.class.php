@@ -251,7 +251,8 @@ class customerActions extends sfActions
         'model' => $boat->getModel(),
         'serial_number' => $boat->getSerialNumber(),
         'registration' => $boat->getRegistration(),
-        'notes' => $boat->getNotes()
+        'notes' => $boat->getNotes(),
+        'fire_date' =>$boat->getFire_Date()
       );
       $this->renderText("{success:true, data:".json_encode($data)."}");
     }
@@ -299,6 +300,7 @@ class customerActions extends sfActions
       $boat->setSerialNumber($request->getParameter('serial_number'));
       $boat->setRegistration($request->getParameter('registration'));
       $boat->setNotes($request->getParameter('notes'));
+      $boat->setFireDate($request->getParameter('fire_date'));
       $boat->save();
 
       //output result as JSON
@@ -352,4 +354,5 @@ class customerActions extends sfActions
 
     return $boat;
   }
+
 }

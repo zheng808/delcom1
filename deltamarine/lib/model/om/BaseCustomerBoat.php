@@ -68,6 +68,8 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 	 */
 	protected $notes;
 
+	protected $fire_date;
+
 	/**
 	 * @var        Customer
 	 */
@@ -195,6 +197,10 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 	public function getNotes()
 	{
 		return $this->notes;
+	}
+
+	public function getFire_Date(){
+		return $this->fire_date;
 	}
 
 	/**
@@ -361,6 +367,19 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 		return $this;
 	} // setNotes()
 
+	public function setFireDate($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->fire_date !== $v) {
+			$this->fire_date = $v;
+			$this->modifiedColumns[] = CustomerBoatPeer::FIRE_DATE;
+		}
+
+		return $this;
+	} 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
@@ -406,6 +425,7 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 			$this->name = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->registration = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
 			$this->notes = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->fire_date = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -792,6 +812,9 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 			case 7:
 				return $this->getNotes();
 				break;
+			case 8;
+				return $this->getFire_Date();
+				break;
 			default:
 				return null;
 				break;
@@ -821,6 +844,7 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 			$keys[5] => $this->getName(),
 			$keys[6] => $this->getRegistration(),
 			$keys[7] => $this->getNotes(),
+			$keys[8] => $this->getFire_Date(),
 		);
 		return $result;
 	}
@@ -875,6 +899,8 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 				break;
 			case 7:
 				$this->setNotes($value);
+			case 8:
+				$this->setFireDate($value);
 				break;
 		} // switch()
 	}
@@ -908,6 +934,7 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[5], $arr)) $this->setName($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setRegistration($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setNotes($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setFireDate($arr[$keys[8]]);
 	}
 
 	/**
@@ -927,7 +954,7 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CustomerBoatPeer::NAME)) $criteria->add(CustomerBoatPeer::NAME, $this->name);
 		if ($this->isColumnModified(CustomerBoatPeer::REGISTRATION)) $criteria->add(CustomerBoatPeer::REGISTRATION, $this->registration);
 		if ($this->isColumnModified(CustomerBoatPeer::NOTES)) $criteria->add(CustomerBoatPeer::NOTES, $this->notes);
-
+		if ($this->isColumnModified(CustomerBoatPeer::FIRE_DATE)) $criteria->add(CustomerBoatPeer::FIRE_DATE, $this->fire_date);
 		return $criteria;
 	}
 
@@ -995,7 +1022,7 @@ abstract class BaseCustomerBoat extends BaseObject  implements Persistent {
 
 		$copyObj->setNotes($this->notes);
 
-
+		$copyObj->setFireDate($this->fire_date);
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.

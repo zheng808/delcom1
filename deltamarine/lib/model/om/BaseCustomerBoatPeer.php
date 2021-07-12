@@ -48,6 +48,8 @@ abstract class BaseCustomerBoatPeer {
 	/** the column name for the NOTES field */
 	const NOTES = 'customer_boat.NOTES';
 
+	const FIRE_DATE = 'customer_boat.FIRE_DATE';
+
 	/**
 	 * An identiy map to hold any loaded instances of CustomerBoat objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -69,11 +71,11 @@ abstract class BaseCustomerBoatPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'SerialNumber', 'Make', 'Model', 'Name', 'Registration', 'Notes', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'serialNumber', 'make', 'model', 'name', 'registration', 'notes', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::SERIAL_NUMBER, self::MAKE, self::MODEL, self::NAME, self::REGISTRATION, self::NOTES, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'serial_number', 'make', 'model', 'name', 'registration', 'notes', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'SerialNumber', 'Make', 'Model', 'Name', 'Registration', 'Notes', 'Fire_Date',),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'serialNumber', 'make', 'model', 'name', 'registration', 'notes', 'fire_date'),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::SERIAL_NUMBER, self::MAKE, self::MODEL, self::NAME, self::REGISTRATION, self::NOTES, self::FIRE_DATE),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'serial_number', 'make', 'model', 'name', 'registration', 'notes', 'fire_date'),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8,)
 	);
 
 	/**
@@ -83,11 +85,11 @@ abstract class BaseCustomerBoatPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'SerialNumber' => 2, 'Make' => 3, 'Model' => 4, 'Name' => 5, 'Registration' => 6, 'Notes' => 7, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'serialNumber' => 2, 'make' => 3, 'model' => 4, 'name' => 5, 'registration' => 6, 'notes' => 7, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::SERIAL_NUMBER => 2, self::MAKE => 3, self::MODEL => 4, self::NAME => 5, self::REGISTRATION => 6, self::NOTES => 7, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'serial_number' => 2, 'make' => 3, 'model' => 4, 'name' => 5, 'registration' => 6, 'notes' => 7, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'SerialNumber' => 2, 'Make' => 3, 'Model' => 4, 'Name' => 5, 'Registration' => 6, 'Notes' => 7, 'Fire_Date' =>8,),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'serialNumber' => 2, 'make' => 3, 'model' => 4, 'name' => 5, 'registration' => 6, 'notes' => 7, 'fire_date' =>8,),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::SERIAL_NUMBER => 2, self::MAKE => 3, self::MODEL => 4, self::NAME => 5, self::REGISTRATION => 6, self::NOTES => 7, self::FIRE_DATE=>8,),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'serial_number' => 2, 'make' => 3, 'model' => 4, 'name' => 5, 'registration' => 6, 'notes' => 7, 'fire_date' =>8,),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8,)
 	);
 
 	/**
@@ -184,6 +186,8 @@ abstract class BaseCustomerBoatPeer {
 		$criteria->addSelectColumn(CustomerBoatPeer::REGISTRATION);
 
 		$criteria->addSelectColumn(CustomerBoatPeer::NOTES);
+
+		$criteria->addSelectColumn(CustomerBoatPeer::FIRE_DATE);
 
 	}
 

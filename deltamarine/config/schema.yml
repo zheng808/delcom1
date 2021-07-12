@@ -435,6 +435,7 @@ propel:
     name:                   { type: varchar(255) }
     registration:           { type: varchar(255) }
     notes:                  { type: longvarchar  }
+    fire_date:              { type: timestamp  }
 
   #######################
   # ACCOUNTING          #

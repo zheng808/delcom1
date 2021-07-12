@@ -21,6 +21,7 @@ class BaseCustomerBoatFormFilter extends BaseFormFilterPropel
       'name'          => new sfWidgetFormFilterInput(),
       'registration'  => new sfWidgetFormFilterInput(),
       'notes'         => new sfWidgetFormFilterInput(),
+      'fire_date'     => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -31,6 +32,7 @@ class BaseCustomerBoatFormFilter extends BaseFormFilterPropel
       'name'          => new sfValidatorPass(array('required' => false)),
       'registration'  => new sfValidatorPass(array('required' => false)),
       'notes'         => new sfValidatorPass(array('required' => false)),
+      'fire_date'     => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('customer_boat_filters[%s]');
@@ -56,6 +58,7 @@ class BaseCustomerBoatFormFilter extends BaseFormFilterPropel
       'name'          => 'Text',
       'registration'  => 'Text',
       'notes'         => 'Text',
+      'notes'         => 'Date',
     );
   }
 }

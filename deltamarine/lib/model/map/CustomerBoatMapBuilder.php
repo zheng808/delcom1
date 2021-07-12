@@ -78,6 +78,8 @@ class CustomerBoatMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('NOTES', 'Notes', 'LONGVARCHAR', false, null);
 
+		$tMap->addColumn('FIRE_DATE', 'Fire_Date ', 'TIMESTAMP', false, null);
+
 	} // doBuild()
 
 } // CustomerBoatMapBuilder

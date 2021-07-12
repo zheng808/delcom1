@@ -304,4 +304,43 @@ class dashboardActions extends sfActions
     return sfView::SUCCESS;
   }
 
+  public function executeFireDate(sfWebRequest $request){
+    $NewDate=Date('y:m:d', strtotime('-335 days'));
+    $c = new Criteria();
+    $c2 = new Criteria();
+    $c->add(CustomerBoatPeer::FIRE_DATE, null, Criteria::ISNOTNULL);
+    $c->add(CustomerBoatPeer::FIRE_DATE, $NewDate, Criteria::LESS_EQUAL);
+  
+    
+
+    ($request->getParameter('dir', 'DESC') == 'ASC' ?  $c->addAscendingOrderByColumn(CustomerBoatPeer::FIRE_DATE)
+    :  $c->addDescendingOrderByColumn(CustomerBoatPeer::FIRE_DATE));
+
+    $boats = CustomerBoatPeer::doSelectForListing($c);
+    //generate JSON output
+    $boatarray = array();
+    foreach ($boats AS $boat)
+    {
+      $c2->add(CustomerPeer::ID, $boat['data']->getCustomerId());
+      $c2->addJoin(CustomerPeer::WF_CRM_ID, wfCRMPeer::ID);
+      //
+      
+      $customers = CustomerPeer::doSelectForListing($c2);
+      foreach($customers AS $customer){
+          $boatarray[] = array('id'    => $boat['data']->getId(),
+          'name'  => $boat['data']->getName(), 
+          'make'  => $boat['data']->getMake(),
+          'model' => $boat['data']->getModel(),
+          'fire_date' =>$boat['data']->getFire_Date(),
+          'customer_name' => $customer->getName(),
+          'lastworkorder' => ($boat['latest'] ? date('m/d/Y', $boat['latest']) : 'Never')
+        );
+      }
+    }
+
+
+    $this->renderText(json_encode($boatarray));
+
+    return sfView::NONE;
+  }
 }
