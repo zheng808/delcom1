@@ -286,7 +286,6 @@ class customerActions extends sfActions
     {
       $this->forward404Unless($boat = CustomerBoatPeer::retrieveByPk($request->getParameter('id')));
     }
-
     //validate
     $result = true;
     $errors = array();
@@ -300,7 +299,11 @@ class customerActions extends sfActions
       $boat->setSerialNumber($request->getParameter('serial_number'));
       $boat->setRegistration($request->getParameter('registration'));
       $boat->setNotes($request->getParameter('notes'));
-      $boat->setFireDate($request->getParameter('fire_date'));
+      if($request->getParameter('fire_date') != null){
+        $boat->setFireDate($request->getParameter('fire_date'));
+      }else{
+        $boat->setFireDate(NULL);
+      }
       $boat->save();
 
       //output result as JSON
