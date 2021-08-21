@@ -76,12 +76,19 @@ class generatePartsExcelRangeAction extends sfAction{
                 }else{
                   $partName = $part[1];
                 }
+                
+                if(is_null($part[6])){
+                  $unit_cost = $part[7];
+                }else{
+                  $unit_cost = $part[6];
+                }
+
                 $worksheet->writeString($row, 0, $part[0]);
                 $worksheet->writeString($row, 1, $partName); 
                 $worksheet->writeString($row, 2, $part[2]); 
                 $worksheet->writeString($row, 3, $part[3]);
                 $worksheet->writeString($row, 4, $part[4]);
-                $worksheet->writeString($row, 5, $part[6]);
+                $worksheet->writeString($row, 5, $unit_cost);
         }
 
         $row++;

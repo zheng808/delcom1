@@ -432,11 +432,10 @@ class PartPeer extends BasePartPeer
   }
 
   public function getPartsDateRange($from, $to){
-    $sql = "select  b.label, d.name, a.quantity, a.custom_name, b.workorder_id, a.custom_name, c.unit_cost from part_instance a
+    $sql = "select  b.label, d.name, a.quantity, a.custom_name, b.workorder_id, a.custom_name, c.unit_cost, a.unit_cost from part_instance a
     join workorder_item b on a.workorder_item_id = b.id
     left  join part_variant c on a.part_variant_id = c.id
     left  join part d on c.part_id = d.id where date_used between ". "'" .$from. "'"." and ". "'" .$to. "'";
-    //$sql = sprintf($format, $from, $to);
 
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
