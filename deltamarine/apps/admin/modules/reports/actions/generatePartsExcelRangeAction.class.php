@@ -81,7 +81,7 @@ class generatePartsExcelRangeAction extends sfAction{
                 $worksheet->writeString($row, 2, $part[2]); 
                 $worksheet->writeString($row, 3, $part[3]);
                 $worksheet->writeString($row, 4, $part[4]);
-                $worksheet->writeString($row, 5, $part[5]);
+                $worksheet->writeString($row, 5, $part[6]);
         }
 
         $row++;
