@@ -2664,7 +2664,11 @@ Ext.define('Ext.ux.ItemCopyWin', {
 
 
     formSuccess: function() {
-      Ext.Msg.alert('Success', 'Item was copied.');
+      Ext.Msg.alert('Success', 'Item was copied.', function(btn){
+          if(btn="ok"){
+            location.reload();
+          }
+      });
     },
 
     fieldDefaults: { labelAlign: 'left', labelWidth: 150 },
