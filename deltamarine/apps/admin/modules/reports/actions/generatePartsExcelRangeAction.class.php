@@ -14,6 +14,7 @@ class generatePartsExcelRangeAction extends sfAction{
         $header[] = 'WorkOrder ID';
         $header[] = 'Unit Cost';
         $header[] = 'One-off Part';
+        $header[] = 'Part Deployment Date';
         $total_cols = count($header);
 
         $currentDateTime = date('Y-m-d H:i:s');
@@ -59,6 +60,7 @@ class generatePartsExcelRangeAction extends sfAction{
         $worksheet->setColumn(4, 4, 50);
         $worksheet->setColumn(5, 5, 50);
         $worksheet->setColumn(6, 6, 50);
+        $worksheet->setColumn(7, 7, 50);
         $worksheet->writeString($row, 1, 'List of Parts as of '.date('m-j-Y h:i a'), $bold_format);
 
         $row ++;
@@ -74,7 +76,7 @@ class generatePartsExcelRangeAction extends sfAction{
                 $row++;
       
                 if(is_null($part[1])){
-                  $partName = $part[5];
+                  $partName = $part[3];
                   $oneoff = 'Yes';
                 }else{
                   $partName = $part[1];
@@ -90,13 +92,14 @@ class generatePartsExcelRangeAction extends sfAction{
                 $worksheet->writeString($row, 0, $part[0]);
                 $worksheet->writeString($row, 1, $partName); 
                 $worksheet->writeString($row, 2, $part[2]); 
-                $worksheet->writeString($row, 3, $part[3]);
+                $worksheet->writeString($row, 3, $part[5]);
                 $worksheet->writeString($row, 4, $part[4]);
                 $worksheet->writeString($row, 5, $unit_cost);
                 $worksheet->writeString($row, 6, $oneoff);
+                $worksheet->writeString($row, 7, $part[8]);
         }
 
-        $row++;
+        $row++; 
         $workbook->close();
         if (sfConfig::get('sf_logging_enabled'))
         {
