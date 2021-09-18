@@ -5,6 +5,11 @@
     echo link_to('Print Parts CSV Data', 'reports/generatePartsExcel',
       array('class' => 'button tabbutton printPartsData', 'style' => 'margin: 20px auto;'));
   ?>
+  <div id="date-range"></div>
+  <?php
+    echo link_to('Print Parts Data by Range', 'reports/generatePartsExcelRange',
+      array('class' => 'button tabbutton printPartsDataRange', 'style' => 'margin: 20px auto;'));
+  ?>
 </div>
 <div class="rightside rightside-narrow">
   <h1 class="headicon headicon-person">Parts CSV Data</h1>
@@ -50,6 +55,42 @@ var workNumberField = new Ext.Panel({
           name: 'workExcel',
           xtype: 'textfield',
           fieldLabel: 'Enter Workorder',
+          anchor: '-1',
+        }]
+    }]
+  }]
+  })]
+});
+
+var dateRange = new Ext.Panel({
+  width: 225,
+  margin: '0 0 25px 0',
+  title: 'Download Part Data by Range',
+  items: [
+  new Ext.FormPanel({
+    autoWidth: true,
+    standardSubmit: true,
+    id: 'downloadPartUnitExcelbyRange',
+    bodyStyle: 'padding: 10px',
+    labelWidth: 70,
+    items: [{
+      layout: 'column',
+      border: false,
+      items: [{
+        border: false,
+        columnWidth: 1,
+        layout: 'anchor',
+        items: [{      
+          id:'dateFrom',
+          name: 'partExcelFrom',
+          xtype: 'datefield',
+          fieldLabel: 'Enter Date From',
+          anchor: '-1',
+        },{
+          id:'dateTo',
+          name: 'partExcelTo',
+          xtype: 'datefield',
+          fieldLabel: 'Enter Date To',
           anchor: '-1',
         }]
     }]
@@ -188,9 +229,24 @@ $(".printPartsData").click(function(){
       $('.printPartsData').attr('href', href + queryString );
 });
 
+$(".printPartsDataRange").click(function(){
+      var from = $("#dateFrom-inputEl").val();
+      var to = $("#dateTo-inputEl").val();
+      from = new Date(from);
+      to = new Date(to);
+      from = String(from.toISOString().substring(0, 10));
+      to = String(to.toISOString().substring(0, 10));
+      console.log(from);
+      console.log(to);
+      var href = $('.printPartsDataRange').attr('href');
+      var queryString = '?from=' +  encodeURIComponent(from) + '&to=' +  encodeURIComponent(to);
+      $('.printPartsDataRange').attr('href', href + queryString );
+});
+
 Ext.onReady(function(){
     grid.render("index-grid");
     goto_panel.render("index-goto");
     workNumberField.render("index-PartExcel");
+    dateRange.render("date-range");
 });
 </script>
