@@ -96,5 +96,6 @@ sfConfig::add(array(
   2 => 'Install Protective Coverings',
   3 => 'Clean Up/Final Clean Up',
   4 => 'Freight & Customs',
+  5 => 'Boat Equipment & Contents',
 ),
 ));

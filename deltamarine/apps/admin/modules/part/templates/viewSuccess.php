@@ -75,7 +75,7 @@
           <td class="label">Current On HOLD:</td>
           <td>
 <?php
-                $part->getDefaultVariant()->calculateCurrentOnHand();
+              $part->getDefaultVariant()->calculateCurrentOnHand();
               $hold = $part->getQuantity('onhold', false); 
               if ($hold > 0) echo '<span style="font-weight: bold; color:#e00;">'.$part->getQuantity('onhold').'</span>';
               else echo $part->getQuantity('onhold');
