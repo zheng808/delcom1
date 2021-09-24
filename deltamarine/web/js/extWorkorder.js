@@ -2749,13 +2749,13 @@ Ext.define('Ext.ux.ItemCopyWin', {
 Ext.define('Ext.ux.ViewNotes',{
   extend: 'Ext.ux.acFormWindow',
   title: 'Task Note', 
-  width: 400,
+  width: 600,
   id: 'Task_note',
   autoShow: true,
   closeAction: 'destroy', 
   task_id: null,
   json: null,
-  height:600,
+  autoScroll: true,
 
   doneSetup: function(){
     var me = this;
@@ -2763,7 +2763,10 @@ Ext.define('Ext.ux.ViewNotes',{
     me.form.json= me.json;
     if(me.json!=null){
       me.json.map((item)=>{
-        html = html + ' ' + '<p>' + item.worker_notes + ' by ' +  item.owner_name + ' ' + item.created_at + '</p>';
+        if(item.path!=null){
+          html = html + '<img style="width:50%; height:50%" src=' +  "'/images"  + item.path + "'" + ' />';
+        }
+          html = html + ' ' + '<p>' + item.worker_notes + ' by ' +  item.owner_name + ' ' + item.created_at + '</p>';
         $('#notes-innerCt').html(html);
       })
     }
@@ -2779,7 +2782,8 @@ Ext.define('Ext.ux.ViewNotes',{
       xtype: 'container',
       name: 'worker_notes',
       anchor: '0',
-      height: 400, 
+      height: '700',
+      style: 'auto',
     }]
   }  
 });

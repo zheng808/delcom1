@@ -423,7 +423,7 @@ class PartPeer extends BasePartPeer
   }
   
   public function getAllNotes($taskId){
-    $sql = 'select text, owner, date_created from notes where task_id = ' .$taskId;
+    $sql = 'select text, owner, date_created, path from notes where task_id = ' .$taskId;
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();

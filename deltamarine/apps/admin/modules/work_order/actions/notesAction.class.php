@@ -9,7 +9,8 @@ class notesAction extends sfAction{
                 $childarray[] = array(
                 'worker_notes' => $note[0],
                 'owner_name' => $note[1],
-                'created_at' => $note[2]
+                'created_at' => $note[2],
+                'path' => $note[3]
                 );
             }    
         }

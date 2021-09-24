@@ -2827,7 +2827,6 @@ var workorder_bbar = new Ext.Toolbar({
           success: function(response){
             var text = response.responseText;
             var data = Ext.JSON.decode(text); 
-            console.log(data);
             if(data!=null){
               new Ext.ux.ViewNotes({
                 json: data
