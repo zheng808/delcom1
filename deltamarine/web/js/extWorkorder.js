@@ -743,7 +743,6 @@ Ext.define('Ext.ux.WorkorderPrintWin', {
 /*      TASKS STUFF                          */
 /*********************************************/
 
-
 Ext.define('Ext.ux.ItemEditWin', {
   extend: 'Ext.ux.acFormWindow',
 
@@ -2749,13 +2748,12 @@ Ext.define('Ext.ux.ItemCopyWin', {
 Ext.define('Ext.ux.ViewNotes',{
   extend: 'Ext.ux.acFormWindow',
   title: 'Task Note', 
-  width: 600,
+  width: 800,
   id: 'Task_note',
   autoShow: true,
   closeAction: 'destroy', 
   task_id: null,
   json: null,
-  autoScroll: true,
 
   doneSetup: function(){
     var me = this;
@@ -2766,7 +2764,7 @@ Ext.define('Ext.ux.ViewNotes',{
         if(item.path!=null){
           html = html + '<img style="width:50%; height:50%" src=' +  "'/images"  + item.path + "'" + ' />';
         }
-          html = html + ' ' + '<p>' + item.worker_notes + ' by ' +  item.owner_name + ' ' + item.created_at + '</p>';
+        html = html + ' ' + '<p>' + item.worker_notes + ' by ' +  item.owner_name + ' ' + item.created_at + '</p>';
         $('#notes-innerCt').html(html);
       })
     }
@@ -2782,8 +2780,7 @@ Ext.define('Ext.ux.ViewNotes',{
       xtype: 'container',
       name: 'worker_notes',
       anchor: '0',
-      height: '700',
-      style: 'auto',
+      height: '700'
     }]
   }  
 });
