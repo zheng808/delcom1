@@ -352,6 +352,7 @@ class work_orderActions extends sfActions
       $workorder->setPickUpDate($request->getParameter('pickup_date') ? strtotime($request->getParameter('pickup_date')) : null);
       $workorder->setfaxed($request->getParameter('faxed') == '1');
       $workorder->setdelivered($request->getParameter('delivered') == '1');
+      $workorder->setDivision($request->getParameter('division'));
       if (sfConfig::get('sf_logging_enabled'))
       {
         $message = 'Finished Setting Canada Entry Num and Date';

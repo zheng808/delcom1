@@ -166,6 +166,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	protected $pickup_date;
 	protected $faxed;
 	protected $delivered;
+	protected $division;
 	/**
 	 * @var        Customer
 	 */
@@ -662,6 +663,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 	public function getUsaEntryNum()
 	{
 		return $this->usa_entry_num;
+	}
+
+	public function getDivision(){
+		return $this->division;
 	}
 	
 	public function getUsaEntryDate($format = 'Y-m-d')
@@ -1482,6 +1487,20 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 
 		return $this;
 	}
+
+	public function setDivision($v){
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->division !== $v) {
+			$this->division = $v;
+			$this->modifiedColumns[] = WorkorderPeer::DIVISION;
+		}
+
+		return $this;
+	}
+
 	public function setUsaEntryDate($v)
 	{
     // we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
@@ -1761,6 +1780,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 				return false;
 			}
 
+			if ($this->division!== false) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -1815,6 +1838,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$this->pickup_date = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
 			$this->faxed = ($row[$startcol + 30] !== null) ? (string) $row[$startcol + 30] : null;
 			$this->delivered = ($row[$startcol + 31] !== null) ? (string) $row[$startcol + 31] : null;
+			$this->division = ($row[$startcol + 32] !== null) ? (string) $row[$startcol + 32] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -2368,7 +2392,10 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 				break;
 			case 31:
 				return $this->getdelivered();
-				break;				
+				break;
+			case 32:
+				return $this->getDivision();
+				break;					
 			default:
 				return null;
 				break;
@@ -2421,7 +2448,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 			$keys[28] => $this->getDeliveredDate(),
 			$keys[29] => $this->getPickUpDate(),
 			$keys[30] => $this->getfaxed(),
-			$keys[31] => $this->getdelivered()
+			$keys[31] => $this->getdelivered(),
+			$keys[32] => $this->getDivision()
 		);
 		return $result;
 	}
@@ -2548,6 +2576,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 				break;
 			case 31:
 				$this->setdelivered($value);
+			case 32:
+				$this->setDivision($value);
 		} // switch()
 	}
 	
@@ -2604,6 +2634,7 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[29], $arr)) $this->setPickUpDate($arr[$keys[29]]);
 		if (array_key_exists($keys[30], $arr)) $this->setfaxed($arr[$keys[30]]);
 		if (array_key_exists($keys[31], $arr)) $this->setdelivered($arr[$keys[31]]);
+		if (array_key_exists($keys[32], $arr)) $this->setDivision($arr[$keys[32]]);
 	}
 	
 	/**
@@ -2646,7 +2677,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(WorkorderPeer::DELIVERED_DATE)) $criteria->add(WorkorderPeer::DELIVERED_DATE, $this->delivered_date);
 		if ($this->isColumnModified(WorkorderPeer::PICKUP_DATE)) $criteria->add(WorkorderPeer::PICKUP_DATE, $this->pickup_date); 
 		if ($this->isColumnModified(WorkorderPeer::FAXED)) $criteria->add(WorkorderPeer::FAXED, $this->faxed);
-		if ($this->isColumnModified(WorkorderPeer::DELIVERED)) $criteria->add(WorkorderPeer::DELIVERED, $this->delivered);  
+		if ($this->isColumnModified(WorkorderPeer::DELIVERED)) $criteria->add(WorkorderPeer::DELIVERED, $this->delivered);
+		if ($this->isColumnModified(WorkorderPeer::DIVISION)) $criteria->add(WorkorderPeer::DIVISION, $this->division);   
 		return $criteria;
 	}
 
@@ -2761,6 +2793,8 @@ abstract class BaseWorkorder extends BaseObject  implements Persistent {
 		$copyObj->setfaxed($this->faxed);
 
 		$copyObj->setdelivered($this->delivered);
+
+		$copyObj->setDivision($this->division);
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.

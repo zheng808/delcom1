@@ -59,6 +59,7 @@
         $pickupDate  =    '<td class="label">Pick up Date:</td><td>'.$workorder->getPickUpDate('M j, Y').'</td>';
         $fax  =    '<td class="label">Fax Status:</td><td>'.($workorder->getfaxed() ? '<strong>YES</strong>' : 'No').'</td>';
         $delivered  =    '<td class="label">Delivered Status:</td><td>'.($workorder->getdelivered() ? '<strong>YES</strong>' : 'No').'</td>';
+        $division  =    '<td class="label">Division</td><td>'.($workorder->getDivision() == 1 ? 'Delta Marine' : 'Elite Marine').'</td>';
         $blank = '<td class="label"></td><td class="blank"></td>';
 
         $taxCategory = 'UNKNOWN';
@@ -154,6 +155,10 @@
         {
            echo '<tr>'.$delivered.'</tr>';
         }
+        if($workorder->getdivision() == '1' || $workorder->getdivision() == '0'){
+          echo '<tr>'.$division.'</tr>';
+        }
+        
 
       ?>
     </table>
@@ -2690,6 +2695,18 @@ Ext.define('Ext.ux.WorkorderEditWin', {
           {name: 'delivered', itemId: 'delivered_No',  boxLabel: 'No', inputValue: '0', checked: <?php echo $workorder->getdelivered() ? 'false':'true' ?>},
         ]
       }]  
+    },{
+      itemId: 'division',
+      xtype: 'combo',
+      layout: 'anchor',
+      anchor: '-25',
+      name: 'division',
+      fieldLabel: 'Division',
+      editable: false,
+      queryMode: 'local',
+      allowBlank: false,
+      store: [[1,'Delta Marine'],[0,'Elite Marine']],
+      value: 0
     },{
       xtype: 'datefield',
       fieldLabel: 'Delivery date',
