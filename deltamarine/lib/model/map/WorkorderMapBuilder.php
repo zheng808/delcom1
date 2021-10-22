@@ -125,8 +125,6 @@ class WorkorderMapBuilder implements MapBuilder {
 		$tMap->addColumn('FAXED', 'Faxed', 'BOOLEAN', true, null);
 
 		$tMap->addColumn('DELIVERED', 'Delivered', 'BOOLEAN', true, null);
-
-		$tMap->addColumn('DIVISION', 'Division', 'BOOLEAN', true, null);
 	} // doBuild()
 
 } // WorkorderMapBuilder
