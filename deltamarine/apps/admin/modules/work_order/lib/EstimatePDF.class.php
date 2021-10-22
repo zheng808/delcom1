@@ -61,7 +61,12 @@ class EstimatePDF extends sfTCPDF
       }
 
       //insert logo
+      if($this->workorder->getDivision() == '1'){
+        //insert logo
       $this->Image(sfConfig::get('sf_web_dir').'/images/invoice_header.jpg', $page_top + 4, $page_top, 62, 18);
+     }else{
+      $this->Image(sfConfig::get('sf_web_dir').'/images/ELITELOGO.jpeg', $page_top + 4, $page_top, 62, 18);
+     }
 
       //insert delta info
       $this->SetXY(80, $page_top + 2);
