@@ -20,7 +20,7 @@ abstract class BaseWorkorderPeer {
 	const CLASS_DEFAULT = 'lib.model.Workorder';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 32;
+	const NUM_COLUMNS = 33;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;

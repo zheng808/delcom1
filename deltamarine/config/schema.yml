@@ -276,7 +276,7 @@ propel:
     delivered_date:          { type: timestamp }
     pickup_date:          { type: timestamp } 
     fax:                  { type: boolean, required: true, default: false }   
-    
+    division:             { type: varchar(45) }
 
   workorder_category:
     id:                     ~
