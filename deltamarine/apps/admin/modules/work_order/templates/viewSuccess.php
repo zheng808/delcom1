@@ -2706,7 +2706,7 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       queryMode: 'local',
       allowBlank: false,
       store: [[1,'Delta Marine'],[0,'Elite Marine']],
-      value: 1
+      value: <?php echo ($workorder->getDivision() == 1 ? '\''.'Delta Marine'.'\'' : '0'); ?>,
     },{
       xtype: 'datefield',
       fieldLabel: 'Delivery date',

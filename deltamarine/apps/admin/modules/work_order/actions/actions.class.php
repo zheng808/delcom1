@@ -245,6 +245,7 @@ class work_orderActions extends sfActions
       $order->setShopSuppliesSurcharge($request->getParameter('shop_supplies_surcharge', 0));
       $order->setMoorageSurchargeAmt($request->getParameter('moorage_surcharge_amt', 0));
       $order->setForRigging($request->getParameter('for_rigging') == '1');
+      $order->setDivision($request->getParameter('division'));
       $order->save();
 
       //output result as JSON

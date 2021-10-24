@@ -698,6 +698,18 @@ var WorkOrderAddWin = new Ext.Window({
       forcePrecision: true,
       anchor: '50%',
       value: 0
+    },{
+      itemId: 'division',
+      xtype: 'combo',
+      layout: 'anchor',
+      anchor: '-25',
+      name: 'division',
+      fieldLabel: 'Division',
+      editable: false,
+      queryMode: 'local',
+      allowBlank: false,
+      store: [[1,'Delta Marine'],[0,'Elite Marine']],
+      value: 1,
     }],
   
     buttons:[{
