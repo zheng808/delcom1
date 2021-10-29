@@ -2702,11 +2702,9 @@ Ext.define('Ext.ux.WorkorderEditWin', {
       anchor: '-25',
       name: 'division',
       fieldLabel: 'Division',
-      editable: false,
       queryMode: 'local',
-      allowBlank: false,
-      store: [[1,'Delta Marine'],[0,'Elite Marine']],
-      value: <?php echo ($workorder->getDivision() == null ? '\''.'Delta Marine'.'\'' : '0'); ?>,
+      store: [['1','Delta Marine'],['0','Elite Marine']],
+      value: <?php echo ($workorder->getDivision() == '1' || $workorder->getDivision() == 'Delta Marine'  ?  '\''.'1'.'\'' : '\''.'0'.'\''); ?>,
     },{
       xtype: 'datefield',
       fieldLabel: 'Delivery date',
