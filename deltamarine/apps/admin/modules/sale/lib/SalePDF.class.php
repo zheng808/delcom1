@@ -64,15 +64,7 @@ class SalePDF extends sfTCPDF
       $this->setFont("Arial", '', 8);
 
       //insert logo
-      if($this->workorder->getDivision() == '1'){
-        //insert logo
       $this->Image(sfConfig::get('sf_web_dir').'/images/invoice_header.jpg', $page_top + 4, $page_top, 62, 18);
-        //insert delta info
-      $this->MultiCell(50, $this->default_fontsize/2, "2075 Tryon Road\nSidney, B.C.  V8L 3X9\nTel: (250) 656-2639\nFax: (250) 656-2619", 0, 'L', 0, 0);
-    }else{
-      $this->Image(sfConfig::get('sf_web_dir').'/images/ELITELOGO.jpeg', $page_top + 4, $page_top, 62, 18);
-      $this->MultiCell(50, $this->default_fontsize/2, "B04 - 2075 Tryon Road\nSidney, B.C.  V8L 3X9\nTel: 778-426-Boat (2628)\nFax: (250) 656-2619", 0, 'L', 0, 0);
-    }
 
       
 
