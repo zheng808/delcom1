@@ -151,6 +151,9 @@ class datagridAction extends sfAction
       $c->addJoin(WorkorderPeer::WORKORDER_CATEGORY_ID, WorkorderCategoryPeer::ID, Criteria::LEFT_JOIN);
       $col = WorkorderCategoryPeer::NAME;
       break;
+    case 'division_name':
+      $col = WorkorderPeer::DIVISION;
+      break;
     }
     ($request->getParameter('dir', 'DESC') == 'ASC' ?  $c->addAscendingOrderByColumn($col)
                                                     :  $c->addDescendingOrderByColumn($col));
@@ -188,6 +191,7 @@ class datagridAction extends sfAction
     $workorderarray = array();
     foreach ($workorders AS $workorder)
     {
+
       $workorderarray[] = array(
         'id'       => $workorder->getId(), 
         'summary'  => '#'.$workorder->getId().' - '.$workorder->getCustomerBoat()->getName(),
@@ -200,7 +204,7 @@ class datagridAction extends sfAction
         'haulin'   => ($haulin   ? $workorder->getHaulinDateTime('m/d/Y') : $workorder->getHaulinDate('m/d/Y ')),
         'color'    => $workorder->getSummaryColor(),
         'for_rigging' => $workorder->getForRigging(),
-        'category_name' => $workorder->getWorkorderCategory() ? $workorder->getWorkorderCategory()->getName() : '',
+        'division_name' => $workorder->getDivision() == '1' ? 'Delta Marine' : 'Elite Marine',
         'progress' => isset($completion[$workorder->getId()]) ? implode('/',$completion[$workorder->getId()]) : '',
         'pst_exempt' => ($workorder->getPstExempt() ? 'Y' : 'N'), 
         'gst_exempt' => ($workorder->getGstExempt() ? 'Y' : 'N'),

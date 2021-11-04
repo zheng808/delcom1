@@ -57,7 +57,7 @@ var boatTpl = new Ext.XTemplate(
 );
 
 var workordersStore = new Ext.data.JsonStore({
-  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','category_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt'],
+  fields: ['id', 'customer', 'boat', 'boattype', 'date', 'status','haulout','haulin','color','for_rigging','division_name', 'progress', 'pst_exempt', 'gst_exempt','tax_exempt'],
   sorters: [{ property: 'id', direction: 'DESC' }],
   remoteSort: true,
   pageSize: 25,
@@ -803,8 +803,8 @@ var grid = new Ext.grid.GridPanel({
     sortable: true,
     width: 75
   },{
-    header: "Category",
-    dataIndex: 'category_name',
+    header: "Division",
+    dataIndex: 'division_name',
     sortable: true,
     width: 90
   },
