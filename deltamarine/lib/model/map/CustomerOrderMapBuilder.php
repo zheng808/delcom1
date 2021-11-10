@@ -94,6 +94,8 @@ class CustomerOrderMapBuilder implements MapBuilder {
 
 		$tMap->addColumn('BOAT_NAME', 'BoatName', 'VARCHAR', false, 127);
 
+		$tMap->addColumn('DIVISION', 'Division', 'TINYINT', true, null);
+
 	} // doBuild()
 
 } // CustomerOrderMapBuilder

@@ -54,6 +54,11 @@
         <td><strong><?php echo $sale->getPoNum(); ?></strong></td>
       </tr>    
     <?php endif; ?>
+    <?php  $division = '<td class="label">Division</td><td>'.($sale->getDivision() == 1 ? 'Delta Marine' : 'Elite Marine').'</td>'; ?>
+    <?php if($sale->getDivision() == '1' || $sale->getDivision() == '0'){
+          echo '<tr>'.$division.'</tr>';
+        } 
+    ?>  
     </table>
     <div id="actions-buttons" style="float: left; padding: 15px 0 0 15px;"></div>
 
@@ -789,6 +794,16 @@ var SaleEditWin = new Ext.Window({
       maxValue: 100,
       value: <?php echo $sale->getDiscountPct(); ?>,
       anchor: '-120'      
+    },{
+      itemId: 'division',
+      xtype: 'combo',
+      layout: 'anchor',
+      anchor: '-25',
+      name: 'division',
+      fieldLabel: 'Division',
+      queryMode: 'local',
+      store: [['1','Delta Marine'],['0','Elite Marine']],
+      value: <?php echo ($sale->getDivision() == '1' || $sale->getDivision() == 'Delta Marine'  ?  '\''.'1'.'\'' : '\''.'0'.'\''); ?>,
     }],
     
     buttons: [{

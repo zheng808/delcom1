@@ -64,9 +64,15 @@ class SalePDF extends sfTCPDF
       $this->setFont("Arial", '', 8);
 
       //insert logo
-      $this->Image(sfConfig::get('sf_web_dir').'/images/invoice_header.jpg', $page_top + 4, $page_top, 62, 18);
+      //$this->Image(sfConfig::get('sf_web_dir').'/images/invoice_header.jpg', $page_top + 4, $page_top, 62, 18);
 
-      
+      if($this->sale->getDivision() == '1'){
+        //insert logo
+      $this->Image(sfConfig::get('sf_web_dir').'/images/invoice_header.jpg', $page_top + 4, $page_top, 62, 18);
+        //insert delta info
+    }else{
+      $this->Image(sfConfig::get('sf_web_dir').'/images/ELITELOGO.jpeg', $page_top + 4, $page_top, 62, 18);
+    }
 
       //main title
       $this->SetY($page_top);

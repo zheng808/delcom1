@@ -161,10 +161,13 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 	 */
 	protected $collPayments;
 
+	protected $division;
+
 	/**
 	 * @var        Criteria The criteria used to select the current contents of collPayments.
 	 */
 	private $lastPaymentCriteria = null;
+
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -386,6 +389,11 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 	public function getPoNum()
 	{
 		return $this->po_num;
+	}
+
+	public function getDivision()
+	{
+		return $this->division;
 	}
 
 	/**
@@ -735,6 +743,20 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 		return $this;
 	} // setPoNum()
 
+	public function setDivision($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->division !== $v) {
+			$this->division = $v;
+			$this->modifiedColumns[] = CustomerOrderPeer::DIVISION;
+		}
+
+		return $this;
+	} 
+
 	/**
 	 * Set the value of [boat_name] column.
 	 * 
@@ -848,6 +870,7 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 			$this->discount_pct = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->po_num = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->boat_name = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->division = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1496,7 +1519,7 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CustomerOrderPeer::DISCOUNT_PCT)) $criteria->add(CustomerOrderPeer::DISCOUNT_PCT, $this->discount_pct);
 		if ($this->isColumnModified(CustomerOrderPeer::PO_NUM)) $criteria->add(CustomerOrderPeer::PO_NUM, $this->po_num);
 		if ($this->isColumnModified(CustomerOrderPeer::BOAT_NAME)) $criteria->add(CustomerOrderPeer::BOAT_NAME, $this->boat_name);
-
+		if ($this->isColumnModified(CustomerOrderPeer::DIVISION)) $criteria->add(CustomerOrderPeer::DIVISION, $this->division);
 		return $criteria;
 	}
 
@@ -1580,6 +1603,7 @@ abstract class BaseCustomerOrder extends BaseObject  implements Persistent {
 
 		$copyObj->setBoatName($this->boat_name);
 
+		$copyObj->setBoatName($this->division);
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of

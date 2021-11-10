@@ -11,7 +11,7 @@
 var is_resetting = false;
 
 var salesStore = new Ext.data.JsonStore({
-  fields: ['id', 'customer', 'date', 'status', 'for_rigging'],
+  fields: ['id', 'customer', 'date', 'status', 'for_rigging', 'division'],
   remoteSort: true,
   pageSize: 25,
   sorters: [{ property: 'date', direction: 'DESC' }],
@@ -250,6 +250,16 @@ Ext.define('Ext.ux.SaleAddWin', {
       maxValue: 100,
       value: 0,
       anchor: '-250',
+    },{
+      itemId: 'division',
+      xtype: 'combo',
+      layout: 'anchor',
+      anchor: '-25',
+      name: 'division',
+      fieldLabel: 'Division',
+      queryMode: 'local',
+      store: [[1,'Delta Marine'],[0,'Elite Marine']],
+      value: 1,
     }]
 
   }
@@ -283,6 +293,12 @@ var grid = new Ext.grid.GridPanel({
     header: "Status",
     dataIndex: 'status',
     id: 'status',
+    sortable: true,
+    width: 180
+  },{
+    header: "Division",
+    dataIndex: 'division',
+    id: 'division',
     sortable: true,
     width: 180
   }],

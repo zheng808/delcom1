@@ -19,7 +19,7 @@ abstract class BaseCustomerOrderPeer {
 	const CLASS_DEFAULT = 'lib.model.CustomerOrder';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 16;
+	const NUM_COLUMNS = 17;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -72,6 +72,8 @@ abstract class BaseCustomerOrderPeer {
 	/** the column name for the BOAT_NAME field */
 	const BOAT_NAME = 'customer_order.BOAT_NAME';
 
+	const DIVISION = 'customer_order.DIVISION';
+
 	/**
 	 * An identiy map to hold any loaded instances of CustomerOrder objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -93,11 +95,11 @@ abstract class BaseCustomerOrderPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'Finalized', 'Approved', 'SentSome', 'SentAll', 'InvoicePerShipment', 'InvoiceId', 'DateOrdered', 'HstExempt', 'GstExempt', 'PstExempt', 'ForRigging', 'DiscountPct', 'PoNum', 'BoatName', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'finalized', 'approved', 'sentSome', 'sentAll', 'invoicePerShipment', 'invoiceId', 'dateOrdered', 'hstExempt', 'gstExempt', 'pstExempt', 'forRigging', 'discountPct', 'poNum', 'boatName', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::FINALIZED, self::APPROVED, self::SENT_SOME, self::SENT_ALL, self::INVOICE_PER_SHIPMENT, self::INVOICE_ID, self::DATE_ORDERED, self::HST_EXEMPT, self::GST_EXEMPT, self::PST_EXEMPT, self::FOR_RIGGING, self::DISCOUNT_PCT, self::PO_NUM, self::BOAT_NAME, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'finalized', 'approved', 'sent_some', 'sent_all', 'invoice_per_shipment', 'invoice_id', 'date_ordered', 'hst_exempt', 'gst_exempt', 'pst_exempt', 'for_rigging', 'discount_pct', 'po_num', 'boat_name', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CustomerId', 'Finalized', 'Approved', 'SentSome', 'SentAll', 'InvoicePerShipment', 'InvoiceId', 'DateOrdered', 'HstExempt', 'GstExempt', 'PstExempt', 'ForRigging', 'DiscountPct', 'PoNum', 'BoatName', 'Division'),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'customerId', 'finalized', 'approved', 'sentSome', 'sentAll', 'invoicePerShipment', 'invoiceId', 'dateOrdered', 'hstExempt', 'gstExempt', 'pstExempt', 'forRigging', 'discountPct', 'poNum', 'boatName', 'division'),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::CUSTOMER_ID, self::FINALIZED, self::APPROVED, self::SENT_SOME, self::SENT_ALL, self::INVOICE_PER_SHIPMENT, self::INVOICE_ID, self::DATE_ORDERED, self::HST_EXEMPT, self::GST_EXEMPT, self::PST_EXEMPT, self::FOR_RIGGING, self::DISCOUNT_PCT, self::PO_NUM, self::BOAT_NAME, self::DIVISION),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'customer_id', 'finalized', 'approved', 'sent_some', 'sent_all', 'invoice_per_shipment', 'invoice_id', 'date_ordered', 'hst_exempt', 'gst_exempt', 'pst_exempt', 'for_rigging', 'discount_pct', 'po_num', 'boat_name', 'division'),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 	);
 
 	/**
@@ -107,11 +109,11 @@ abstract class BaseCustomerOrderPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'Finalized' => 2, 'Approved' => 3, 'SentSome' => 4, 'SentAll' => 5, 'InvoicePerShipment' => 6, 'InvoiceId' => 7, 'DateOrdered' => 8, 'HstExempt' => 9, 'GstExempt' => 10, 'PstExempt' => 11, 'ForRigging' => 12, 'DiscountPct' => 13, 'PoNum' => 14, 'BoatName' => 15, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'finalized' => 2, 'approved' => 3, 'sentSome' => 4, 'sentAll' => 5, 'invoicePerShipment' => 6, 'invoiceId' => 7, 'dateOrdered' => 8, 'hstExempt' => 9, 'gstExempt' => 10, 'pstExempt' => 11, 'forRigging' => 12, 'discountPct' => 13, 'poNum' => 14, 'boatName' => 15, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::FINALIZED => 2, self::APPROVED => 3, self::SENT_SOME => 4, self::SENT_ALL => 5, self::INVOICE_PER_SHIPMENT => 6, self::INVOICE_ID => 7, self::DATE_ORDERED => 8, self::HST_EXEMPT => 9, self::GST_EXEMPT => 10, self::PST_EXEMPT => 11, self::FOR_RIGGING => 12, self::DISCOUNT_PCT => 13, self::PO_NUM => 14, self::BOAT_NAME => 15, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'finalized' => 2, 'approved' => 3, 'sent_some' => 4, 'sent_all' => 5, 'invoice_per_shipment' => 6, 'invoice_id' => 7, 'date_ordered' => 8, 'hst_exempt' => 9, 'gst_exempt' => 10, 'pst_exempt' => 11, 'for_rigging' => 12, 'discount_pct' => 13, 'po_num' => 14, 'boat_name' => 15, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CustomerId' => 1, 'Finalized' => 2, 'Approved' => 3, 'SentSome' => 4, 'SentAll' => 5, 'InvoicePerShipment' => 6, 'InvoiceId' => 7, 'DateOrdered' => 8, 'HstExempt' => 9, 'GstExempt' => 10, 'PstExempt' => 11, 'ForRigging' => 12, 'DiscountPct' => 13, 'PoNum' => 14, 'BoatName' => 15, 'Division'=>16),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'customerId' => 1, 'finalized' => 2, 'approved' => 3, 'sentSome' => 4, 'sentAll' => 5, 'invoicePerShipment' => 6, 'invoiceId' => 7, 'dateOrdered' => 8, 'hstExempt' => 9, 'gstExempt' => 10, 'pstExempt' => 11, 'forRigging' => 12, 'discountPct' => 13, 'poNum' => 14, 'boatName' => 15, 'division' =>16),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CUSTOMER_ID => 1, self::FINALIZED => 2, self::APPROVED => 3, self::SENT_SOME => 4, self::SENT_ALL => 5, self::INVOICE_PER_SHIPMENT => 6, self::INVOICE_ID => 7, self::DATE_ORDERED => 8, self::HST_EXEMPT => 9, self::GST_EXEMPT => 10, self::PST_EXEMPT => 11, self::FOR_RIGGING => 12, self::DISCOUNT_PCT => 13, self::PO_NUM => 14, self::BOAT_NAME => 15, self::DIVISION =>16),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'customer_id' => 1, 'finalized' => 2, 'approved' => 3, 'sent_some' => 4, 'sent_all' => 5, 'invoice_per_shipment' => 6, 'invoice_id' => 7, 'date_ordered' => 8, 'hst_exempt' => 9, 'gst_exempt' => 10, 'pst_exempt' => 11, 'for_rigging' => 12, 'discount_pct' => 13, 'po_num' => 14, 'boat_name' => 15, 'division'=>16),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 	);
 
 	/**
@@ -225,6 +227,7 @@ abstract class BaseCustomerOrderPeer {
 
 		$criteria->addSelectColumn(CustomerOrderPeer::BOAT_NAME);
 
+		$criteria->addSelectColumn(CustomerOrderPeer::DIVISION);
 	}
 
 	/**

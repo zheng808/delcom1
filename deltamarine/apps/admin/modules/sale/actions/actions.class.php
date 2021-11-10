@@ -120,6 +120,7 @@ class saleActions extends sfActions
       $order->setForRigging(($request->getParameter('for_rigging') == '1'));
       $order->setPoNum(trim($request->getParameter('po_num')));
       $order->setBoatName(trim($request->getParameter('boat_name')));
+      $order->setDivision($request->getParameter('division'));
       $order->save();
 
       //add an initial item to the newly-created order
@@ -206,7 +207,8 @@ class saleActions extends sfActions
       $sale->setDiscountPct($discount);
       $sale->setForRigging(($request->getParameter('for_rigging') == '1'));
       $sale->setPoNum(trim($request->getParameter('po_num')));
-      $sale->setBoatName(trim($request->getParameter('boat_name')));      
+      $sale->setBoatName(trim($request->getParameter('boat_name')));    
+      $sale->setDivision(($request->getParameter('division')));
       $sale->save();
       if ($old_pst != $sale->getPstExempt() || $old_gst != $sale->getGstExempt())
       {

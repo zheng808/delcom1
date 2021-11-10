@@ -101,7 +101,8 @@ class datagridAction extends sfAction
         'customer' => $order->getCustomer()->generateName(false, false, false), 
         'date' => $dateval,
         'status' => $status,
-        'for_rigging' => $order->getForRigging()
+        'for_rigging' => $order->getForRigging(),
+        'division' => $order->getDivision() == '1' ? 'Delta Marine' : 'Elite Marine',
        );
     }
     $dataarray = array('totalCount' => $count_all, 'sales' => $orderarray);
