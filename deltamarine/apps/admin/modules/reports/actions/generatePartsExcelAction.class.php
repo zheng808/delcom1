@@ -17,6 +17,7 @@ class generatePartsExcelAction extends sfAction
     $header[] = 'Unit Price';
     $header[] = 'Total Amount';
     $header[] = 'Origin';
+    $header[] = 'Division';
     $total_cols = count($header);
 
     require_once("Spreadsheet/Excel/Writer.php");
@@ -62,6 +63,7 @@ class generatePartsExcelAction extends sfAction
     $worksheet->setColumn(5, 5, 50);
     $worksheet->setColumn(6, 6, 50);
     $worksheet->setColumn(7, 7, 50);
+    $worksheet->setColumn(8, 8, 50);
     $worksheet->writeString($row, 1, 'List of Currently Open Workorders as of '.date('m-j-Y h:i a'), $bold_format);
 
     $row ++;
@@ -101,6 +103,12 @@ class generatePartsExcelAction extends sfAction
             $origin = $part[4];
           }
 
+          if($part[8] == '1'){
+            $division = 'Delta Marine';
+          }else{
+            $division = 'Elite Marine';
+          }
+
           $worksheet->writeString($row, 0, $part[0]);
           $worksheet->writeString($row, 1, $task);
           $worksheet->writeString($row, 2, $partName); 
@@ -108,6 +116,7 @@ class generatePartsExcelAction extends sfAction
           $worksheet->writeString($row, 4, $part[3]);
           $worksheet->writeString($row, 5, $part[5]);
           $worksheet->writeString($row, 6, $origin); 
+          $worksheet->writeString($row, 7, $division); 
       }
     }
 

@@ -361,10 +361,11 @@ class PartPeer extends BasePartPeer
   }
 
   public static function getPartCSVData($workId){
-    $sql = 'select  b.label, d.name, a.quantity, a.unit_price, d.origin, round(a.quantity * a.unit_price, 2) as totalAmount, a.custom_name, a.custom_origin  from part_instance a
+    $sql = 'select  b.label, d.name, a.quantity, a.unit_price, d.origin, round(a.quantity * a.unit_price, 2) as totalAmount, a.custom_name, a.custom_origin, e.division  from part_instance a
           join workorder_item b on a.workorder_item_id = b.id
           left  join part_variant c on a.part_variant_id = c.id
           left  join part d on c.part_id = d.id
+          left join workorder e on e.id = b.workorder_id
           where b.workorder_id = ' .$workId. ' and a.delivered = 1 and a.allocated = 1';
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
