@@ -88,7 +88,7 @@ class WorkorderSummaryPDF extends sfTCPDF
       if ($this->workorder->getHauloutDate())
       {
         $this->SetY(20);
-        $this->SetX($this->page_width - 32 - 4 - 100);
+        $this->SetX($this->page_width - 32 - 4 - 80);
         $this->setFont("Arial", "B", $this->subtitle_font*1.5);
         $this->setTextColor(0);
         $this->Cell(100, $this->subtitle_font/1.5, 'Haulout: '.$this->workorder->getHauloutDateTime('m/d/Y'), 0, 2, 'R');
@@ -98,7 +98,7 @@ class WorkorderSummaryPDF extends sfTCPDF
       if ($this->workorder->getHaulinDate())
       {
         $this->SetY(25);
-        $this->SetX($this->page_width - 32 - 4 - 100);
+        $this->SetX($this->page_width - 32 - 4 - 80);
         $this->setFont("Arial", "B", $this->subtitle_font*1.5);
         $this->setTextColor(0);
         $this->Cell(100, $this->subtitle_font/1.5, 'Relaunch: '.$this->workorder->getHaulinDateTime('m/d/Y'), 0, 2, 'R');
