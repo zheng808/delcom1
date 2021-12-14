@@ -142,7 +142,14 @@ class datagridAction extends sfAction
       }
       $workorderID = TimelogPeer::retrieveWorkOrderID($timelog->getId());
       $workorder = WorkorderPeer::retrieveByPk($workorderID);
-      $customerName = TimelogPeer::retrieveCustomerName(current($workorderID));
+      $customerNames = TimelogPeer::retrieveCustomerName(current($workorderID));
+      foreach($customerNames As $key=>$name){
+         if(is_null($name[0]) || is_null($name[1])){
+           $names = $name[2];
+         }else{
+           $names = $name[0] . $name[1];
+         }
+      }
       $workItemID = $timelog->getWorkorderItemId();
       $item = WorkorderItemPeer::retrieveByPk($workItemID);
       $timelogarray[] = array('id'          => $timelog->getId(), 
@@ -160,7 +167,7 @@ class datagridAction extends sfAction
                               'workorder'   => $workorderID,
                               'item'        => $timelog->getWorkorderItemName(),
                               'boat'        => $timelog->getTimeLogBoatName(),
-                              'customer'    => $customerName,
+                              'customer'    => $names,
                               'status'      => $timelog->getStatus(),
                               'custom_label'   =>  $timelog->getCustomLabel(),
                               'employee_notes' => ($timelog->getEmployeeNotes() ? nl2br($timelog->getEmployeeNotes()) : ''),

@@ -534,6 +534,7 @@ var showPartCustomEditWin = function(inst_id){
     config.title = 'Add One-Off Part';
   }
   
+  
   new Ext.ux.PartCustomEditWin(config);
 };//showPartCustomEditWin()----------------------------------------------------
 
