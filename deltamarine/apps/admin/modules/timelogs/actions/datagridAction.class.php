@@ -147,7 +147,7 @@ class datagridAction extends sfAction
          if(is_null($name[0]) || is_null($name[1])){
            $names = $name[2];
          }else{
-           $names = $name[0] . $name[1];
+           $names = $name[0] . ' ' .  $name[1];
          }
       }
       $workItemID = $timelog->getWorkorderItemId();
