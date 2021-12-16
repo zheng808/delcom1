@@ -15,6 +15,7 @@ class generatePartsExcelRangeAction extends sfAction{
         $header[] = 'Unit Cost';
         $header[] = 'One-off Part';
         $header[] = 'Part Deployment Date';
+        $header[] = 'Division';
         $total_cols = count($header);
 
         $currentDateTime = date('Y-m-d H:i:s');
@@ -61,6 +62,7 @@ class generatePartsExcelRangeAction extends sfAction{
         $worksheet->setColumn(5, 5, 50);
         $worksheet->setColumn(6, 6, 50);
         $worksheet->setColumn(7, 7, 50);
+        $worksheet->setColumn(8, 8, 50);
         $worksheet->writeString($row, 1, 'List of Parts as of '.date('m-j-Y h:i a'), $bold_format);
 
         $row ++;
@@ -89,6 +91,12 @@ class generatePartsExcelRangeAction extends sfAction{
                   $unit_cost = $part[6];
                 }
 
+                if($part[9] == 1){
+                  $division = "Delta Marine Service";
+                }else{
+                  $division = "Elite Marine Service";
+                }
+
                 $worksheet->writeString($row, 0, $part[0]);
                 $worksheet->writeString($row, 1, $partName); 
                 $worksheet->writeString($row, 2, $part[2]); 
@@ -97,6 +105,7 @@ class generatePartsExcelRangeAction extends sfAction{
                 $worksheet->writeString($row, 5, $unit_cost);
                 $worksheet->writeString($row, 6, $oneoff);
                 $worksheet->writeString($row, 7, $part[8]);
+                $worksheet->writeString($row, 8, $division);
         }
 
         $row++; 

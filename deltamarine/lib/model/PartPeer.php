@@ -433,7 +433,7 @@ class PartPeer extends BasePartPeer
   }
 
   public function getPartsDateRange($from, $to){
-    $sql = "select  b.label, d.name, a.quantity, a.custom_name, b.workorder_id, g.alpha_name, c.unit_cost, a.unit_cost, date_used from part_instance a
+    $sql = "select  b.label, d.name, a.quantity, a.custom_name, b.workorder_id, g.alpha_name, c.unit_cost, a.unit_cost, date_used, e.division from part_instance a
     join workorder_item b on a.workorder_item_id = b.id
     left  join part_variant c on a.part_variant_id = c.id
     left  join part d on c.part_id = d.id
