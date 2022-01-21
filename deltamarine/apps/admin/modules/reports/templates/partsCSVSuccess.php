@@ -10,6 +10,11 @@
     echo link_to('Print Parts Data by Range', 'reports/generatePartsExcelRange',
       array('class' => 'button tabbutton printPartsDataRange', 'style' => 'margin: 20px auto;'));
   ?>
+  <div id = "labour-range"></div>
+  <?php
+    echo link_to('Print Labour Data by Range', 'reports/generateLabourDateRange',
+      array('class' => 'button tabbutton printLabourDataRange', 'style' => 'margin: 20px auto;'));
+  ?>
 </div>
 <div class="rightside rightside-narrow">
   <h1 class="headicon headicon-person">Parts CSV Data</h1>
@@ -89,6 +94,42 @@ var dateRange = new Ext.Panel({
         },{
           id:'dateTo',
           name: 'partExcelTo',
+          xtype: 'datefield',
+          fieldLabel: 'Enter Date To',
+          anchor: '-1',
+        }]
+    }]
+  }]
+  })]
+});
+
+var LabourRange = new Ext.Panel({
+  width: 225,
+  margin: '0 0 25px 0',
+  title: 'Download Labour Data by Range',
+  items: [
+  new Ext.FormPanel({
+    autoWidth: true,
+    standardSubmit: true,
+    id: 'downloadLabourExcelbyRange',
+    bodyStyle: 'padding: 10px',
+    labelWidth: 70,
+    items: [{
+      layout: 'column',
+      border: false,
+      items: [{
+        border: false,
+        columnWidth: 1,
+        layout: 'anchor',
+        items: [{      
+          id:'dateToLabourFrom',
+          name: 'LabourExcelFrom',
+          xtype: 'datefield',
+          fieldLabel: 'Enter Date From',
+          anchor: '-1',
+        },{
+          id:'dateToLabour',
+          name: 'LabourExcelTo',
           xtype: 'datefield',
           fieldLabel: 'Enter Date To',
           anchor: '-1',
@@ -243,10 +284,25 @@ $(".printPartsDataRange").click(function(){
       $('.printPartsDataRange').attr('href', href + queryString );
 });
 
+$(".printLabourDataRange").click(function(){
+      var from = $("#dateToLabourFrom-inputEl").val();
+      var to = $("#dateToLabour-inputEl").val();
+      from = new Date(from);
+      to = new Date(to);
+      from = String(from.toISOString().substring(0, 10));
+      to = String(to.toISOString().substring(0, 10));
+      console.log(from);
+      console.log(to);
+      var href = $('.printLabourDataRange').attr('href');
+      var queryString = '?from=' +  encodeURIComponent(from) + '&to=' +  encodeURIComponent(to);
+      $('.printLabourDataRange').attr('href', href + queryString );
+});
+
 Ext.onReady(function(){
     grid.render("index-grid");
     goto_panel.render("index-goto");
     workNumberField.render("index-PartExcel");
     dateRange.render("date-range");
+    LabourRange.render("labour-range");
 });
 </script>

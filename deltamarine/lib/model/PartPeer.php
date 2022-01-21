@@ -400,7 +400,7 @@ class PartPeer extends BasePartPeer
   }
 
   public function getExpenseUnitCostCSV($workId){
-    $sql = 'select b.label, a.label, cost,created_at  from  workorder_expense a 
+    $sql = 'select b.label, a.label, price ,created_at  from  workorder_expense a 
     left join workorder_item b on a.workorder_item_id = b.id
     where b.workorder_id = ' .$workId;
     $con = Propel::getConnection();
@@ -441,6 +441,32 @@ class PartPeer extends BasePartPeer
     left join customer f on f.id = e.customer_id
     join wf_crm g on g.id = f.wf_crm_id 
     where date_used between ". "'" .$from. "'"." and ". "'" .$to. "'";
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+  }
+
+  public function getAllWorkorder(){
+     $progress = 'In Progress';
+     $estimate = 'Estimate';
+     $sql = "select id from FROM deltamarine.workorder where status = {$progress} or status = {$estimate}";
+     $con = Propel::getConnection();
+     $stmt = $con->prepare($sql);
+     $stmt->execute();
+     $row = $stmt->fetchall(PDO::FETCH_NUM);
+     return $row;
+  }
+
+  public function generateLabourByDateRange($from, $to){
+    $sql = "select c.id, e.alpha_name, f.name, a.billable_hours, f.hourly_rate,  round(a.billable_hours * f.hourly_rate, 2) as totalAmoun, c.division, a.created_at from timelog a
+    inner join workorder_item b on a.workorder_item_id = b.id
+    inner join workorder c on b.workorder_id = c.id
+    inner join customer d on c.customer_id = d.id
+    inner join wf_crm e on d.wf_crm_id = e.id
+    inner join labour_type f on a.labour_type_id = f.id
+    where a.created_at between ". "'" .$from. "'"." and ". "'" .$to. "'";
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();
