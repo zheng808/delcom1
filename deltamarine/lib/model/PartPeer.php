@@ -463,10 +463,23 @@ class PartPeer extends BasePartPeer
     $sql = "select c.id, e.alpha_name, f.name, a.billable_hours, f.hourly_rate,  round(a.billable_hours * f.hourly_rate, 2) as totalAmoun, c.division, a.created_at from timelog a
     inner join workorder_item b on a.workorder_item_id = b.id
     inner join workorder c on b.workorder_id = c.id
-    inner join customer d on c.customer_id = d.id
+    inner join employee d on a.employee_id = d.id
     inner join wf_crm e on d.wf_crm_id = e.id
     inner join labour_type f on a.labour_type_id = f.id
     where a.created_at between ". "'" .$from. "'"." and ". "'" .$to. "'";
+    $con = Propel::getConnection();
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchall(PDO::FETCH_NUM);
+    return $row;
+  }
+
+  public function fetchEmployeeName($workId){
+    $sql = 'selectd.alpha_name from timelog a
+    left join workorder_item b on a.workorder_item_id = b.id
+    left join employee c on a.employee_id = c.id
+    join wf_crm d on c.wf_crm_id = d.id
+    where b.workorder_id = ' .$workId;
     $con = Propel::getConnection();
     $stmt = $con->prepare($sql);
     $stmt->execute();

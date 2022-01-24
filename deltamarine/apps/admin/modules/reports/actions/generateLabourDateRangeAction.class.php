@@ -8,7 +8,7 @@ class generateLabourDateRangeAction extends sfAction{
     $show_blank_new = true;
     $output = array();
     $header[] = 'WorkOrder ID';
-    $header[] = 'Customer Name ';
+    $header[] = 'Employee Name ';
     $header[] = 'Labour Type';
     $header[] = 'Hour';
     $header[] = 'Rate';
@@ -61,6 +61,7 @@ class generateLabourDateRangeAction extends sfAction{
     $worksheet->setColumn(5, 5, 50);
     $worksheet->setColumn(6, 6, 50);
     $worksheet->setColumn(7, 7, 50);
+    $worksheet->setColumn(8, 8, 50);
     $worksheet->writeString($row, 1, 'List of Labour Log as of '.date('m-j-Y h:i a'), $bold_format);
 
     $row ++;
@@ -90,8 +91,6 @@ class generateLabourDateRangeAction extends sfAction{
             $worksheet->writeString($row, 6, $division);
             $worksheet->writeString($row, 7, $labour[7]);
     }
-
-    $row++; 
     $workbook->close();
     if (sfConfig::get('sf_logging_enabled'))
     {
